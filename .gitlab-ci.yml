@@ -13,11 +13,11 @@ default:
     - mistic
     - small
 
-# variables:
-#   HOME: "$CI_BUILDS_DIR"
-#   MYCACHE: "$CI_PROJECT_DIR/.cache"
-#   LIBCHEBIPY_DOWNLOAD_DIR: "$MYCACHE/libChEBI"
-#   LIBCHEBIPY_AUTO_UPDATE: False
+variables:
+  HOME: "$CI_BUILDS_DIR"
+  MYCACHE: "$CI_PROJECT_DIR/.cache"
+  # LIBCHEBIPY_DOWNLOAD_DIR: "$MYCACHE/libChEBI"
+  # LIBCHEBIPY_AUTO_UPDATE: False
 
 
 # cache:
@@ -26,74 +26,74 @@ default:
 #     - .cache/libChEBI/
 
 stages:
-  # - prepare
-  # - check
-  # - test
+  - prepare
+  - check
+  - test
   - mirror
 
   # - quality
   # - mirror
 
-# Get test data:
-#   stage: prepare
-#   before_script: []
-#   image: public.ecr.aws/aws-cli/aws-cli
-#   script:
-#     - aws s3 sync s3://$MISTIC_BUCKET/ref/ontology/ebi.ac.uk/chebi/2025-08-01/rel244/ $LIBCHEBIPY_DOWNLOAD_DIR
-#     - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/sri.com/metacyc/2025-04-18/29.0/compounds_29.dat tests/data/compounds_29.dat
-#     - aws s3 cp s3://$MISTIC_BUCKET/gen/metanetmap/kb/20250916/conversion_datatable.tsv tests/data/conversion_datatable.tsv
-#   artifacts:
-#     paths:
-#       - $MYCACHE
-#       - tests/data/
+Get test data:
+  stage: prepare
+  before_script: []
+  image: public.ecr.aws/aws-cli/aws-cli
+  script:
+    # - aws s3 sync s3://$MISTIC_BUCKET/ref/ontology/ebi.ac.uk/chebi/2025-08-01/rel244/ $LIBCHEBIPY_DOWNLOAD_DIR
+    - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/sri.com/metacyc/2025-04-18/29.0/compounds_29.dat tests/data/compounds_29.dat
+    - aws s3 cp s3://$MISTIC_BUCKET/gen/metanetmap/kb/20250916/conversion_datatable.tsv tests/data/conversion_datatable.tsv
+  artifacts:
+    paths:
+      - $MYCACHE
+      - tests/data/
 
 
-# Check:
-#   stage: check
-#   image: ruby:3.1
-#   script:
-#     - find $MYCACHE $LIBCHEBIPY_DOWNLOAD_DIR tests/data -type f
-#     - echo $LIBCHEBIPY_DOWNLOAD_DIR
+Check:
+  stage: check
+  image: ruby:3.1
+  script:
+    - find $MYCACHE $LIBCHEBIPY_DOWNLOAD_DIR tests/data -type f
+    - echo $LIBCHEBIPY_DOWNLOAD_DIR
 
-# Quality:
-#   stage: check
-#   before_script:
-#     - python3 -m pip install flake8 isort --user
-#   script:
-#     - export PATH="${PATH}:${HOME}/.local/bin"
-#     - isort --check-only --diff src || ISORT_EXIT=$?  # Ignore failure
-#     - flake8 src || FLAKE8_EXIT=$?   # Ignore failure
-#     - expr ${ISORT_EXIT:-0} + ${FLAKE8_EXIT:-0} = 0
-#   allow_failure: true
+Quality:
+  stage: check
+  before_script:
+    - python3 -m pip install flake8 isort --user
+  script:
+    - export PATH="${PATH}:${HOME}/.local/bin"
+    - isort --check-only --diff src || ISORT_EXIT=$?  # Ignore failure
+    - flake8 src || FLAKE8_EXIT=$?   # Ignore failure
+    - expr ${ISORT_EXIT:-0} + ${FLAKE8_EXIT:-0} = 0
+  allow_failure: true
 
 
     
-# test:
-#   stage: test
-#   before_script:
-#     - export PATH="${PATH}:${HOME}/.local/bin"
-#     - python3 -V
-#     # - python3 -m ensurepip --default-pip --user
-#     - python3 -m pip install tox --user
+test:
+  stage: test
+  before_script:
+    - export PATH="${PATH}:${HOME}/.local/bin"
+    - python3 -V
+    # - python3 -m ensurepip --default-pip --user
+    - python3 -m pip install tox --user
 
-#   script:
-#     - find "$LIBCHEBIPY_DOWNLOAD_DIR" -type f -ls
-#     - pip install -r requirements_dev.txt  # Install dependencies
-#     - pip install -r requirements.txt      # Install tool dependencies
-#     - pip install .                        # install the package itself
-#     - pytest -vv --log-cli-level=debug     # Run tests without changing directories
+  script:
+    - find "$LIBCHEBIPY_DOWNLOAD_DIR" -type f -ls
+    - pip install -r requirements_dev.txt  # Install dependencies
+    - pip install -r requirements.txt      # Install tool dependencies
+    - pip install .                        # install the package itself
+    - pytest -vv --log-cli-level=debug     # Run tests without changing directories
 
-# coverage:
-#   stage: test
-#   script:
-#     - tox run -e clean,py39,py312,report
-#   # coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-#   artifacts:
-#     paths:
-#       - htmlcov/
-#       - coverage.xml
-#     reports:
-#       junit: toxtests.xml
+coverage:
+  stage: test
+  script:
+    - tox run -e clean,py39,py312,report
+  # coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    paths:
+      - htmlcov/
+      - coverage.xml
+    reports:
+      junit: toxtests.xml
 
 
 # sonarqube-check:
@@ -154,32 +154,3 @@ mirror_to_github:
     - git push github $CI_COMMIT_REF_NAME -f
   only:
     - main 
-
-
-# mirror_to_github:
-#   stage: mirror
-#   script:
-#     - echo "Pushing branch $CI_COMMIT_REF_NAME to GitHub"
-#     - echo "Repository size analysis"
-#     - du -sh . 
-#     - echo "Cleaning up CI artifacts and cache before GitHub push"
-#     - rm -rf $MYCACHE || echo "No cache to remove"
-#     - rm -rf tests/data/ || echo "No test data to remove"  
-#     - rm -rf .cache/ || echo "No .cache to remove"
-#     - echo "Size after cleanup:"
-#     - du -sh .
-#     - git fetch --all  # Fetch all branches
-#     # - echo "Top 10 largest files after cleanup"
-#     # - find . -type f -exec du -h {} + | sort -rh | head -10
-#     # - echo "Files over 50MB"
-#     # - find . -type f -size +50M -exec ls -lh {} \; || echo "No files over 50MB found"
-#     # - echo "Files over 100MB"
-#     # - find . -type f -size +100M -exec ls -lh {} \; || echo "No files over 100MB found"
-#     # - echo "Git object analysis"
-#     # - git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | grep '^blob' | sort -k3 -n | tail -10
-#     - git checkout $CI_COMMIT_REF_NAME
-#     - echo "Setting up GitHub remote"
-#     - git remote add github https://${GITHUB_TOKEN_CF}@${GITHUB_REPO_URL}
-#     - git push github $CI_COMMIT_REF_NAME --force
-#   only:
-#     - main
