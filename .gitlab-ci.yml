@@ -144,42 +144,42 @@ stages:
 #     - main 
 
 # # what we expected to work
-# mirror_to_github:
-#   stage: mirror
-#   script:
-#     - echo "Pushing branch $CI_COMMIT_REF_NAME to GitHub"
-#     - git fetch --all  # Fetch all branches
-#     - git checkout $CI_COMMIT_REF_NAME  # Ensure we're on the correct branch
-#     - git remote add github https://${GITHUB_TOKEN}@${GITHUB_REPO_URL}
-#     - git push github $CI_COMMIT_REF_NAME -f
-#   only:
-#     - main 
-
-
 mirror_to_github:
   stage: mirror
   script:
     - echo "Pushing branch $CI_COMMIT_REF_NAME to GitHub"
-    - echo "Repository size analysis"
-    - du -sh . 
-    - echo "Cleaning up CI artifacts and cache before GitHub push"
-    - rm -rf $MYCACHE || echo "No cache to remove"
-    - rm -rf tests/data/ || echo "No test data to remove"  
-    - rm -rf .cache/ || echo "No .cache to remove"
-    - echo "Size after cleanup:"
-    - du -sh .
     - git fetch --all  # Fetch all branches
-    # - echo "Top 10 largest files after cleanup"
-    # - find . -type f -exec du -h {} + | sort -rh | head -10
-    # - echo "Files over 50MB"
-    # - find . -type f -size +50M -exec ls -lh {} \; || echo "No files over 50MB found"
-    # - echo "Files over 100MB"
-    # - find . -type f -size +100M -exec ls -lh {} \; || echo "No files over 100MB found"
-    # - echo "Git object analysis"
-    # - git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | grep '^blob' | sort -k3 -n | tail -10
-    - git checkout $CI_COMMIT_REF_NAME
-    - echo "Setting up GitHub remote"
+    - git checkout $CI_COMMIT_REF_NAME  # Ensure we're on the correct branch
     - git remote add github https://${GITHUB_TOKEN_CF}@${GITHUB_REPO_URL}
-    - git push github $CI_COMMIT_REF_NAME --force
+    - git push github $CI_COMMIT_REF_NAME -f
   only:
-    - main
+    - main 
+
+
+# mirror_to_github:
+#   stage: mirror
+#   script:
+#     - echo "Pushing branch $CI_COMMIT_REF_NAME to GitHub"
+#     - echo "Repository size analysis"
+#     - du -sh . 
+#     - echo "Cleaning up CI artifacts and cache before GitHub push"
+#     - rm -rf $MYCACHE || echo "No cache to remove"
+#     - rm -rf tests/data/ || echo "No test data to remove"  
+#     - rm -rf .cache/ || echo "No .cache to remove"
+#     - echo "Size after cleanup:"
+#     - du -sh .
+#     - git fetch --all  # Fetch all branches
+#     # - echo "Top 10 largest files after cleanup"
+#     # - find . -type f -exec du -h {} + | sort -rh | head -10
+#     # - echo "Files over 50MB"
+#     # - find . -type f -size +50M -exec ls -lh {} \; || echo "No files over 50MB found"
+#     # - echo "Files over 100MB"
+#     # - find . -type f -size +100M -exec ls -lh {} \; || echo "No files over 100MB found"
+#     # - echo "Git object analysis"
+#     # - git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | grep '^blob' | sort -k3 -n | tail -10
+#     - git checkout $CI_COMMIT_REF_NAME
+#     - echo "Setting up GitHub remote"
+#     - git remote add github https://${GITHUB_TOKEN_CF}@${GITHUB_REPO_URL}
+#     - git push github $CI_COMMIT_REF_NAME --force
+#   only:
+#     - main
