@@ -1,0 +1,185 @@
+image: python:3.11
+
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+
+
+default:
+  tags:
+    - mistic
+    - small
+
+# variables:
+#   HOME: "$CI_BUILDS_DIR"
+#   MYCACHE: "$CI_PROJECT_DIR/.cache"
+#   LIBCHEBIPY_DOWNLOAD_DIR: "$MYCACHE/libChEBI"
+#   LIBCHEBIPY_AUTO_UPDATE: False
+
+
+# cache:
+#   key: libChEBI-cache
+#   paths:
+#     - .cache/libChEBI/
+
+stages:
+  # - prepare
+  # - check
+  # - test
+  - mirror
+
+  # - quality
+  # - mirror
+
+# Get test data:
+#   stage: prepare
+#   before_script: []
+#   image: public.ecr.aws/aws-cli/aws-cli
+#   script:
+#     - aws s3 sync s3://$MISTIC_BUCKET/ref/ontology/ebi.ac.uk/chebi/2025-08-01/rel244/ $LIBCHEBIPY_DOWNLOAD_DIR
+#     - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/sri.com/metacyc/2025-04-18/29.0/compounds_29.dat tests/data/compounds_29.dat
+#     - aws s3 cp s3://$MISTIC_BUCKET/gen/metanetmap/kb/20250916/conversion_datatable.tsv tests/data/conversion_datatable.tsv
+#   artifacts:
+#     paths:
+#       - $MYCACHE
+#       - tests/data/
+
+
+# Check:
+#   stage: check
+#   image: ruby:3.1
+#   script:
+#     - find $MYCACHE $LIBCHEBIPY_DOWNLOAD_DIR tests/data -type f
+#     - echo $LIBCHEBIPY_DOWNLOAD_DIR
+
+# Quality:
+#   stage: check
+#   before_script:
+#     - python3 -m pip install flake8 isort --user
+#   script:
+#     - export PATH="${PATH}:${HOME}/.local/bin"
+#     - isort --check-only --diff src || ISORT_EXIT=$?  # Ignore failure
+#     - flake8 src || FLAKE8_EXIT=$?   # Ignore failure
+#     - expr ${ISORT_EXIT:-0} + ${FLAKE8_EXIT:-0} = 0
+#   allow_failure: true
+
+
+    
+# test:
+#   stage: test
+#   before_script:
+#     - export PATH="${PATH}:${HOME}/.local/bin"
+#     - python3 -V
+#     # - python3 -m ensurepip --default-pip --user
+#     - python3 -m pip install tox --user
+
+#   script:
+#     - find "$LIBCHEBIPY_DOWNLOAD_DIR" -type f -ls
+#     - pip install -r requirements_dev.txt  # Install dependencies
+#     - pip install -r requirements.txt      # Install tool dependencies
+#     - pip install .                        # install the package itself
+#     - pytest -vv --log-cli-level=debug     # Run tests without changing directories
+
+# coverage:
+#   stage: test
+#   script:
+#     - tox run -e clean,py39,py312,report
+#   # coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+#   artifacts:
+#     paths:
+#       - htmlcov/
+#       - coverage.xml
+#     reports:
+#       junit: toxtests.xml
+
+
+# sonarqube-check:
+#   stage: quality
+#   needs: ["coverage"]
+#   image: 
+#     name: sonarsource/sonar-scanner-cli:5.0.1
+#     entrypoint: [""]
+#   variables:
+#     SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+#     GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
+#   # cache:
+#   #   key: "${CI_JOB_NAME}"
+#   #   paths:
+#   #     - .sonar/cache
+#   script: 
+#     - tox run -e sonar
+#   allow_failure: true
+#   only:
+#     - merge_requests
+#     - main
+#     # - develop
+#   artifacts:
+#     paths:
+#       - pylint-report.txt
+#       - coverage.xml
+
+# mirror_to_github:
+#   stage: mirror
+#   script:
+#     - echo "Pushing branch $CI_COMMIT_REF_NAME to GitHub"
+#     - echo "Cleaning up repository before push"
+#     - git gc --prune=now
+#     - git repack -a -d --depth=250 --window=250
+#     - git config --global http.postBuffer 524288000
+#     - git config --global pack.windowMemory 512m
+#     - git config --global pack.packSizeLimit 128m
+#     - echo "Setting up GitHub remote"
+#     - git remote add github https://${GITHUB_TOKEN}@${GITHUB_REPO_URL}
+#     - echo "Fetching and checking out full history"
+#     - git fetch --unshallow                     # Ensure full repository history (not a shallow clone)
+#     - git checkout -B main origin/main          # Ensure we are on the correct branch
+#     - echo "Branch set to $(git branch)"
+#     - echo "Force pushing branch $CI_COMMIT_REF_NAME to GitHub"
+#     - GIT_TRACE_PACKET=1 GIT_TRACE=1 GIT_CURL_VERBOSE=1 git push github main --force    # - git remote add github https://${GITHUB_TOKEN}@${GITHUB_REPO_URL}
+#     # - git push github $CI_COMMIT_REF_NAME -f
+#   only:
+#     - main 
+
+# # what we expected to work
+# mirror_to_github:
+#   stage: mirror
+#   script:
+#     - echo "Pushing branch $CI_COMMIT_REF_NAME to GitHub"
+#     - git fetch --all  # Fetch all branches
+#     - git checkout $CI_COMMIT_REF_NAME  # Ensure we're on the correct branch
+#     - git remote add github https://${GITHUB_TOKEN}@${GITHUB_REPO_URL}
+#     - git push github $CI_COMMIT_REF_NAME -f
+#   only:
+#     - main 
+
+
+mirror_to_github:
+  stage: mirror
+  script:
+    - echo "Pushing branch $CI_COMMIT_REF_NAME to GitHub"
+    - echo "Repository size analysis"
+    - du -sh . 
+    - echo "Cleaning up CI artifacts and cache before GitHub push"
+    - rm -rf $MYCACHE || echo "No cache to remove"
+    - rm -rf tests/data/ || echo "No test data to remove"  
+    - rm -rf .cache/ || echo "No .cache to remove"
+    - echo "Size after cleanup:"
+    - du -sh .
+    - git fetch --all  # Fetch all branches
+    # - echo "Top 10 largest files after cleanup"
+    # - find . -type f -exec du -h {} + | sort -rh | head -10
+    # - echo "Files over 50MB"
+    # - find . -type f -size +50M -exec ls -lh {} \; || echo "No files over 50MB found"
+    # - echo "Files over 100MB"
+    # - find . -type f -size +100M -exec ls -lh {} \; || echo "No files over 100MB found"
+    # - echo "Git object analysis"
+    # - git rev-list --objects --all | git cat-file --batch-check='%(objecttype) %(objectname) %(objectsize) %(rest)' | grep '^blob' | sort -k3 -n | tail -10
+    - git checkout $CI_COMMIT_REF_NAME
+    - echo "Setting up GitHub remote"
+    - git remote add github https://${GITHUB_TOKEN_CF}@${GITHUB_REPO_URL}
+    - git push github $CI_COMMIT_REF_NAME --force
+  only:
+    - main

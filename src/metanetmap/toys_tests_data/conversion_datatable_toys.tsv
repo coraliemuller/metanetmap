@@ -1,0 +1,55 @@
+UNIQUE-ID	CHEBI	COMMON-NAME	ABBREV-NAME	SYNONYMS	ADD-COMPLEMENT	MOLECULAR-WEIGHT	MONOISOTOPIC-MW	SEED	BIGG	HMDB	METANETX	LIGAND-CPD	REFMET	PUBCHEM	CAS	INCHI-KEY	SMILES
+CPD-17257	30828	trans-vaccenate		"[""trans-vaccenic acid"", ""(E)-octadec-11-enoate"", ""(E)-11-octadecenoic acid"", ""trans-11-octadecenoic acid"", ""trans-octadec-11-enoic acid""]"		281.457	282.2558803356						trans-vaccenic acid	5461067		InChIKey=UWHZIFQPPBDJPM-BQYQJAHWSA-M	CCCCCC/C=C/CCCCCCCCCC([O-])=O
+CPD-24978	50258	alpha-L-allofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-BYIBVSMXSA-N	C(O)[C@@H]([C@@H]1(O[C@@H](O)[C@H]([C@H]1O)O))O
+CPD-25014	147718	alpha-D-talofuranoses				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-PQMKYFCFSA-N	C(O)[C@@H](O)[C@H]1([C@@H]([C@@H]([C@@H](O)O1)O)O)
+CPD-25010	153460	alpha-D-mannofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-DVKNGEFBSA-N	C(O)[C@@H](O)[C@@H]1([C@@H]([C@@H]([C@@H](O)O1)O)O)
+Glucopyranose	4167	D-glucopyranose		"[""6-(hydroxymethyl)tetrahydropyran-2,3,4,5-tetraol""]"		180.157	180.0633881178		glc__D		MNXM41	C00031				InChIKey=WQZGKKKJIJFFOK-GASJEMHNSA-N	C([C@@H]1([C@H]([C@@H]([C@H](C(O1)O)O)O)O))O
+CPD-26454		19'-butanoyloxyfucoxanthin				745.007	744.4601190312							14160128		InChIKey=NEKQVGDUHFTLGS-MFFPCINUSA-N	CCCC(=O)OCC(/C=C=C1([C@](C)(O)C[C@@H](OC(=O)C)CC(C)(C)1))=C/C=C/C(\C)=C/C=C/C=C(C)/C=C/C=C(C)/C(=O)C[C@]23(C(C)(C)C[C@H](O)C[C@@](C)(O2)3)
+CPD-16933	50255	alpha-D-allofuranose				180.157	180.0633881178				MNXM40986			21627865		InChIKey=AVVWPBAENSWJCB-RXRWUWDJSA-N	C(O)[C@H]([C@H]1(O[C@H](O)[C@H](O)[C@H](O)1))O
+CPD-24986	153974	beta-D-altrofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-PHYPRBDBSA-N	C(O)[C@H]([C@@H]1([C@H]([C@@H]([C@@H](O)O1)O)O))O
+CPD-24992	153617	alpha-D-idofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-URLGYRAOSA-N	C(O)[C@@H](O)[C@H]1([C@H]([C@@H]([C@@H](O)O1)O)O)
+CPD-25011	152296	beta-D-mannofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-VFUOTHLCSA-N	C(O)[C@@H](O)[C@@H]1([C@@H]([C@@H]([C@H](O)O1)O)O)
+CPD-25008	151758	alpha-L-gulofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-DSOBHZJASA-N	C(O)[C@H](O)[C@@H]1([C@@H]([C@@H]([C@H](O)O1)O)O)
+CPD-25020	147529	beta-L-talofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-YJRYQGEOSA-N	C(O)[C@H](O)[C@@H]1([C@H]([C@H]([C@@H](O)O1)O)O)
+CPD-9247	30827	cis-vaccenate		"[""cis-vaccenic acid"", ""(Z)-octadec-11-enoate"", ""(Z)-11-octadecenoic acid"", ""cis-11-octadecenoic acid"", ""cis-octadec-11-enoic acid""]"		281.457	282.2558803356					C08367	cis-vaccenic acid	5461069		InChIKey=UWHZIFQPPBDJPM-FPLPWBNLSA-M	CCCCCC\C=C/CCCCCCCCCC(=O)[O-]
+CPD-24979	50259	beta-L-allofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-GNFDWLABSA-N	C(O)[C@@H]([C@@H]1(O[C@H](O)[C@H]([C@H]1O)O))O
+CPD-24991	138485	beta-L-idofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-BSQWINAVSA-N	C(O)[C@H](O)[C@@H]1([C@@H]([C@H]([C@@H](O)O1)O)O)
+MET	57844	L-methionine	met	"[""M"", ""methionine"", ""L-met""]"		149.207	149.0510492925		met__L	HMDB00696	MNXM61	C00073	Methionine	6992087	63-68-3	InChIKey=FFEARJCKVFRZRR-BYPYZUCNSA-N	CSCC[C@H]([NH3+])C([O-])=O
+CPD-24984	150524	beta-L-altrofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-KGJVWPDLSA-N	C(O)[C@@H]([C@H]1([C@@H]([C@H]([C@@H](O)O1)O)O))O
+FRU1P	138881	beta-D-fructofuranose 1-phosphate		"[""beta-D-fructofuranose-1-P""]"	keto-D-fructose 1-phosphate	258.121	260.0297185262		f1p	HMDB01076	MNXM743			25244216	15978-08-2	InChIKey=RHKKZBWRNHGJEZ-ARQDHWQXSA-L	C(O)[C@@H]1([C@@H](O)[C@H](O)[C@](COP([O-])([O-])=O)(O)O1)
+CARBAMOYL-P	58228	carbamoyl phosphate		"[""carbamoyl-P"", ""carbamyl-phosphate""]"		139.004	140.9827087541	cpd00146	cbp	HMDB01096	MNXM138	C00169		3423467	590-55-6	InChIKey=FFQKYPRQEYGKAF-UHFFFAOYSA-L	C(=O)(N)OP(=O)([O-])[O-]
+DIMETHYLMAL-CPD	17081	dimethylmaleate		"[""2,3-dimethylmaleic acid"", ""2,3-dimethylmaleate""]"		142.111	144.0422587452	cpd00684		HMDB36232	MNXM1822	C00922		5459894	624-48-6	InChIKey=CGBYBGVMDAPUIH-ARJAWSKDSA-L	CC(\C(=O)[O-])=C(C)\C(=O)[O-]
+CPD-24997	149114	beta-L-glucofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-RUTHBDMASA-N	C(O)[C@H](O)[C@H]1([C@H]([C@@H]([C@@H](O)O1)O)O)
+Long-Chain-Fatty-Acids	15904	long-chain fatty acid		"[""LCFA""]"				cpd00487			MNXM96037	C00638					C(CCCCCCCCCCCC([O-])=O)[R]
+CPD-25015	148879	beta-D-talofuranoses				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-RWOPYEJCSA-N	C(O)[C@@H](O)[C@H]1([C@@H]([C@@H]([C@H](O)O1)O)O)
+CPD-25019	154524	alpha-L-talofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-HGVZOGFYSA-N	C(O)[C@H](O)[C@@H]1([C@H]([C@H]([C@H](O)O1)O)O)
+CPD-15970	18105	keto-D-fructose 1-phosphate			keto-D-fructose 1-phosphate	258.121	260.0297185262		f1p	HMDB60467	MNXM1553		Fructose-1-phosphate	20111955		InChIKey=ZKLLSNQJRLJIGT-UYFOZJQFSA-L	C(OP([O-])(=O)[O-])C(=O)[C@@H](O)[C@H](O)[C@H](O)CO
+Vaccenate	50498	vaccenate		"[""octadec-11-enoate"", ""11-octadecenoate"", ""vaccenic acid""]"		281.457	282.2558803356									InChIKey=UWHZIFQPPBDJPM-UHFFFAOYSA-M	CCCCCC/C=C/CCCCCCCCCC([O-])=O
+OROTATE	30839	orotate		"[""orotic acid""]"		155.09	156.0171066272	cpd00247	orot	HMDB00226	MNXM235	C00295	Orotic acid	1492348	65-86-1	InChIKey=PXQPEWDEAKTCGB-UHFFFAOYSA-M	C1(\C(=O)NC(NC(/C([O-])=O)=1)=O)
+CPD0-2486	146456	alpha-D-galactofuranose				180.157	180.0633881178	cpd26522			MNXM89485			21627868		InChIKey=AVVWPBAENSWJCB-TVIMKVIFSA-N	C(O)[C@@H](O)[C@H]1([C@H](O)[C@@H](O)[C@H](O1)O)
+CPD-25006	151495	alpha-D-gulofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-RDQKPOQOSA-N	C(O)[C@@H](O)[C@H]1([C@H]([C@H]([C@@H](O)O1)O)O)
+CPD-22089		delphinidin 3-O-(4-coumaroyl-alpha-L-rhamnosyl-(1->6)-beta-D-glucoside		"[""delphinidin 3-O-(4-coumaroyl)-rutinoside""]"		755.662	757.1979893855							138319285		InChIKey=ZHAHYPSCTKDQEC-AYJKEVOISA-M	C[C@@H]2(O[C@H]([C@H](O)[C@H](O)[C@@H](OC(=O)/C=C/C1(\C=C/C(/O)=C\C=1))2)OC[C@H]3(O[C@H]([C@H](O)[C@@H](O)[C@H](O)3)OC5(\C(C4(\C=C(C(\O)=C(/C=4)\O)\O))=[O+]C6(\C(/C=5)=C(/C=C(/C=6)/[O-])\[O-]))))
+CPD-25370	84783	beta-D-galactosyl-(1harr1')-N-hexadecanoylsphinganine		"[""GalCer(d18:0/16:0)"", ""beta-D-galactosyl-(1harr1')-N-hexadecanoylsphinganine"", ""beta-D-galactosyl-(1harr1')-N-palmitoylsphinganine"", ""N-(hexadecanoyl)-1-beta-galactosyl-sphinganine""]"		702.066	701.5805685179									InChIKey=BLGKYYVFGMKTEZ-VEZWYSRTSA-N	CCCCCCCCCCCCCCC[C@@H](O)[C@@H](NC(=O)CCCCCCCCCCCCCCC)CO[C@H]1([C@H](O)[C@@H](O)[C@@H](O)[C@@H](CO)O1)
+CPD-16934	50256	beta-D-allofuranose				180.157	180.0633881178				MNXM5636			21627866		InChIKey=AVVWPBAENSWJCB-AIECOIEWSA-N	C(O)[C@H]([C@H]1(O[C@@H](O)[C@H](O)[C@H](O)1))O
+CPD-24952	145606	beta-D-glucofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-QZABAPFNSA-N	C(O)[C@H]([C@@H]1([C@@H]([C@H]([C@H](O)O1)O)O))O
+CPD-25013	146876	beta-L-mannofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-QYESYBIKSA-N	C(O)[C@H](O)[C@H]1([C@H]([C@H]([C@@H](O)O1)O)O)
+CPD-24951	148749	alpha-D-glucofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-UKFBFLRUSA-N	C(O)[C@H]([C@@H]1([C@@H]([C@H]([C@@H](O)O1)O)O))O
+CPD-17381	182411	roquefortine C				389.456	389.1851750085			HMDB30381	MNXM130356	C22165		5935070		InChIKey=SPWSUFUPTSJWNG-CXUHLZMHSA-N	C=CC(C)(C)C13(CC4(N(C(NC2(/C=C\C=C/C\1=2))3)C(=O)C(/NC(=O)4)=C\C5(\N=C/N\C=5)))
+CPD-18186		8-O-methylfusarubin alcohol				320.298	320.0896028683				MNXM163700			102515244		InChIKey=PODQBZJWKPDHDN-UHFFFAOYSA-N	CC(=O)CC1(\C(=O)C2(/C(/O)=C(/C=C(C(\C(=O)C(/CO)=1)=2)/OC)/OC))
+CPD-25012	148580	alpha-L-mannofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-MDMQIMBFSA-N	C(O)[C@H](O)[C@H]1([C@H]([C@H]([C@H](O)O1)O)O)
+PANTOTHENATE	29032	(R)-pantothenate		"[""vitamin B5"", ""(R)-pantothenic acid"", ""D-pantothenic acid""]"	pantothenic acid	218.229	219.11067266140003	cpd00644	pnto__R	HMDB00210	MNXM364	C00864	Pantothenic acid	167945	79-83-4	InChIKey=GHOKWGTUZJEAQD-ZETCQYMHSA-M	CC(C)(CO)[C@@H](O)C(=O)NCCC(=O)[O-]
+CPD0-2485	59497	beta-D-galactofuranose		"[""Galf""]"		180.157	180.0633881178	cpd26521			MNXM148101	C22957		11019448		InChIKey=AVVWPBAENSWJCB-DGPNFKTASA-N	C(O)[C@@H](O)[C@H]1([C@H](O)[C@@H](O)[C@@H](O1)O)
+CPD-24996	152105	alpha-L-glucofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-GKFJPSPNSA-N	C(O)[C@H](O)[C@H]1([C@H]([C@@H]([C@H](O)O1)O)O)
+CPD-24985	152069	alpha-D-altrofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-FPRJBGLDSA-N	C(O)[C@H]([C@@H]1([C@H]([C@@H]([C@H](O)O1)O)O))O
+CPD-569	58263	N-acetylputrescine		"[""monoacetylputrescine""]"	N-acetylputrescine	131.197	130.1106130819	cpd01758	aprut	HMDB02064	MNXM1153	C02714	N-Acetylputrescine	25243990	18233-70-0	InChIKey=KLZGKIDSEJWEDW-UHFFFAOYSA-O	CC(=O)NCCCC[NH3+]
+CPD-24990	153554	alpha-L-idofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-YDMGZANHSA-N	C(O)[C@H](O)[C@@H]1([C@@H]([C@H]([C@H](O)O1)O)O)
+CPD-24983	150666	alpha-L-altrofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-SXUWKVJYSA-N	C(O)[C@@H]([C@H]1([C@@H]([C@H]([C@H](O)O1)O)O))O
+CPD-25009	148497	beta-L-gulofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-ZSNZIGRDSA-N	C(O)[C@H](O)[C@@H]1([C@@H]([C@@H]([C@@H](O)O1)O)O)
+ADENINE	16708	adenine		"[""6-aminopurine"", ""A""]"		135.128	135.0544951865		ade	HMDB00034		C00147	Adenine	190	73-24-5	InChIKey=GFFGJBXGBJISGV-UHFFFAOYSA-N	C2(N)(\N=C/N=C1(C(/N=C\N1)=2))
+CPD-24993	147926	beta-D-idofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-QBFJYBIGSA-N	C(O)[C@@H](O)[C@H]1([C@H]([C@@H]([C@H](O)O1)O)O)
+CPD-25005	146919	beta-L-galactofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-XKTQNOIPSA-N	C(O)[C@H](O)[C@@H]1([C@@H](O)[C@H](O)[C@H](O1)O)
+PALMITATE	7896	palmitate		"[""hexadecanoate (n-C16:0)"", ""palmitic acid"", ""hexadecanoate"", ""hexadecanoic acid""]"		255.42	256.2402302714	cpd00214	hdca	HMDB00220	MNXM108	C00249	Palmitic acid	504166	57-10-3	InChIKey=IPCSVZSSVZVIGE-UHFFFAOYSA-M	CCCCCCCCCCCCCCCC([O-])=O
+CPD-25004	148031	alpha-L-galactofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-FQJSGBEDSA-N	C(O)[C@H](O)[C@@H]1([C@@H](O)[C@H](O)[C@@H](O1)O)
+beta-Gal-13-beta-GlcNac-R	88144	type 1 histo-blood group antigen precursor disaccharide		"[""beta-D-galactosyl-(1,3)-N-acetyl-beta-D-glucosamine-R"", ""betaGal-(1->3)-betaGlcNac-R"", ""beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-R""]"							MNXM163316						CC(=O)N[C@H]2([C@H](O[R])O[C@H](CO)[C@H]([C@H](O[C@@H]1(O[C@H](CO)[C@H](O)[C@H](O)[C@@H](O)1))2)O)
+Gal-13-GlcN-R		beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-R															CC(=O)N[C@H]2([C@H](O[R])O[C@H](CO)[C@@H](O)[C@H](O[C@@H]1(O[C@H](CO)[C@H](O)[C@H](O)[C@@H](O)1))2)
+CPD-25007	151369	beta-D-gulofuranose				180.157	180.0633881178									InChIKey=AVVWPBAENSWJCB-FDROIEKHSA-N	C(O)[C@@H](O)[C@H]1([C@H]([C@H]([C@H](O)O1)O)O)

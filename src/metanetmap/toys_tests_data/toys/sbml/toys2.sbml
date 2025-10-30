@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sbml xmlns:fbc="http://www.sbml.org/sbml/level3/version1/fbc/version2" xmlns="http://www.sbml.org/sbml/level3/version1/core" level="3" version="1" sboTerm="SBO:0000624" fbc:required="false">
+    <model fbc:strict="true" id="toys_metabolites">
+        <listOfUnitDefinitions>
+        <unitDefinition id="mmol_per_gDW_per_hr">
+            <listOfUnits>
+            <unit kind="mole" scale="-3" multiplier="1" exponent="1"/>
+            <unit kind="gram" scale="0" multiplier="1" exponent="-1"/>
+            <unit kind="second" scale="0" multiplier="3600" exponent="-1"/>
+            </listOfUnits>
+        </unitDefinition>
+        </listOfUnitDefinitions>
+        <fbc:listOfObjectives fbc:activeObjective="obj">
+        <fbc:objective fbc:id="obj" fbc:type="maximize">
+            <fbc:listOfFluxObjectives>
+                <fbc:fluxObjective fbc:reaction="R_BIOMASS" fbc:coefficient="1"/>
+            </fbc:listOfFluxObjectives>
+        </fbc:objective>
+        </fbc:listOfObjectives>
+        <listOfParameters>
+        <parameter value="-1000" id="cobra_default_lb" sboTerm="SBO:0000626" constant="true" units="mmol_per_gDW_per_hr"/>
+        <parameter value="1000" id="cobra_default_ub" sboTerm="SBO:0000626" constant="true" units="mmol_per_gDW_per_hr"/>
+        <parameter value="0" id="cobra_0_bound" sboTerm="SBO:0000626" constant="true" units="mmol_per_gDW_per_hr"/>
+        <parameter value="-10" id="cobra_10_lbound" sboTerm="SBO:0000626" constant="true" units="mmol_per_gDW_per_hr"/>
+        </listOfParameters>
+        <listOfCompartments>
+            <compartment id="e" name="extracellular space" constant="true"/>
+            <compartment id="c" name="cytosol" constant="true"/>
+        </listOfCompartments>
+        <listOfSpecies>
+            <species id="M_OROTATE_e"  name="OROTATE" compartment="e" boundaryCondition="false"/>
+            <species id="M_Carbamyl__45__phosphate_c"  name="Carbamyl-phosphate" compartment="c" boundaryCondition="false"/>
+            <species id="M_CPD__45__18186_e"  name="8-O-methylfusarubin alcohol" compartment="e" boundaryCondition="false"/>
+            <species id="M_CPD__45__26454_c"  name="Xanthophylls" compartment="c" boundaryCondition="false"/>
+            <species id="M_Gal__45__13__45__GlcN__45__R_c"  name="M_Gal__45__13__45__GlcN__45__R_c" compartment="c" boundaryCondition="false"/>
+            <species id="M_BIOMASS_c"  name="BIOMASS" compartment="c" boundaryCondition="false"/>
+            <species id="M_PANTOTHENATE_c"  name="PANTOTHENATE" compartment="c" boundaryCondition="false"/>
+            <species id="M_MET_e"  name="L-methionine" compartment="e" boundaryCondition="false"/>
+            <species id="M_MET_c"  name="L-methionine" compartment="c" boundaryCondition="false"/>
+
+
+        </listOfSpecies>
+        <listOfReactions> 
+                <reaction id="R_EX_MET" name="R_EX_MET" reversible="true" fbc:upperFluxBound="cobra_default_ub" fbc:lowerFluxBound="cobra_default_lb">
+                <listOfReactants>
+                    <speciesReference species="M_MET_e" stoichiometry="1.0000" />
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="M_MET_c" stoichiometry="1.0000" />
+                </listOfProducts>
+            </reaction>           
+            <reaction id="R_R1" name="R_R1" reversible="true" fbc:upperFluxBound="cobra_default_ub" fbc:lowerFluxBound="cobra_default_lb">
+                <listOfReactants>
+                    <speciesReference species="M_OROTATE_e" stoichiometry="1.0000" />
+                    <speciesReference species="M_MET_c" stoichiometry="1.0000" />
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="M_Carbamyl__45__phosphate_c" stoichiometry="1.0000" />
+                </listOfProducts>
+            </reaction>
+            <reaction id="R_R2" name="R_R2" reversible="false" fbc:upperFluxBound="cobra_0_bound" fbc:lowerFluxBound="cobra_default_lb">
+                <listOfReactants>
+                    <speciesReference species="M_CPD__45__18186_e" stoichiometry="1.0000" />
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="M_Carbamyl__45__phosphate_c" stoichiometry="1.0000" />
+                </listOfProducts>
+            </reaction>
+            <reaction id="R_R3" name="R_R3" reversible="false" fbc:upperFluxBound="cobra_0_bound" fbc:lowerFluxBound="cobra_default_lb">
+                <listOfReactants>
+                    <speciesReference species="M_Carbamyl__45__phosphate_c" stoichiometry="1.0000" />
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="M_CPD__45__26454_c" stoichiometry="1.0000" />
+                </listOfProducts>
+            </reaction>
+            <reaction id="R_R4" name="R_R4" reversible="false" fbc:upperFluxBound="cobra_0_bound" fbc:lowerFluxBound="cobra_default_lb">
+                <listOfReactants>
+                    <speciesReference species="M_CPD__45__26454_c" stoichiometry="1.0000" />
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="M_PANTOTHENATE_c" stoichiometry="1.0000" />
+                </listOfProducts>
+            </reaction>
+            <reaction id="R_BIOMASS" name="R_BIOMASS" reversible="true" fbc:upperFluxBound="cobra_default_ub" fbc:lowerFluxBound="cobra_default_lb">
+                <listOfReactants>
+                    <speciesReference species="M_PANTOTHENATE_c" stoichiometry="1.0000" />
+                </listOfReactants>
+                <listOfProducts>
+                    <speciesReference species="M_BIOMASS_c" stoichiometry="1.0000" />
+                </listOfProducts>
+            </reaction>
+        </listOfReactions>
+    </model>
+</sbml>

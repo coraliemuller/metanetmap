@@ -1,0 +1,79 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+metanetmap = "metanetmap.cli:main"
+
+[project]
+name = "metanetmap"
+version = "0.1.0"
+description = "A Python package for mapping metabolites between metabolic models and  metabolomics data."
+readme = "README.rst"
+authors = [
+  {name = "Coralie Muller", email = "coralie.muller@inria.fr"}
+]
+maintainers = [
+  {name = "Coralie Muller", email = "coralie.muller@inria.fr"}
+]
+classifiers = [
+
+]
+license = {text = "GNU General Public License v3"}
+dependencies = [
+  
+]
+
+[project.optional-dependencies]
+dev = [
+    "coverage",  # testing
+    "mypy",  # linting
+    "pytest",  # testing
+    "ruff"  # linting
+]
+
+[project.urls]
+
+homepage = "https://gitlab.inria.fr/mistic/metanetmap"
+
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+include-package-data = true
+
+[tool.setuptools.package-data]
+metanetmap = [
+  "toys_tests_data/conversion_datatable_toys.tsv",
+  "build_datatable_conversion/datatable_complementary.tsv",
+  "toys_tests_data/toys/maf/*.tsv",
+  "toys_tests_data/toys/sbml/*.sbml",
+  "toys_tests_data/toys/sbml/*.xml",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+
+# Mypy
+# ----
+
+[tool.mypy]
+files = "."
+
+# Use strict defaults
+strict = true
+warn_unreachable = true
+warn_no_return = true
+
+[[tool.mypy.overrides]]
+# Don't require test functions to include types
+module = "tests.*"
+allow_untyped_defs = true
+disable_error_code = "attr-defined"
+
+# Linting
+[tool.pylint.format]
+max-line-length = "88"
+
+[tool.isort]
+profile = 'black'

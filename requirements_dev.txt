@@ -1,0 +1,11 @@
+pip
+bump2version
+wheel
+watchdog
+tox
+coverage
+Sphinx
+twine
+ruff
+pytest
+pytest-asyncio

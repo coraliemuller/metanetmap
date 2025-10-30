@@ -1,0 +1,9 @@
+--extra-index-url=https://gitlab.inria.fr/api/v4/projects/62842/packages/pypi/simple
+
+setuptools
+cobra
+numpy
+pandas
+aiohttp
+tqdm
+
