@@ -27,7 +27,7 @@ variables:
 
 stages:
   - prepare
-  - check
+  # - check
   - test
   - mirror
 
@@ -48,12 +48,12 @@ Get test data:
       - tests/data/
 
 
-Check:
-  stage: check
-  image: ruby:3.1
-  script:
-    - find $MYCACHE $LIBCHEBIPY_DOWNLOAD_DIR tests/data -type f
-    - echo $LIBCHEBIPY_DOWNLOAD_DIR
+# Check:
+#   stage: check
+#   image: ruby:3.1
+#   script:
+#     - find $MYCACHE $LIBCHEBIPY_DOWNLOAD_DIR tests/data -type f
+#     - echo $LIBCHEBIPY_DOWNLOAD_DIR
 
 Quality:
   stage: check
