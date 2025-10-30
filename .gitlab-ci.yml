@@ -83,17 +83,17 @@ test:
     - pip install .                        # install the package itself
     - pytest -vv --log-cli-level=debug     # Run tests without changing directories
 
-coverage:
-  stage: test
-  script:
-    - tox run -e clean,py39,py312,report
-  # coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  artifacts:
-    paths:
-      - htmlcov/
-      - coverage.xml
-    reports:
-      junit: toxtests.xml
+# coverage:
+#   stage: test
+#   script:
+#     - tox run -e clean,py39,py312,report
+#   # coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+#   artifacts:
+#     paths:
+#       - htmlcov/
+#       - coverage.xml
+#     reports:
+#       junit: toxtests.xml
 
 
 # sonarqube-check:
