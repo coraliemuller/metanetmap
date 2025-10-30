@@ -27,7 +27,6 @@ variables:
 
 stages:
   - prepare
-  # - check
   - test
   - mirror
 
