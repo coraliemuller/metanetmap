@@ -97,7 +97,7 @@ This kind of table is commonly used as a mapping table between databases such as
 | **Column**  | **Name**      | **Description**                                          |
 +=============+===============+==========================================================+
 | 1           | source        | Source database and identifier (e.g. mnx:BIOMASS,        |
-|             |               | seedM:cpd11416, CHEBI:16234...                           |
+|             |               | seedM:cpd11416, CHEBI:16234...)                          |
 +-------------+---------------+----------------------------------------------------------+
 | 2           | ID            | Corresponding MetaNetX or normalized identifier (e.g.    |
 |             |               | MNXM01, MNXM02, BIOMASS)                                 |
@@ -202,6 +202,7 @@ Notes
 | MNXM1265        | 3-phosphoshikimic acid              |      |      |
 | MNXM1140        | 7,8-diaminononanoate                | dann |      |
 +-----------------+-------------------------------------+------+------+
+
 The ``datatable_complementary`` is a tabular file provided by the user.  
 It allows users to add their own custom identifiers in order to improve matching with their metabolomic data.
 
@@ -218,6 +219,10 @@ It allows users to add their own custom identifiers in order to improve matching
 - Be sure to keep track of any custom or fictional IDs you create, so you can filter or manage them later if needed.
 
 
+Output data details for Database Building Mode 
+----------------------------------------------
+
+Below in **Input Files for Mapping Mode**: Datatable_conversion_metacyc and Datatable_conversion_metanetx
 
 Input Files for Mapping Mode
 ---------------------------------------
@@ -296,7 +301,8 @@ For **metabolic network data**, we typically extract the ID and name, as well as
 
 
 - **Datatable_conversion_metacyc**: 
-- 
+Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
+
 - Some Column Name are missing (non-exhaustive)
 +---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
 |   UNIQUE-ID   | CHEBI  |      COMMON-NAME      | ABBREV-NAME |                                                                 SYNONYMS                                                                  | ADD-COMPLEMENT | MOLECULAR-WEIGHT | MONOISOTOPIC-MW | SEED |  BIGG  |
@@ -335,7 +341,8 @@ SMILES              Simplified Molecular Input Line Entry System (SMILES) string
 ==================  ================================================================================================================================
 
 - **Datatable_conversion_metanetx**: 
-- 
+Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
+
 - Some Column Name are missing (non-exhaustive)
 +---------------+--------------+----------------+------------------+----------------+------+--------+
 |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC        | SEED |  BIGG  |
@@ -367,8 +374,8 @@ Output data details
 
 The name of the output file depends on the processing mode:
 
-- In **community mode**, the file is named as: ``community_mapping_results_YYYY-MM-DD_HH:MM:SS.tsv``
-- In **classic mode**, the file is named as: ``mapping_results_YYYY-MM-DD_HH:MM:SS.tsv``
+- In **community mode**, the file is named as: ``community_mapping_results_YYYY-MM-DD_HH_MM_SS.tsv``
+- In **classic mode**, the file is named as: ``mapping_results_YYYY-MM-DD_HH_MM_SS.tsv``
 - If **partial match** is activated, the filename will include ``partial_match`` to indicate this.
 
 **File content and column structure**
@@ -403,6 +410,7 @@ The output is a tabular file containing several columns with mapping results and
    Each cell contains ``YES`` to indicate that a match was found on the ID of that column in the metabolomics data.
 
 
+- Some Column Name are missing (non-exhaustive)
 +----------------------------------------------------+----------------------+----------------------------+-----------------------+--------------------+-----------------+
 | Metabolites                                        | Match in database    | Match in metabolic         | Partial match         | Match via UNIQUE-ID| Match via CHEBI |
 |                                                    |                      | networks                   |                       |                    |                 |

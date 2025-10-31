@@ -32,8 +32,6 @@ By leveraging both the MetaCyc/MetaNetX database and user-provided enhancements,
    is **not included** in the test option.  
    Only a simplified example (a "toy" version) of the ``datatable_conversion`` file is provided.
 
-  But a conversion data table has already been built and is provided from MetaNetX in ``data/metanetx_conversion_datatable.tsv``.
-
 
 After building this knowledge base - ``datatable_conversion``, it is possible to perform mapping in several ways
 

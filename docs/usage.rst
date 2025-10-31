@@ -39,34 +39,44 @@ This ensures that the **mapping mode** runs correctly.
   .. code-block:: bash
 
     metanetmap     build_db   \
-                  -y --metacyc (True/False)
-                  -x --metanetx (True/False)
-                  -f metacyc_compounds_dat/file/path datatable_complementary_tsv/file/path  output_conversion_datatable_tsv/file/path 
-                  -q quiet_mode (True/False) # Optional
+                  --db            metacyc\
+                  -f              metacyc_compounds_dat/file/path 
+                  --compfiles     datatable_complementary_tsv/file/path
+                  --out_db        output_conversion_datatable_tsv/file/path 
+                  -q              quiet_mode (True/False) # Optional
 
 
 - **Run database building mode for MetaNetX**:
-    .. code-block:: bash
+  
+  .. code-block:: bash
 
     metanetmap     build_db   \
-                  -y --metacyc (True/False)
-                  -x --metanetx (True/False)
-                  -f MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path datatable_complementary_tsv/file/path  output_conversion_datatable_tsv/file/path  
-                  -q quiet_mode (True/False) # Optional
+                  --db            metanetx\
+                  -f              MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path
+                  --compfiles     datatable_complementary_tsv/file/path
+                  --out_db        output_conversion_datatable_tsv/file/path 
+                  -q              quiet_mode (True/False) # Optional
 
 
 .. note::
-  ``output_conversion_datatable_tsv/file/path`` and ``datatable_complementary_tsv/file/path`` are optional.  
-  If you do not want to provide one or both of them, simply pass an empty string using double quotes, like this:
 
-      -f metacyc_compounds_dat/file/path  "" "" or -f MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path "" ""
+   The parameters ``output_conversion_datatable_tsv/file/path`` and 
+   ``datatable_complementary_tsv/file/path`` are optional.
 
-  ``datatable_complementary_tsv/file/path`` is a file curated manually by users to include specific or custom IDs. See documentation for more details.
-  
-  The options ``-x`` and ``-y`` allow you to build the conversion data table using either **MetaCyc** or **MetaNetX** data.  
-  Since these two sources do not provide the same type or number of files, the build process differs depending on the selected source.
+   - If ``output_conversion_datatable_tsv/file/path`` is empty, the file will be downloaded 
+     to the root directory.
+   - If ``datatable_complementary_tsv/file/path`` is empty, the complementary step will 
+     be ignored.
 
-  Both options are **boolean flags**, and are set to **False** by default.
+   For the ``metanetx`` option, the ``-f`` argument specifies the input files. 
+   If not provided by the user, the default ``chem_prop`` and ``chem_xref`` files 
+   will be downloaded automatically.
+
+   The file ``datatable_complementary_tsv/file/path`` may also be a manually curated file 
+   created by users to include specific or custom IDs. 
+   See the documentation for more details.
+
+  Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
 
 
 After this you can run MetaNetMap in two different modes with a partial match option :
