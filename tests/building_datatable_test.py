@@ -24,7 +24,8 @@ from metanetmap import build_database
 #------------------------------------#
 TEST_TOYS_DIR = Path(__file__).parent.parent
 
-DATATABLE_COMPLEMENT = path.join(TEST_TOYS_DIR,'src/metanetmap/build_datatable_conversion/datatable_complementary_metacyc.tsv')
+DATATABLE_COMPLEMENT_METACYC = path.join(TEST_TOYS_DIR,'src/metanetmap/build_datatable_conversion/datatable_complementary_metacyc.tsv')
+DATATABLE_COMPLEMENT_METANETX = path.join(TEST_TOYS_DIR,'src/metanetmap/build_datatable_conversion/datatable_complementary_metanetx.tsv')
 TEST_EXPECTED_DIR = Path(__file__).parent
 
 # ----------------------------------------------------------
@@ -41,41 +42,82 @@ def read_tsv(fp):
 #         TESTS         #
 #-----------------------#
 
-# @pytest.mark.skipif(
-#     not os.path.exists("tests/data/compounds_29.dat") or
-#     not os.path.exists("tests/data/conversion_datatable.tsv"),
-#     reason="Required test data files are missing"
-# )
-# # Main --> Compare the datatable generated to the one expected 
-# #### Results table
-# def test_mapping_run_vs_expected_classic(tmp_path):
-#     # 1. Settings
-#     output_folder = tmp_path
-#     output_folder.mkdir(parents=True, exist_ok=True)  # <- CRUCIAL
-#     output_path=output_folder/"conversion_datatable.tsv"
+@pytest.mark.skipif(
+    not os.path.exists("tests/data/compounds_29.dat") or
+    not os.path.exists("tests/data/conversion_datatable.tsv"),
+    reason="Required test data files are missing"
+)
+# Main --> Compare the datatable generated to the one expected 
+#### Results table
+def test_build_datatable_metacyc(tmp_path):
+    # 1. Settings
+    output_folder = tmp_path
+    output_folder.mkdir(parents=True, exist_ok=True)  # <- CRUCIAL
+    output_path=Path(output_folder,"conversion_datatable.tsv")
 
-#     # 2. Load input data
-#     Metacyc = "tests/data/compounds_29.dat"
-#     CONVERSION_DATATABLE = "tests/data/conversion_datatable.tsv"
+    # 2. Load input data
+    Metacyc = "tests/data/compounds_29.dat"
+    CONVERSION_DATATABLE = "tests/data/conversion_datatable.tsv"
 
-#     args = Namespace(
-#     metacyc_file=Metacyc,
-#     complement_file=DATATABLE_COMPLEMENT,
-#     output=output_folder,
-#     metacyc=True,
-#     metanetx= False,
-#     quiet= True)
-#     build_database.load_args(args)
-#     # 3. Run the mapping
+    args = Namespace(
+        metacyc_file=Metacyc,
+        complement_file=DATATABLE_COMPLEMENT_METACYC,
+        output=output_path,
+        db='metacyc',
+        quiet=True,
+                )
+    build_database.load_args(args)
+    # 3. Run the mapping
     
-#     # 4. Check the generated file
-#     assert output_path.exists(), "Output file not generated"
+    # 4. Check the generated file
+    assert output_path.exists(), "Output file not generated"
 
-#     # 5.  Compare contents
-#     actual = read_tsv(output_path)
-#     expected = read_tsv(CONVERSION_DATATABLE)
-#     assert actual == expected, "The generated table does not match the expected one"
+    # 5.  Compare contents
+    actual = read_tsv(output_path)
+    expected = read_tsv(CONVERSION_DATATABLE)
+    assert actual == expected, "The generated table does not match the expected one"
 
+
+
+
+
+
+@pytest.mark.skipif(
+    not os.path.exists("tests/data/chem_xref.tsv") or
+    not os.path.exists("tests/data/chem_prop.tsv") or
+    not os.path.exists("tests/data/metanetx_conversion_datatable.tsv"),
+    reason="Required test data files are missing"
+)
+# Main --> Compare the datatable generated to the one expected 
+#### Results table
+def test_build_datatable_metanetx(tmp_path):
+    # 1. Settings
+    output_folder = tmp_path
+    output_folder.mkdir(parents=True, exist_ok=True)  # <- CRUCIAL
+    output_path=Path(output_folder,"conversion_datatable.tsv")
+
+    # 2. Load input data
+    chem_prop_file="tests/data/chem_prop.tsv"
+    chem_ref_file="tests/data/chem_xref.tsv"
+    CONVERSION_DATATABLE_METANETX = "tests/data/metanetx_conversion_datatable.tsv"
+    args = Namespace(
+        chem_prop_file=chem_prop_file,
+        chem_ref_file=chem_ref_file,
+        complement_file=DATATABLE_COMPLEMENT_METANETX,
+        output=output_path,
+        db='metanetx',
+        quiet=True,
+    )
+    build_database.load_args(args)
+    # 3. Run the mapping
+    
+    # 4. Check the generated file
+    assert output_path.exists(), "Output file not generated"
+
+    # 5.  Compare contents
+    actual = read_tsv(output_path)
+    expected = read_tsv(CONVERSION_DATATABLE_METANETX)
+    assert actual == expected, "The generated table does not match the expected one"
 
 
 

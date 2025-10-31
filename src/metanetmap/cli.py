@@ -97,35 +97,44 @@ def main():
     )
 
     # Multiple complement files for build_db mode
+    parent_parser_files_for_build_db = argparse.ArgumentParser(
+        add_help=False)
+    parent_parser_files_for_build_db.add_argument(
+        "-f",
+        "--files_for_build_db",
+        help="Paths to main files for database conversion (build_db mode)\n"
+        "\nExample: -f <path>/compounds_29.dat (Metacyc) OR  <path>/chem_prop.tsv <path>/chem_xref.tsv (MetaNetX)",
+        nargs="+",
+        required=False,
+    )
+    # Complementary file
     parent_parser_complement_files_for_build_db = argparse.ArgumentParser(
         add_help=False
     )
     parent_parser_complement_files_for_build_db.add_argument(
-        "-f",
-        "--complement_files_for_build_db",
+        "--compfiles",
         help="Paths to complement files for database conversion (build_db mode)\n"
-        "\nExample: -f <path>/compounds_29.dat (Metacyc) OR  <path>/chem_prop.tsv <path>/chem_xref.tsv (MetaNetX)"
-        "<path>/datatable_complementary.tsv "
-        "<output_path>/conversion_datatable.tsv",
-        nargs="+",
-        required=True,
+        "\nExample: -f <path>/complementary_db.tsv",
+        required=False,
     )
 
-    # Quiet mode (less verbose output)
-    parent_parser_metanetx = argparse.ArgumentParser(add_help=False)
-    parent_parser_metanetx.add_argument(
-        "-x",
-        "--metanetx",
-        help="Enable the MetaNetX option to build a conversion datatable from the MetaNetX files",
-        action="store_true",
+    # Output path for
+    parent_parser_out_db = argparse.ArgumentParser(
+        add_help=False
     )
-        # Quiet mode (less verbose output)
-    parent_parser_metacyc = argparse.ArgumentParser(add_help=False)
-    parent_parser_metacyc.add_argument(
-        "-y",
-        "--metacyc",
-        help="Enable the Metacyc option to build a conversion datatable from the Metacyc file",
-        action="store_true",
+    parent_parser_out_db.add_argument(
+        "--out_db",
+        help="Path for the creation of the  to complement files for database conversion (build_db mode)\n"
+        "\nExample: -f <pathoutput>/",
+        required=False,
+    )
+
+    # Metacyc or MetaNetX methods
+    parent_parser_db = argparse.ArgumentParser(add_help=False)
+    parent_parser_db.add_argument(
+        "--db",
+        help="Choose 'metacyc' or 'metanetx' methods to build the conversion datatable"
+        "--db metacyc or --db metanetx"
     )
 
     # Community mode for test:
@@ -171,9 +180,11 @@ def main():
     subparsers.add_parser(
         "build_db",
         help="Run in building mode",
-        parents=[parent_parser_complement_files_for_build_db,
-                parent_parser_quiet,parent_parser_metacyc,
-                parent_parser_metanetx,
+        parents=[parent_parser_db,
+        parent_parser_files_for_build_db,
+        parent_parser_complement_files_for_build_db,
+        parent_parser_out_db,
+        parent_parser_quiet,
                 ],
         description="Run database building mode to generate the "
         "database conversion file",
@@ -292,75 +303,45 @@ def main():
     # #    Main command      #
     # #----------------------#
     if args.cmd == "build_db":
-        compl_files = args.complement_files_for_build_db
-        if args.metacyc == True and args.metanetx == True:
-            logger.critical(
-                "Error: Metacyc and MetanetX have both been selected" "" \
-                "— only one of them must be selected."
+        if args.db == "metacyc":
+            files_for_build_db = args.files_for_build_db
+            if len(files_for_build_db) != 1:
+                logger.critical(
+                    "Error: the required 'metacyc' file is missing. "
+                    "Please check that the specified path is correct: "
+                    "-f <path>/bases/metacyc/compounds_29.dat"
+                )
+                sys.exit()
+            else:
+                utils.is_valid_file(files_for_build_db[0])
+                args = Namespace(
+                    metacyc_file=files_for_build_db[0],
+                    complement_file=args.compfiles,
+                    output=args.out_db,
+                    db=args.db,
+                    quiet=args.quiet,
+                )
+                load_args(args)
+        elif args.db == "metanetx":
+            if not args.files_for_build_db:
+                files_for_build_db = [ "",""]
+            else:
+                files_for_build_db = args.files_for_build_db
+            args = Namespace(
+                chem_prop_file=files_for_build_db[0],
+                chem_ref_file=files_for_build_db[1],
+                complement_file=args.compfiles,
+                output=args.out_db,
+                db=args.db,
+                quiet=args.quiet,
             )
-            sys.exit()
-        elif args.metacyc == False and args.metanetx == False:
-            logger.critical(
-                "Error: Either Metacyc or MetanetX must be selected"
-                " — at least one of them is required."
-            )
-            sys.exit()
+            load_args(args)
         else:
-            if args.metacyc == True:
-                if len(compl_files) != 3:
-                    logger.critical(
-                        "Error: The paths for build_db option must be in a "
-                        "specific order: metacyc_file, complement_file, output"
-                    )
-                    logger.critical(
-                        "-f <path>/bases/metacyc/compounds_29.dat  "
-                        "<path>/datatable_complementary.tsv "
-                        "<path>/conversion_datatable.tsv"
-                    )
-                    sys.exit()
-                    
-                else:
-                    print(compl_files[0])
-                    print(compl_files[1])
-                    utils.is_valid_file(compl_files[0])
-                    args = Namespace(
-                        metacyc_file=compl_files[0],
-                        complement_file=compl_files[1],
-                        output=compl_files[2],
-                        metacyc=args.metacyc,
-                        metanetx= args.metanetx,
-                        quiet=args.quiet,
-                    )
-                    load_args(args)
-            elif args.metanetx == True:
-                if len(compl_files) != 4:
-                    logger.critical(
-                        "Error: The paths for build_db option must be in a "
-                        "specific order: metacyc_file, complement_file, output"
-                    )
-                    logger.critical(
-                        "-f  <path>/chem_prop.tsv   "
-                        "<path>/chem_xref.tsv "
-                        "<path>/datatable_complementary.tsv "
-                        "<path>/conversion_datatable.tsv"
-                    )
-                    sys.exit()
-                else:
-                    print(compl_files[0])
-                    print(compl_files[1])
-                    utils.is_valid_file(compl_files[0])
-                    utils.is_valid_file(compl_files[1])
-                    args = Namespace(
-                        chem_prop_file=compl_files[0],
-                        chem_ref_file=compl_files[1],
-                        complement_file=compl_files[2],
-                        output=compl_files[3],
-                        metacyc=args.metacyc,
-                        metanetx= args.metanetx,
-                        quiet=args.quiet,
-                    )
-                    load_args(args)
-
+            logger.critical(
+            "Error: the '--db' argument must be either 'metacyc' or 'metanetx'. "
+            "You must choose one of these database methods."
+            )
+            sys.exit()    
 
     elif args.cmd == "test":
         #     ## Test toys

@@ -31,7 +31,7 @@ Input data details
 Input Files for Database Building Mode
 ---------------------------------------
 
-- **📄 metacyc_compounds (Metacyc)**:  
+- **metacyc_compounds (Metacyc)**:  
 Tabular file provided by the user with a licence for MetaCyc
 
 The following is a raw entry for the compound **WATER** from a MetaCyc flat file `.dat` extension. 
@@ -86,7 +86,7 @@ Example Compound Entry in the Metacyc
     SYNONYMS - water
 
 
-- **📄 chem_xref.tsv (MetaNetX)**:
+- **chem_xref.tsv (MetaNetX)**:
 - Tabular file provided by the user from MetaNetX website.
 
 Each line represents an entry linking different identifiers or names for the same metabolite.
@@ -127,7 +127,7 @@ Notes
 
 
 
-- **📄 chem_prop.tsv (MetaNetX):
+- **chem_prop.tsv (MetaNetX):
 
 This table lists basic information for metabolites or pseudo-metabolites,
 including chemical formulas, charges, molecular masses, and structure encodings.
@@ -179,7 +179,7 @@ Notes
   balancing.
 
 
-- **📄 datatable_complementary**:  
+- **datatable_complementary**:  
   Tabular file provided by the user
 
 (Metacyc)
@@ -222,7 +222,7 @@ It allows users to add their own custom identifiers in order to improve matching
 Input Files for Mapping Mode
 ---------------------------------------
 
-- **📄 metabolomics_data**:  
+- **metabolomics_data**:  
   .. note::
   For **metabolomics_data**:
   Column names must follow a specific naming convention and each line is a metabolite.
@@ -251,7 +251,7 @@ Input Files for Mapping Mode
 |            | CHEBI:16708 | Adenine                            |              |                                           |
 +------------+-------------+------------------------------------+--------------+-------------------------------------------+
 
-- **📄 Metabolic networks**: 
+- **Metabolic networks**: 
 
 .. code-block:: [langage]
    <?xml version="1.0" encoding="UTF-8"?>
@@ -295,7 +295,7 @@ For **metabolic network data**, we typically extract the ID and name, as well as
 
 
 
-- **📄 Datatable_conversion_metacyc**: 
+- **Datatable_conversion_metacyc**: 
 - 
 - Some Column Name are missing (non-exhaustive)
 +---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
@@ -308,23 +308,33 @@ For **metabolic network data**, we typically extract the ID and name, as well as
 | Glucopyranose |  4167  |    D-glucopyranose    |             |                                           ["6-(hydroxymethyl)tetrahydropyran-2,3,4,5-tetraol"]                                            |                |     180.157      | 180.0633881178  |      | glc__D |
 +---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
 
-Some Column Name are missing (non-exhaustive)
-| Column Name        | Description                                                                                                                                        |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UNIQUE-ID`        | The unique identifier for the compound, typically from the MetaCyc database (e.g., `CPD-17257`).                                                   |
-| `CHEBI`            | The corresponding ChEBI identifier (if available), used for chemical standardization and interoperability.                                         |
-| `COMMON-NAME`      | The common name of the metabolite as found in MetaCyc or other databases.                                                                          |
-| `ABBREV-NAME`      | Abbreviated name for the metabolite, if defined. Often used in metabolic modeling tools (e.g., COBRA models).                                      |
-| `SYNONYMS`         | A list of alternative names for the metabolite. These may include IUPAC names, trivial names, and other variants used in the literature/databases. |
-| `ADD-COMPLEMENT`   | Reserved for additional manually added metadata or complement terms, if applicable.                                                                |
-| `MOLECULAR-WEIGHT` | The molecular weight (nominal or average) of the metabolite.                                                                                       |
-| `MONOISOTOPIC-MW`  | The monoisotopic molecular weight — i.e., the exact mass based on the most abundant isotope of each element.                                       |
-| `SEED`             | Identifier from the SEED database, if available.                                                                                                   |
-| `BIGG`             | Identifier from the BiGG Models database, if available. Typically used in genome-scale metabolic models.  
-| `METANETX`         | Identifier from the MetaNetX database, if available.                                         |
-TODO HERE
 
-- **📄 Datatable_conversion_metanetx**: 
+==================  ================================================================================================================================
+Column Name         Description
+==================  ================================================================================================================================
+UNIQUE-ID           The unique identifier for the compound, typically from the MetaCyc database (e.g., ``CPD-17257``).
+CHEBI               The corresponding ChEBI identifier (if available), used for chemical standardization and interoperability.
+COMMON-NAME         The common name of the metabolite as found in MetaCyc or other databases.
+ABBREV-NAME         Abbreviated name for the metabolite, if defined. Often used in metabolic modeling tools (e.g., COBRA models).
+SYNONYMS            A list of alternative names for the metabolite. These may include IUPAC names, trivial names, and other variants used in the literature/databases.
+ADD-COMPLEMENT      Reserved for additional manually added metadata or complement terms, if applicable.
+MOLECULAR-WEIGHT    The molecular weight (nominal or average) of the metabolite.
+MONOISOTOPIC-MW     The monoisotopic molecular weight — i.e., the exact mass based on the most abundant isotope of each element.
+SEED                Identifier from the SEED database, if available.
+BIGG                Identifier from the BiGG Models database, if available. Typically used in genome-scale metabolic models.
+HMDB                Identifier from the Human Metabolome Database (HMDB), if available.
+METANETX            Identifier from the MetaNetX database, if available. This field becomes the unique identifier in this dataset.
+LIGAND-CPD          Identifier from the KEGG Ligand Compound database (KEGG COMPOUND).
+REFMET              Identifier from the RefMet metabolite reference list, used in metabolomics.
+PUBCHEM             PubChem Compound Identifier (CID), if available.
+CAS                 Chemical Abstracts Service (CAS) Registry Number, if available.
+INCHI               IUPAC International Chemical Identifier string describing the compound structure.
+NON-STANDARD-INCHI  A non-standardized or modified InChI representation, if applicable.
+INCHI-KEY           The hashed InChIKey string derived from the InChI for compact referencing.
+SMILES              Simplified Molecular Input Line Entry System (SMILES) string representing the compound’s structure.
+==================  ================================================================================================================================
+
+- **Datatable_conversion_metanetx**: 
 - 
 - Some Column Name are missing (non-exhaustive)
 +---------------+--------------+----------------+------------------+----------------+------+--------+
@@ -338,22 +348,13 @@ TODO HERE
 +---------------+--------------+----------------+------------------+-----------------+------+--------+
 
 
-Some Column Name are missing (non-exhaustive)
+Use the same description for the columns as above, except for the exceptions below, and make METANTX the unique identifier.
 
 | Column Name        | Description                                                                                                                                        |
 | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UNIQUE-ID`        | The unique identifier for the compound, typically from the MetaNetX database (e.g., `CPD-17257`).                                                  |
-| `CHEBI`            | The corresponding ChEBI identifier (if available), used for chemical standardization and interoperability.                                         |
-| `COMMON-NAME`      | The common name of the metabolite as found in MetaNetX or other databases.                                                                         |
-| `ABBREV-NAME`      | Abbreviated name for the metabolite, if defined. Often used in metabolic modeling tools (e.g., COBRA models).                                      |
-| `SYNONYMS`         | A list of alternative names for the metabolite. These may include IUPAC names, trivial names, and other variants used in the literature/databases. |
-| `ADD-COMPLEMENT`   | Reserved for additional manually added metadata or complement terms, if applicable.                                                                |
-| `MOLECULAR-WEIGHT` | The molecular weight (nominal or average) of the metabolite.                                                                                       |
-| `SEED`             | Identifier from the SEED database, if available.                                                                                                   |
-| `BIGG`             | Identifier from the BiGG Models database, if available. Typically used in genome-scale metabolic models.                                           |
-| `METACYC`          | Identifier from the METACYC database, if available.                                                                                                |
-
-
+| `UNIQUE-ID`        | The unique identifier for the compound, typically from the MetaNetX database (e.g., `CPD-17257`).                                                  |                                         |
+| `METACYC`          | Identifier from the METACYC database, if available. (exchanged with METANETX)  
+| `VMH`              | Identifier from the VMH database, if available.                                                                                               |
 
 
 
@@ -361,7 +362,7 @@ Output data details
 ------------------
 
 
-- **📄mapping_results**:  
+- **mapping_results**:  
   .. note::
 
 The name of the output file depends on the processing mode:
@@ -375,7 +376,7 @@ The name of the output file depends on the processing mode:
 The output is a tabular file containing several columns with mapping results and metadata:
 
 1. **Metabolite Matches**  
-   Lists the metabolite names that matched.  
+   Lists the metabolite IDS that matched.  
    If multiple matches are found for a single input (i.e., duplicates), they are joined using ``_AND_``.  
 
 2. **MetaCyc/MetaNetX UNIQUE-ID Match (from `datatable_conversion`)**  
@@ -396,7 +397,8 @@ The output is a tabular file containing several columns with mapping results and
      - CHEBI ontology expansion
      - INCHIKEY simplification
      - Enantiomer removal
-- **📄mapping_results**:
+     - 
+- **mapping_results**:
    The remaining columns correspond to identifiers or metadata from the metabolomics data.  
    Each cell contains ``YES`` to indicate that a match was found on the ID of that column in the metabolomics data.
 
@@ -458,13 +460,12 @@ Output File Content and Column Structure
 | `Match via INCHI-KEY`         | Match based on the **InChIKey**, a hashed version of the InChI chemical identifier.                                                                                                                                                                                        |
 | `Match via SMILES`            | Match via the **SMILES** string (Simplified Molecular Input Line Entry System) representing the molecular structure.                                                                                                                                                       |
 | `Match via FORMULA`           | Match based on **molecular formula**, e.g., `C6H12O6`.                                                                                                                                                                                                                     |
-| `Input File Match`            | - **Classic mode**: Matched identifier from the original input file. <br> - **Community mode**: List of input files where the match was found, e.g., `[data1, data3]`.                                                                                                     |
 +-------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
 
 
-- **📄log **:
+- **log**:
 
 Provides more information about each step and the corresponding results.
 

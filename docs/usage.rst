@@ -13,24 +13,60 @@ Command-line usage
 Based on the input listed in :doc:`input_data`, ``metanetmap`` can be run in four mode:
 
 .. note::
-  Before running the different modes, you must build your own datatable conversion.
-  You need access and permission to use MetaCyc data — specifically the ``compounds.dat`` (or ``compounds_version.dat``) file — in order to build this datatable conversion.
+  Before running the different modes, you must first build your own **data table conversion**.
 
-- **Run database building mode**:
+There are two main ways to do this:
+
+1. **Using MetaCyc files** (not provided with this package). You need access and permission to use MetaCyc data — specifically the ``compounds.dat`` (or ``compounds_version.dat``) file — in order to build this datatable conversion.
+2. **Using MetaNetX reference files**, which can be downloaded from:
+
+   - `MetaNetX Reference Data <https://www.metanetx.org/mnxdoc/mnxref.html>`_
+
+Custom Conversion Tables
+------------------------
+
+You can also provide your **own custom conversion data table**, as long as it follows the required column naming convention.  
+This ensures that the **mapping mode** runs correctly.
+
+.. note::
+
+   The list and description of the required column names are available in the
+   :doc:`input_data` section.
+  
+
+- **Run database building mode for Metacyc**:
 
   .. code-block:: bash
 
     metanetmap     build_db   \
-                  -f metacyc_compounds_dat/file/path datatable_complementary_tsv/file/path  conversion_datatable_tsv/file/path 
+                  -y --metacyc (True/False)
+                  -x --metanetx (True/False)
+                  -f metacyc_compounds_dat/file/path datatable_complementary_tsv/file/path  output_conversion_datatable_tsv/file/path 
                   -q quiet_mode (True/False) # Optional
 
+
+- **Run database building mode for MetaNetX**:
+    .. code-block:: bash
+
+    metanetmap     build_db   \
+                  -y --metacyc (True/False)
+                  -x --metanetx (True/False)
+                  -f MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path datatable_complementary_tsv/file/path  output_conversion_datatable_tsv/file/path  
+                  -q quiet_mode (True/False) # Optional
+
+
 .. note::
-  ``conversion_datatable_tsv/file/path`` and ``datatable_complementary_tsv/file/path`` are optional.  
+  ``output_conversion_datatable_tsv/file/path`` and ``datatable_complementary_tsv/file/path`` are optional.  
   If you do not want to provide one or both of them, simply pass an empty string using double quotes, like this:
 
-      -f metacyc_compounds_dat/file/path  "" ""
+      -f metacyc_compounds_dat/file/path  "" "" or -f MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path "" ""
 
   ``datatable_complementary_tsv/file/path`` is a file curated manually by users to include specific or custom IDs. See documentation for more details.
+  
+  The options ``-x`` and ``-y`` allow you to build the conversion data table using either **MetaCyc** or **MetaNetX** data.  
+  Since these two sources do not provide the same type or number of files, the build process differs depending on the selected source.
+
+  Both options are **boolean flags**, and are set to **False** by default.
 
 
 After this you can run MetaNetMap in two different modes with a partial match option :
@@ -95,15 +131,19 @@ Input Data
 Summary of input files for database building mode
 ----------------------
 
-+-------------------------+-------------------------------------------------------------+
-| File/Directory          | Description                                                 |
-+=========================+=============================================================+
-| metacyc_compounds       | Binary file provided by the MetaCyc database                |
-+-------------------------+-------------------------------------------------------------+
-| datatable_complementary | Tabular file provided by the user (see details below)       |
-+-------------------------+-------------------------------------------------------------+
-| output -o               | Output directory for mapping results and logs               |
-+-------------------------+-------------------------------------------------------------+
++-------------------------+-------------------------------------------------------+
+| File/Directory          | Description                                           |
++=========================+=======================================================+
+| metacyc_compounds       | Text file provided by the MetaCyc database            |
++-------------------------+-------------------------------------------------------+
+| chem_xref               | Tabular file from MetaNetX with ref to others db      |
++-------------------------+-------------------------------------------------------+
+| chem_prop               | Tabular file from MetaNetX with properties            |                                                                          
++-------------------------+-------------------------------------------------------+
+| datatable_complementary | Tabular file provided by the user (see details below) |
++-------------------------+-------------------------------------------------------+
+| output -o               | Output directory for mapping results and logs         |
++-------------------------+-------------------------------------------------------+
 
 .. note::
 The ``datatable_complementary`` is a tabular file provided by the user.  
@@ -111,13 +151,13 @@ It allows users to add their own custom identifiers in order to improve matching
 
 **Requirements and structure:**
 
-- The **first column must be** a ``UNIQUE-ID`` that links to the MetaCyc database.
+- The **first column must be** a ``UNIQUE-ID`` that links to the MetaCyc/MetaNetX database.
 - All **following columns are free** and may contain any identifiers or names. Their column names will be automatically included in the main conversion datatable.
 - The file must be in tabular format (e.g., TSV or CSV), with headers.
 
 **Important notes:**
 
-- If you have a metabolite **without a matching ``UNIQUE-ID`` in MetaCyc**, you may assign a **custom or fictional ID** in the first column.
+- If you have a metabolite **without a matching ``UNIQUE-ID`` in MetaCyc/MetaNetX**, you may assign a **custom or fictional ID** in the first column.
 - This fictional ``UNIQUE-ID`` will still be included in the conversion table, and **will be used if a match is found based on the name or identifier you provided.**
 - Be sure to keep track of any custom or fictional IDs you create, so you can filter or manage them later if needed.
 
@@ -125,17 +165,17 @@ It allows users to add their own custom identifiers in order to improve matching
 Summary of input files for mapping modes
 ----------------------
 
-+---------------------+-------------------------------------------------------------+
-| File/Directory      | Description                                                 |
-+=====================+=============================================================+
-| MetaNetMap output   | Output directory for mapping results and logs               |
-+---------------------+-------------------------------------------------------------+
-| metabolic_networks  | Path to the directory with .sbml or/and .xml files          |
-+---------------------+-------------------------------------------------------------+
-| metabolomics_data   | Tabulated file, (cf note below for details)                 |
-+---------------------+-------------------------------------------------------------+
-| datatable_conversion| Tabulated file, first column is the UNIQUE-ID in MetaCyc    |
-+---------------------+-------------------------------------------------------------+
++---------------------+----------------------------------------------------------------------+
+| File/Directory      | Description                                                          |
++=====================+======================================================================+
+| MetaNetMap output   | Output directory for mapping results and logs                        |
++---------------------+----------------------------------------------------------------------+
+| metabolic_networks  | Path to the directory with .sbml or/and .xml files                   |
++---------------------+----------------------------------------------------------------------+
+| metabolomics_data   | Tabulated file, (cf note below for details)                          |
++---------------------+----------------------------------------------------------------------+
+| datatable_conversion| Tabulated file, first column is the UNIQUE-ID in MetaCyc/MetaNetX    |
++---------------------+----------------------------------------------------------------------+
 
 
 .. note::
@@ -147,7 +187,7 @@ Summary of input files for mapping modes
 
    ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``,
    ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
-   ``BIGG``, ``HMDB``, ``METANETX``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,
+   ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC`` , ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,
    ``CAS``, ``INCHI-KEY``, ``SMILES``
 
 
@@ -157,25 +197,25 @@ Output Data
 
 Summary of output file for database building mode
 ----------------------
-+-------------------------+-------------------------------------------------------------+
-| File/Directory          | Description                                                 |
-+=========================+=============================================================+
-| datatable_conversion    | Tabulated file, first column is the UNIQUE-ID in MetaCyc    |
-+-------------------------+-------------------------------------------------------------+
-| logs                    | Directory provides more detailed information                |
-+-------------------------+-------------------------------------------------------------+
++-------------------------+----------------------------------------------------------------------+
+| File/Directory          | Description                                                          |
++=========================+======================================================================+
+| datatable_conversion    | Tabulated file, first column is the UNIQUE-ID in MetaCyc/MetaNetX    |
++-------------------------+----------------------------------------------------------------------+
+| logs                    | Directory provides more detailed information                         |
++-------------------------+----------------------------------------------------------------------+
 
 .. note::
 
   The ``datatable_conversion`` file acts as a bridge between the metabolomics data and the metabolic networks.
-  It combines all structured information extracted from the MetaCyc ``compounds.dat`` file, along with any additional identifiers or metadata provided by the user through the ``datatable_complementary`` file.
+  It combines all structured information extracted from the MetaCyc ``compounds.dat`` file or from MetaNetX files ``chem_xref.tsv`` and ``chem_prop.tsv``files, along with any additional identifiers or metadata provided by the user through the ``datatable_complementary`` file.
   This unified table serves as a comprehensive knowledge base that allows the tool to search across all known identifiers for a given metabolite and match them between the input data and the metabolic networks.
-  By leveraging both the MetaCyc database and user-provided enhancements, the ``datatable_conversion`` enables robust and flexible mapping across diverse data sources.
+  By leveraging both the MetaCyc/MetaNetX database and user-provided enhancements, the ``datatable_conversion`` enables robust and flexible mapping across diverse data sources.
 
   The ``logs`` directory contains detailed information about the processing steps.  
   It is useful for debugging, auditing, and understanding how the tool performed the mapping and handled the input data.
 
-
+  A conversion data table has already been built and is provided from MetaNetX in ``data/metanetx_conversion_datatable.tsv``.
 
 
 Summary of output file for mapping modes
@@ -207,8 +247,8 @@ The output is a tabular file containing several columns with mapping results and
    Lists the metabolite names that matched.  
    If multiple matches are found for a single input (i.e., duplicates), they are joined using ``_AND_``.  
 
-2. **MetaCyc UNIQUE-ID Match (from `datatable_conversion`)**  
-   Indicates whether a match was found through the MetaCyc conversion table using a ``UNIQUE-ID``.  
+2. **MetaCyc/MetaNetX UNIQUE-ID Match (from `datatable_conversion`)**  
+   Indicates whether a match was found through the MetaCyc/MetaNetX conversion table using a ``UNIQUE-ID``.  
    If two UNIQUE-IDs match the same input, they are separated by ``_AND_`` and flagged as uncertain.  
    These entries are also reflected in the **partial** column due to ambiguity.
 

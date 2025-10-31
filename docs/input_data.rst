@@ -69,9 +69,9 @@ Input data
 +=========================+=======================================================+
 | metacyc_compounds       | Text file provided by the MetaCyc database            |
 +-------------------------+-------------------------------------------------------+
-| chem_xref               | Tabular file from MetaNetX                            |
+| chem_xref               | Tabular file from MetaNetX with ref to others db      |
 +-------------------------+-------------------------------------------------------+
-| chem_prop               | Tabular file from MetaNetX                            |                                                                          
+| chem_prop               | Tabular file from MetaNetX with properties            |                                                                          
 +-------------------------+-------------------------------------------------------+
 | datatable_complementary | Tabular file provided by the user (see details below) |
 +-------------------------+-------------------------------------------------------+

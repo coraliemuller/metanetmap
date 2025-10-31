@@ -27,6 +27,7 @@ import re
 import sys
 import time
 from pathlib import Path
+import urllib.request
 
 from metanetmap import utils
 
@@ -453,15 +454,54 @@ def add_complement_from_complementary(dictionary_db, complementary_dicts):
 
 
 
-# --- File reading functions ---
+def download_metanetx_file(filename, url, root) :
+    """
+    Download a MetaNetX file into a choosen directory and return its full path.
+
+    If the download fails or the file does not exist after download, returns None.
+
+    Parameters:
+    -----------
+    filename (str) : The name to save the downloaded file as (e.g., 'chem_prop.tsv.gz').
+    url (str) : The full URL to download the file from.
+
+    Returns:
+    --------
+    str or None
+        Full path to the downloaded file if successful, None otherwise.
+    """
+    output = os.path.join(root, "metanetx_db")
+    os.makedirs(output, exist_ok=True)
+
+    filepath = os.path.join(output, filename)
+    logger.info(f"Downloading {filename} from {url}...")
+
+    try:
+        urllib.request.urlretrieve(url, filepath)
+        logger.info(f"{filename} successfully downloaded to {filepath}")
+    except Exception as e:
+        logger.info(f"Error downloading {filename}: {e}")
+        return None
+
+    # Check if file exists after download
+    if os.path.exists(filepath):
+        logger.info(f"File exists: {filepath}")
+        return filepath
+    else:
+        logger.info(f"File not found after download: {filepath}")
+        return None
+
+
+
+
+###  File reading functions 
 def read_chem_prop(path):
     """
     Read the MetaNetX chemical properties file (chem_prop.tsv).
 
     Parameters
     ----------
-    path : str
-        Path to the chem_prop.tsv file.
+    path (str) Path to the chem_prop.tsv file.
 
     Returns
     -------
@@ -488,14 +528,15 @@ def read_chem_prop(path):
             })
     return pd.DataFrame(rows)
 
+
+
 def read_chem_xref(path):
     """
     Read the MetaNetX cross-reference file (chem_xref.tsv).
 
     Parameters
     ----------
-    path : str
-        Path to the chem_xref.tsv file.
+    path (str): Path to the chem_xref.tsv file.
 
     Returns
     -------
@@ -537,6 +578,7 @@ def extract_ids(df, db_prefix):
     """
     subset = df[df["source"].str.startswith(db_prefix)]
     return subset.groupby("MNX_ID")["source"].apply(lambda x: "|".join(sorted(set(x)))).reset_index().rename(columns={"source": db_prefix.upper()})
+
 
 
 def explode_ids(df, col):
@@ -656,82 +698,26 @@ def remove_prefix_M(val):
 
 def parse_args():
     """
-    Parses command-line arguments for the MetaCyc data conversion script.
+    Parses command-line arguments for the MetaCyc/MetaNetX data conversion script.
 
     Returns:
-        argparse.Namespace: Parsed arguments including:
-            - metacyc_file (str): Path to the MetaCyc .dat file
-              (default: 'bases/metacyc/compounds_29.dat').
-            - complement_file (str): Path to the complementary .tsv
-              file (default: 'datatable_complementary.tsv').
-            - output (str): Output file name or directory path for the
-              resulting TSV (default: 'conversion_datatable.tsv').
-            - quiet (bool): If set, runs the script in quiet mode
-              (suppress logs except warnings/errors).
+        argparse.Namespace: Parsed arguments 
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-c",
-        "--metacyc_file",
-        help="Path to the metacyc file for build conversion datatable from Metacyc: .dat",
-    )
-    parser.add_argument(
-        "-r",
-        "--chem_ref_file",
-        help="Path to the chem_xref file for build conversion datatable from MetaNetX: .tsv",
-        required=False,
-    )
-    parser.add_argument(
-        "-p",
-        "--chem_prop_file",
-        help="Path to the chem_prop file for build conversion datatable from MetaNetX: .tsv",
-        required=False,
-    )
-    parser.add_argument(
-        "-s",
-        "--complement_file",
-        help="Path to the complement file: .tsv",
-        required=True,
-    )
-    parser.add_argument(
-        "-o",
-        "--output",
-        help="output filename: .tsv or folder/",
-        default="conversion_datatable.tsv",
-    )
-    parser.add_argument(
-        "-q",
-        "--quiet",
-        help="Output directory name for mapping results",
-        action="store_true",
-        required=False,
-    )
-    parser.add_argument(
-        "-x",
-        "--metanetx",
-        help="Enable the MetaNetX option to build a conversion datatable from the MetaNetX files",
-        action="store_true",
-    )
-        # Quiet mode (less verbose output)
-    parser.add_argument(
-        "-y",
-        "--metacyc",
-        help="Enable the Metacyc option to build a conversion datatable from the Metacyc file",
-        action="store_true",
-    )
+
     return parser.parse_args()
 
 
 def load_args(args=None):
     """
-    Main function to run the MetaCyc to TSV conversion pipeline.
+    Main function to run the MetaCyc/MetaNetX to TSV conversion pipeline.
 
     Args:
         args (argparse.Namespace, optional): Parsed command-line arguments.
             If None, the arguments will be parsed from sys.argv.
 
     This function:
-        - Parses the MetaCyc .dat file to extract compound information.
+        - Parses the MetaCyc .dat or TSV from MetaNetX files to extract compound information.
         - Optionally loads a complementary file for additional
           identifiers (BIGG, SEED, etc.).
         - Builds the conversion dictionary.
@@ -774,7 +760,11 @@ def load_args(args=None):
         print("---->    Build database run in quiet mode    <----\n")
     logger.addHandler(console_handler)
 
-    output = Path(args.output)
+
+    if not args.output:
+        output = ""
+    else:
+        output = args.output
 
     # ----------------------------------------#
     #        Check validity of output         #
@@ -786,16 +776,17 @@ def load_args(args=None):
     if not ext:  # Check if we have the path for outputfolder but not the name
         # in args, create an arbitrary filename.
         utils.is_valid_dir(root)
-        if args.metacyc == True:
+        if args.db == "metacyc":
             utils.is_valid_file_or_create(f"{root}metacyc_conversion_datatable.tsv")
             output = os.path.join(root, "metacyc_conversion_datatable.tsv")
-        elif args.metanetx == True:
+        elif args.db == "metanetx":
             utils.is_valid_file_or_create(f"{root}metanetx_conversion_datatable.tsv")
             output = os.path.join(root, "metanetx_conversion_datatable.tsv")
         else:
             logger.critical(
-                "Error: Metacyc and MetanetX option -- only one of them must be selected."
-                    )
+            "Error: the '--db' argument must be either 'metacyc' or 'metanetx'. "
+            "You must choose one of these database methods."
+            )
             sys.exit()
     else:
         stripped = os.path.dirname(output)
@@ -839,7 +830,7 @@ def load_args(args=None):
     logger.info("\nCommand run:")
     logger.info("Actual command run (from sys.argv): python " + " ".join(sys.argv))
 
-    if args.metacyc == True:
+    if args.db == "metacyc":
         utils.is_valid_file(args.metacyc_file)
         if complementary_file:  # iF complementrary file is add
             utils.is_valid_file(complementary_file)
@@ -860,15 +851,22 @@ def load_args(args=None):
             dictionary_db = manage_synonyms(dictionary_db)
             utils.write_csv(dictionary_db, output, keys)
     
-    if args.metanetx:
-
+    if args.db == "metanetx":
+        if args.chem_prop_file == "":
+            chem_prop_file=download_metanetx_file("chem_prop.tsv","https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_prop.tsv",root)
+        else:
+            chem_prop_file=args.chem_prop_file
+        if args.chem_ref_file =="":   
+            chem_ref_file=download_metanetx_file("chem_xref.tsv","https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_xref.tsv",root)
+        else:
+            chem_ref_file=args.chem_ref_file
         if complementary_file:  # iF complementrary file is add
             utils.is_valid_file(complementary_file)
     
             logger.info("\n---> Run construction of the datatable for MetaNetX\n")
                         # --- Load data ---
-            df_prop = read_chem_prop(args.chem_prop_file)
-            df_xref = read_chem_xref(args.chem_ref_file)
+            df_prop = read_chem_prop(chem_prop_file)
+            df_xref = read_chem_xref(chem_ref_file)
             # Extract references for each database
             chebi_df = extract_ids(df_xref, "chebi")
             pubchem_df = extract_ids(df_xref, "pubchem")
@@ -941,14 +939,14 @@ def load_args(args=None):
             dictionary_db = add_complement_from_complementary(dictionary_db_metanetx, column_dicts)
             utils.write_csv(dictionary_db, output, cols_order)
 
+
         else:
             logger.info("\n---> Run construction of the datatable for MetaNetX")
             logger.info("/!\\  No complementary file added")
-    
             
             # --- Load data ---
-            df_prop = read_chem_prop(args.chem_prop_file)
-            df_xref = read_chem_xref(args.chem_ref_file)
+            df_prop = read_chem_prop(chem_prop_file)
+            df_xref = read_chem_xref(chem_ref_file)
             # Extract references for each database
             chebi_df = extract_ids(df_xref, "chebi")
             pubchem_df = extract_ids(df_xref, "pubchem")
@@ -1013,7 +1011,7 @@ def load_args(args=None):
 
             # --- Save final merged table ---
             df_final.to_csv(output, sep="\t", index=False)
-            print(f"Final merged table generated: {output}")
+            logger.info(f"Final merged table generated: {output}")
 
     t1 = time.time()
     if args.quiet:
