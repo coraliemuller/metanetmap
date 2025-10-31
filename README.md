@@ -72,7 +72,7 @@ The **Partial match** is optional, as it can be time-consuming. It is a post-pro
 
 
 ### Classic mode
-The classic mode allows you to input a single metabolomics data file (`.maf` or `.tsv`) and a directory containing multiple metabolic networks (`.sbml` or `.xml`).
+The classic mode allows you to input a single metabolomics data file (`.maf` or `.tsv`) or a directory containing multiple metabolomics data files, and a unique metabolic network (`.sbml` or `.xml`).
 
 ```bash
 metanetmap test
@@ -84,7 +84,7 @@ metanetmap test --partial_match
 ```
 
 ### Community mode
-The "community" mode allows you to input a directory containing multiple metabolomics data files (`.maf` or `.tsv`), as well as a directory containing multiple metabolic networks(`.sbml` or `.xml`).
+The "community" mode allows you to input a directory containing multiple metabolomic data files (`.maf` or `.tsv`), as well as a directory containing multiple metabolic networks(`.sbml` or `.xml`).
 
 ```bash
 metanetmap test --community

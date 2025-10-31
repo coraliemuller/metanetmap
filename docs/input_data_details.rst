@@ -1,10 +1,10 @@
 .. This file is included from input_data.rst
 
 Input data details
-------------------
+==================
 
 - **Structure** 
- Example directory structure (but files and directories can be placed anywhere):
+ Example of directory structure (but files and directories can be placed anywhere):
 
   .. code-block:: text
 
@@ -23,16 +23,16 @@ Input data details
     metacyc_compounds.dat (MetaCyc)
     chem_xref.tsv (MetaNetX)
     chem_prop.tsv (MetaNetX)
-    datatable_complementary.tsv (for MetaCyc/MetaNetX)
+    complementary_datatable.tsv (for MetaCyc/MetaNetX)
     datatable_conversion.tsv
     logs/
 
 
-Input Files for Database Building Mode
+Input files for third-party database building mode
 ---------------------------------------
 
 - **metacyc_compounds (MetaCyc)**:  
-Tabular file provided by the user with a licence for MetaCyc
+``compounds.dat`` has to be provided by the user. Access to this file requires a licence for MetaCyc
 
 The following is a raw entry for the compound **WATER** from a MetaCyc flat file `.dat` extension. 
 The file is structured as key-value pairs, where each line represents a specific property or annotation of the compound.
@@ -87,7 +87,11 @@ Example Compound Entry in the MetaCyc file
 
 
 - **chem_xref.tsv (MetaNetX)**:
-- Tabular file provided by the user from MetaNetX website.
+- Tabular file provided by the user from MetaNetX website. It can also be directly downloaded by MetaNetMap using the command:
+  
+  .. code-block:: bash
+
+      metanetmap build_db --db metanetx
 
 Each line represents an entry linking different identifiers or names for the same metabolite.
 This kind of table is commonly used as a mapping table between databases such as MetaNetX, SEED, BiGG, or ChEBI.
@@ -132,6 +136,12 @@ Notes
 This table lists basic information for metabolites or pseudo-metabolites,
 including chemical formulas, charges, molecular masses, and structure encodings.
 It links each metabolite to a reference identifier from a source database.
+
+This file does not have to be provided by the user if MetaNetMap is used to download the necessary data, with the command:
+  
+  .. code-block:: bash
+
+      metanetmap build_db --db metanetx
 
 Table Structure
 ---------------
@@ -179,7 +189,7 @@ Notes
   balancing.
 
 
-- **datatable_complementary**:  
+- **complementary_datatable**:  
   Tabular file provided by the user
 
 (MetaCyc)
@@ -203,7 +213,7 @@ Notes
 | MNXM1140        | 7,8-diaminononanoate                | dann |      |
 +-----------------+-------------------------------------+------+------+
 
-The ``datatable_complementary`` is a tabular file provided by the user.  
+The ``complementary_datatable`` is a tabular file provided by the user.  
 It allows users to add their own custom identifiers in order to improve matching with their metabolomic data.
 
 **Requirements and structure:**
@@ -219,17 +229,17 @@ It allows users to add their own custom identifiers in order to improve matching
 - Be sure to keep track of any custom or fictional IDs you create, so you can filter or manage them later if needed.
 
 
-Output data details for Database Building Mode 
+Output data details for database building mode 
 ----------------------------------------------
 
 Below in **Input Files for Mapping Mode**: Datatable_conversion_metacyc and Datatable_conversion_metanetx
 
-Input Files for Mapping Mode
+Input files for mapping mode
 ---------------------------------------
 
-- **metabolomics_data**:  
+- **metabolomic_data**:  
   .. note::
-  For **metabolomics_data**:
+  For **metabolomic_data**:
   Column names must follow a specific naming convention and each line is a metabolite.
   Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
  
@@ -257,6 +267,9 @@ Input Files for Mapping Mode
 +------------+-------------+------------------------------------+--------------+-------------------------------------------+
 
 - **Metabolic networks**: 
+
+Metabolite information is represented in SBML (Systems Biology Markup Language) format.
+An example of a metabolite entry in SBML format is shown below.
 
 .. code-block:: [langage]
    <?xml version="1.0" encoding="UTF-8"?>
@@ -301,7 +314,7 @@ For **metabolic network data**, we typically extract the ID and name, as well as
 
 
 - **Datatable_conversion_MetaCyc**: 
-Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
+Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
 
 - Some Column Name are missing (non-exhaustive)
 +---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
@@ -341,7 +354,7 @@ SMILES              Simplified Molecular Input Line Entry System (SMILES) string
 ==================  ================================================================================================================================
 
 - **Datatable_conversion_metanetx**: 
-Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
+Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
 
 - Some Column Name are missing (non-exhaustive)
 +---------------+--------------+----------------+------------------+----------------+------+--------+

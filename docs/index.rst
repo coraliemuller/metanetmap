@@ -7,6 +7,9 @@ Welcome to MetaNetMap's documentation!
 
    overview
    installation
+   quickstart
+   application_details
+   input_data
    usage
    modules
    contributing
