@@ -38,10 +38,10 @@ START_TIME_PARTIAL = "XXXX-XX-XX_XX:XX:50"
 START_TIME = "XXXX-XX-XX_XX:XX:48"
 
 #Expected final files
-EXPECTED_FILE_COMMUNITY= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_2025-08-22_09:52:44.tsv")  # Ton fichier de référence
-EXPECTED_FILE_COMMUNITY_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_partial_match_2025-08-22_09:52:56.tsv") 
-EXPECTED_FILE_CLASSIC= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_2025-08-22_09:50:25.tsv")  # Ton fichier de référence
-EXPECTED_FILE_CLASSIC_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_partial_match_2025-08-22_09:50:33.tsv") 
+EXPECTED_FILE_COMMUNITY= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_2025-08-22_09_52_44.tsv")  # Ton fichier de référence
+EXPECTED_FILE_COMMUNITY_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_partial_match_2025-08-22_09_52_56.tsv") 
+EXPECTED_FILE_CLASSIC= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_2025-08-22_09_50_25.tsv")  # Ton fichier de référence
+EXPECTED_FILE_CLASSIC_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_partial_match_2025-08-22_09_50_33.tsv") 
 
 #Output:
 OUTPUT_FILENAME_CLASSIC = f"mapping_results_{START_TIME}.tsv"
@@ -716,4 +716,3 @@ def test_smart_merge_no_overlap_returns_same():
     ]
     merged = utils.smart_merge(dicts)
     assert merged == dicts
-

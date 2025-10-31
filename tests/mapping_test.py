@@ -40,10 +40,10 @@ TIMESTAMP= "1694872984.472839"
 
 #Expected final files
 
-EXPECTED_FILE_COMMUNITY= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_2025-10-27_15:51:33.tsv") 
-EXPECTED_FILE_COMMUNITY_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_partial_match_2025-10-27_15:55:35.tsv") 
-EXPECTED_FILE_CLASSIC= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_2025-10-27_15:35:48.tsv") 
-EXPECTED_FILE_CLASSIC_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_partial_match_2025-10-27_15:36:16.tsv") 
+EXPECTED_FILE_COMMUNITY= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_2025-10-27_15_51_33.tsv") 
+EXPECTED_FILE_COMMUNITY_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_partial_match_2025-10-27_15_55_35.tsv") 
+EXPECTED_FILE_CLASSIC= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_2025-10-27_15_35_48.tsv") 
+EXPECTED_FILE_CLASSIC_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_partial_match_2025-10-27_15_36_16.tsv") 
 
 #Output:
 
