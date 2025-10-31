@@ -1,26 +1,21 @@
 #!/bin/python
-## MISTIC Project INRIA
+## MISTIC Project INRIA/INRAE
 ## Author Muller Coralie
 ## Date: 2025/08/19
-## Update: 2025/08/22
+## Update: 2025/10/31
 
 """
 Description:
 Test methods for partial
 """
-import aiohttp
-import asyncio
+
 import pytest
 from os import path
-from pathlib import Path
 from unittest.mock import MagicMock
 from unittest.mock import AsyncMock, patch
 
 from metanetmap import mapping
 from metanetmap import utils
-import unittest
-import pandas as pd
-import numpy as np
 
 
 #-----------------------#
@@ -107,17 +102,27 @@ async def test_fetch_chebi_entity_success():
 
 
 
+
 @pytest.mark.asyncio
 async def test_fetch_chebi_entity_failure_status():
-    """Test that it returns None if response status is not 200."""
+    """Test fetch_chebi_entity returns None for non-200 status."""
+
+    # Create a mock response that works with 'async with'
     mock_response = AsyncMock()
     mock_response.status = 404
-    mock_response.json = AsyncMock()
+    mock_response.json = AsyncMock(return_value={})
 
-    session = AsyncMock()
-    session.get = AsyncMock(return_value=mock_response)
+    # Make it act as an async context manager
+    mock_response.__aenter__.return_value = mock_response
+    mock_response.__aexit__.return_value = None
 
-    result = await utils.fetch_chebi_entity(session, "1234")
+    # Patch session.get to return the mock_response directly (not as coroutine)
+    mock_session = MagicMock()
+    mock_session.get.return_value = mock_response
+
+    # Call the async function with the mocked session
+    result = await utils.fetch_chebi_entity(mock_session, "1234")
+
     assert result is None
 
 

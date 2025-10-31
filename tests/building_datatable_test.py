@@ -1,12 +1,12 @@
 #!/bin/python
-## MISTIC Project INRIA
+## MISTIC Project INRIA/INRAE
 ## Author Muller Coralie
 ## Date: 2025/08/19
-## Update: 2025/08/
+## Update: 2025/10/31
 
 """
 Description:
-Test build datatable function
+Test build datatable function for Metacyc and MetNetX mode
 """
 from os import path
 import pytest
@@ -15,8 +15,11 @@ import csv
 import os
 import tempfile
 import json
+import pandas as pd
 from argparse import Namespace
 from metanetmap import build_database
+from unittest.mock import patch
+
 
 
 #------------------------------------#
@@ -24,7 +27,8 @@ from metanetmap import build_database
 #------------------------------------#
 TEST_TOYS_DIR = Path(__file__).parent.parent
 
-DATATABLE_COMPLEMENT = path.join(TEST_TOYS_DIR,'src/metanetmap/build_datatable_conversion/datatable_complementary_metacyc.tsv')
+DATATABLE_COMPLEMENT_METACYC = path.join(TEST_TOYS_DIR,'src/metanetmap/build_datatable_conversion/datatable_complementary_metacyc.tsv')
+DATATABLE_COMPLEMENT_METANETX = path.join(TEST_TOYS_DIR,'src/metanetmap/build_datatable_conversion/datatable_complementary_metanetx.tsv')
 TEST_EXPECTED_DIR = Path(__file__).parent
 
 # ----------------------------------------------------------
@@ -41,47 +45,91 @@ def read_tsv(fp):
 #         TESTS         #
 #-----------------------#
 
-# @pytest.mark.skipif(
-#     not os.path.exists("tests/data/compounds_29.dat") or
-#     not os.path.exists("tests/data/conversion_datatable.tsv"),
-#     reason="Required test data files are missing"
-# )
-# # Main --> Compare the datatable generated to the one expected 
-# #### Results table
-# def test_mapping_run_vs_expected_classic(tmp_path):
-#     # 1. Settings
-#     output_folder = tmp_path
-#     output_folder.mkdir(parents=True, exist_ok=True)  # <- CRUCIAL
-#     output_path=output_folder/"conversion_datatable.tsv"
+@pytest.mark.skipif(
+    not os.path.exists("tests/data/compounds_29.dat") or
+    not os.path.exists("tests/data/conversion_datatable.tsv"),
+    reason="Required test data files are missing"
+)
+# Main --> Compare the datatable generated to the one expected 
+#### Results table
+def test_build_datatable_metacyc(tmp_path):
+    # 1. Settings
+    output_folder = tmp_path
+    output_folder.mkdir(parents=True, exist_ok=True) 
+    output_path=Path(output_folder,"conversion_datatable.tsv")
 
-#     # 2. Load input data
-#     Metacyc = "tests/data/compounds_29.dat"
-#     CONVERSION_DATATABLE = "tests/data/conversion_datatable.tsv"
+    # 2. Load input data
+    Metacyc = "tests/data/compounds_29.dat"
+    CONVERSION_DATATABLE = "tests/data/conversion_datatable.tsv"
 
-#     args = Namespace(
-#     metacyc_file=Metacyc,
-#     complement_file=DATATABLE_COMPLEMENT,
-#     output=output_folder,
-#     metacyc=True,
-#     metanetx= False,
-#     quiet= True)
-#     build_database.load_args(args)
-#     # 3. Run the mapping
+    # 3. Run the build step
+    args = Namespace(
+        metacyc_file=Metacyc,
+        complement_file=DATATABLE_COMPLEMENT_METACYC,
+        output=output_path,
+        db='metacyc',
+        quiet=True,
+                )
+    build_database.load_args(args)
+   
     
-#     # 4. Check the generated file
-#     assert output_path.exists(), "Output file not generated"
+    # 4. Check the generated file
+    assert output_path.exists(), "Output file not generated"
 
-#     # 5.  Compare contents
-#     actual = read_tsv(output_path)
-#     expected = read_tsv(CONVERSION_DATATABLE)
-#     assert actual == expected, "The generated table does not match the expected one"
+    # 5.  Compare contents
+    actual = read_tsv(output_path)
+    expected = read_tsv(CONVERSION_DATATABLE)
+    assert actual == expected, "The generated table does not match the expected one"
 
+
+
+
+
+
+@pytest.mark.skipif(
+    not os.path.exists("tests/data/chem_xref.tsv") or
+    not os.path.exists("tests/data/chem_prop.tsv") or
+    not os.path.exists("tests/data/metanetx_conversion_datatable.tsv"),
+    reason="Required test data files are missing"
+)
+# Main --> Compare the datatable generated to the one expected 
+#### Results table
+def test_build_datatable_metanetx(tmp_path):
+    # 1. Settings
+    output_folder = tmp_path
+    output_folder.mkdir(parents=True, exist_ok=True) 
+    output_path=Path(output_folder,"conversion_datatable.tsv")
+
+    # 2. Load input data
+    chem_prop_file="tests/data/chem_prop.tsv"
+    chem_ref_file="tests/data/chem_xref.tsv"
+    CONVERSION_DATATABLE_METANETX = "tests/data/metanetx_conversion_datatable.tsv"
+
+    # 3. Run the build step
+    args = Namespace(
+        chem_prop_file=chem_prop_file,
+        chem_ref_file=chem_ref_file,
+        complement_file=DATATABLE_COMPLEMENT_METANETX,
+        output=output_path,
+        db='metanetx',
+        quiet=True,
+    )
+    build_database.load_args(args)
+
+    
+    # 3. Check the generated file
+    assert output_path.exists(), "Output file not generated"
+
+    # 4.  Compare contents
+    actual = read_tsv(output_path)
+    expected = read_tsv(CONVERSION_DATATABLE_METANETX)
+    assert actual == expected, "The generated table does not match the expected one"
 
 
 
 
 def test_split_line_adds_extracted_value_to_dict():
-    # Simulate a binary line from a MetaCyc file
+    # Simulate a binary line from a MetaCyc/MetaNetX file
     line = b'(COMMON-NAME "Glucose")'
     column_name = "COMMON-NAME"
     dictionary_temp = {}
@@ -95,7 +143,7 @@ def test_split_line_adds_extracted_value_to_dict():
 
 
 def test_replace_header_line_updates_dictionary():
-    # Example binary line from a MetaCyc file header
+    # Example binary line from a MetaCyc/MetaNetX file header
     line = b'UNIQUE-ID - META00001\n'
     column_name = "UNIQUE-ID"
     dictionary_temp = {}
@@ -110,7 +158,7 @@ def test_replace_header_line_updates_dictionary():
 
 
 def test_replace_line_cleans_and_simplifies_text():
-    # Example raw MetaCyc line in bytes
+    # Example raw MetaCyc/MetaNetX line in bytes
     line = b'COMMON-NAME - <i>D-glucose</i> &rarr; energy\n'
 
     # Expected cleaned result
@@ -358,4 +406,223 @@ def test_load_complementary_datatable_errors(monkeypatch):
         os.remove(path2)
 
 
+############################################ 
+#   Build_data test specific to MetaNetX   #
+############################################ 
 
+
+#Test download
+def test_download_metanetx_file_success():
+    """Test a successful download using a mock."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        filename = "test_file.tsv"
+        url = "http://example.com/test_file.tsv"
+
+        # Mock urllib.request.urlretrieve to just create an empty file
+        def fake_urlretrieve(u, fpath):
+            with open(fpath, "w") as f:
+                f.write("mock content")
+            return (fpath, None)
+
+        with patch("urllib.request.urlretrieve", side_effect=fake_urlretrieve):
+            result = build_database.download_metanetx_file(filename, url, tmpdir)
+
+        assert result is not None
+        assert os.path.exists(result)
+        with open(result) as f:
+            content = f.read()
+        assert content == "mock content"
+
+def test_download_metanetx_file_fail():
+    """Test download failure returns None."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        filename = "test_file.tsv"
+        url = "http://example.com/test_file.tsv"
+
+        # Mock urllib.request.urlretrieve to raise an exception
+        with patch("urllib.request.urlretrieve", side_effect=Exception("Failed")):
+            result = build_database.download_metanetx_file(filename, url, tmpdir)
+
+        assert result is None
+
+
+
+# Check reads files
+def test_read_chem_prop_basic():
+    """Test reading a small chem_prop.tsv content."""
+    content = """MNXM1\tGlucose\tRef1\tC6H12O6\t0\t180.16\tInChI1\tKey1\tSMILES1
+MNXM2\tATP\tRef2\tC10H16N5O13P3\t-4\t507.18\tInChI2\tKey2\tSMILES2
+"""
+    with tempfile.NamedTemporaryFile(mode="w+", delete=True) as tmp:
+        tmp.write(content)
+        tmp.flush()
+        df = build_database.read_chem_prop(tmp.name)
+    
+    assert df.shape[0] == 2
+    assert list(df.columns) == ["MNX_ID","COMMON_NAME","REFERENCE","FORMULA","CHARGE","MOLECULAR_WEIGHT","INCHI","INCHI_KEY","SMILES"]
+    assert df.iloc[0]["COMMON_NAME"] == "Glucose"
+
+
+def test_read_chem_xref_basic():
+    """Test reading a small chem_xref.tsv content."""
+    content = """chebi:1234\tMNXM1\tGlucose
+seed:cpd00001\tMNXM2\tATP
+"""
+    with tempfile.NamedTemporaryFile(mode="w+", delete=True) as tmp:
+        tmp.write(content)
+        tmp.flush()
+        df = build_database.read_chem_xref(tmp.name)
+    
+    assert df.shape[0] == 2
+    assert list(df.columns) == ["source","MNX_ID","description"]
+    assert df.iloc[1]["source"] == "seed:cpd00001"
+
+
+# extract ids 
+
+def test_extract_ids_basic():
+    """Basic test: extract and group database-specific IDs."""
+    df = pd.DataFrame({
+        "MNX_ID": ["MNXM1", "MNXM1", "MNXM2", "MNXM3"],
+        "source": ["chebi:1234", "chebi:5678", "chebi:9999", "seed:0001"]
+    })
+    
+    result = build_database.extract_ids(df, "chebi")
+    
+    expected = pd.DataFrame({
+        "MNX_ID": ["MNXM1", "MNXM2"],
+        "CHEBI": ["chebi:1234|chebi:5678", "chebi:9999"]
+    })
+    
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+def test_extract_ids_duplicates():
+    """Duplicate IDs should be deduplicated and sorted."""
+    df = pd.DataFrame({
+        "MNX_ID": ["MNXM1", "MNXM1", "MNXM1"],
+        "source": ["chebi:2", "chebi:1", "chebi:2"]
+    })
+    
+    result = build_database.extract_ids(df, "chebi")
+    expected = pd.DataFrame({
+        "MNX_ID": ["MNXM1"],
+        "CHEBI": ["chebi:1|chebi:2"]
+    })
+    
+    pd.testing.assert_frame_equal(result, expected)
+
+def test_extract_ids_mixed_prefixes():
+    """Only rows with the correct prefix should be extracted."""
+    df = pd.DataFrame({
+        "MNX_ID": ["MNXM1", "MNXM1", "MNXM2"],
+        "source": ["chebi:123", "hmdb:456", "chebi:789"]
+    })
+    
+    result = build_database.extract_ids(df, "chebi")
+    expected = pd.DataFrame({
+        "MNX_ID": ["MNXM1", "MNXM2"],
+        "CHEBI": ["chebi:123", "chebi:789"]
+    })
+    
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+
+
+# Explode test 
+def test_explode_basic():
+    """Basic test: explode a column with '|' separators."""
+    df = pd.DataFrame({
+        "id": [1, 2],
+        "metabolite": ["A|B|C", "D"]
+    })
+    
+    result = build_database.explode_ids(df, "metabolite")
+    
+    expected = pd.DataFrame({
+        "id": [1, 1, 1, 2],
+        "metabolite": ["A", "B", "C", "D"]
+    })
+    
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+def test_explode_ignore_empty():
+    """Empty strings or spaces should be ignored."""
+    df = pd.DataFrame({
+        "id": [1],
+        "metabolite": ["A||B| |C|"]
+    })
+    
+    result = build_database.explode_ids(df, "metabolite")
+    
+    expected = pd.DataFrame({
+        "id": [1, 1, 1],
+        "metabolite": ["A", "B", "C"]
+    })
+    
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+def test_explode_empty_dataframe():
+    """If the input DataFrame is empty, result should be empty."""
+    df = pd.DataFrame(columns=["id", "metabolite"])
+    result = build_database.explode_ids(df, "metabolite")
+    assert result.empty
+
+def test_explode_single_value():
+    """If the column has a single value with no separator, it should remain unchanged."""
+    df = pd.DataFrame({"id": [1], "metabolite": ["X"]})
+    result = build_database.explode_ids(df, "metabolite")
+    expected = pd.DataFrame({"id": [1], "metabolite": ["X"]})
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+def test_explode_with_duplicates():
+    """Duplicate values should be preserved unless explicitly removed."""
+    df = pd.DataFrame({"id": [1], "metabolite": ["A|A|B"]})
+    result = build_database.explode_ids(df, "metabolite")
+    expected = pd.DataFrame({
+        "id": [1, 1, 1],
+        "metabolite": ["A", "A", "B"]
+    })
+    pd.testing.assert_frame_equal(result.reset_index(drop=True), expected)
+
+
+# Simply test 
+@pytest.mark.parametrize("func,val,expected", [
+    # BiGG
+    (build_database.simplify_bigg, "bigg.metabolite:glc__D", "glc__D"),
+    (build_database.simplify_bigg, "biggM:M_glc__D", "glc__D"),
+    (build_database.simplify_bigg, "M_atp|biggM:M_adp|biggM:Pi", "Pi|adp|atp"),
+    (build_database.simplify_bigg, None, ""),
+    
+    # SEED
+    (build_database.simplify_seed, "seed.compound:cpd00001", "cpd00001"),
+    (build_database.simplify_seed, "M_cpd00002|seedM:cpd00003", "cpd00002|cpd00003"),
+    (build_database.simplify_seed, "", ""),
+    
+    # VMH
+    (build_database.simplify_vmh, "vmhM:M_oh1|vmhM:oh1|vmhmetabolite:oh1", "oh1"),
+    (build_database.simplify_vmh, "M_lac_L", "lac_L"),
+    (build_database.simplify_vmh, None, ""),
+    
+    # HMDB
+    (build_database.simplify_hmdb, "hmdb:HMDB0000123", "HMDB0000123"),
+    (build_database.simplify_hmdb, "HMDB0000123|HMDB0000456", "HMDB0000123"),
+    (build_database.simplify_hmdb, "foo|bar", "bar"),
+    (build_database.simplify_hmdb, None, ""),
+    
+    # MetaCyc
+    (build_database.simplify_metacyc, "metacyc.compound:GLC|metacycM:ATP", "ATP|GLC"),
+    (build_database.simplify_metacyc, "GLC", "GLC"),
+    (build_database.simplify_metacyc, "", ""),
+    
+    # Remove M_
+    (build_database.remove_prefix_M, "M_glc__D|M_atp", "glc__D|atp"),
+    (build_database.remove_prefix_M, "", ""),
+    (build_database.remove_prefix_M, None, None),
+])
+def test_simplify_functions(func, val, expected):
+    """Generic test for all simplify_* functions."""
+    result = func(val)
+    assert result == expected

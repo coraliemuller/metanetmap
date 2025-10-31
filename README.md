@@ -20,16 +20,18 @@ There are several challenges to this task:
   Automatic reconstruction of metabolic networks using different tools often assigns different IDs to the same metabolites. This inconsistency makes it difficult to cross-compare or transfer data across networks.
 
 - **Metabolomic data complexities:**  
-  Due to the difficulty of annotating metabolomic profiles, identifications are often partial, incomplete, and inconsistently represented. For example, enantiomers are frequently not precisely specified because they are indistinguishable by LC/MS methods (to be confirmed with Sylvain).
+  Due to the difficulty of annotating metabolomic profiles, identifications are often partial, incomplete, and inconsistently represented. For example, enantiomers are frequently not precisely specified because they are indistinguishable by LC/MS methods.
 
 Successfully bridging metabolomic data and metabolic networks is complex but highly valuable, both for species-specific studies and community-level analyses.
 
 Metanetmap enables this bridging process. We developed a tool that primarily allows the construction of a knowledge base, based on:
 
 The ``datatable_conversion`` file acts as a bridge between the metabolomics data and the metabolic networks.  
-It combines all structured information extracted from the MetaCyc ``compounds.dat`` file, along with any additional identifiers or metadata provided by the user through the ``datatable_complementary`` file.  
+It combines all structured information extracted from the MetaCyc ``compounds.dat`` file or from MetaNetX files ``chem_xref.tsv`` and ``chem_prop.tsv``files, along with any additional identifiers or metadata provided by the user through the ``datatable_complementary`` file.  
 This unified table serves as a comprehensive knowledge base that allows the tool to search across all known identifiers for a given metabolite and match them between the input data and the metabolic networks.  
-By leveraging both the MetaCyc database and user-provided enhancements, the ``datatable_conversion`` enables robust and flexible mapping across diverse data sources.
+By leveraging both the MetaCyc/MetaNetX database and user-provided enhancements, the ``datatable_conversion`` enables robust and flexible mapping across diverse data sources.
+
+A conversion data table has already been built and is provided from MetaNetX in ``data/metanetx_conversion_datatable.tsv``.
 
 
 ## Installation

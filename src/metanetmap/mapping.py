@@ -1,5 +1,5 @@
 #!/bin/python
-# MISTIC Project INRIA
+# MISTIC Project INRIA/INRAE
 # Author Muller Coralie
 # Date: 2024/11/27
 # Update: 2025/08/-
@@ -10,7 +10,7 @@
 
 # Script to match metabolites between MAF files and SBML files.
 # A conversion table is used to perform the matching. This table is
-# based on the MetaCyc database, and includes corresponding
+# based on the MetaCyc/MetaNetX database, and includes corresponding
 # information and IDs from other databases to establish links.
 
 
@@ -547,7 +547,7 @@ def remove_enantiomer_process(value, enantiomers=["D", "L", "R", "S"]):
 
 def remove_enantiomer_and_Inchey_db(dictionary_db):
     """
-    Clean a list of dictionaries (e.g., from MetaCyc) by:
+    Clean a list of dictionaries (e.g., from MetaCyc/MetaNetX) by:
     - Removing enantiomer notation ('D', 'L', 'R', 'S') from selected
       fields.
     - Trimming the InChIKey to its base fragment (first block before
@@ -1079,10 +1079,10 @@ def match_metabo(
 ):
     """
     Match a metabolite (from SBML or MAF) to entries in the reference
-    database (MetaCyc).
+    database (MetaCyc/MetaNetX).
 
     Args:
-        dictionary_db (dict): Full MetaCyc dictionary.
+        dictionary_db (dict): Full MetaCyc/MetaNetX dictionary.
         met (str): Metabolite name to search.
         column_name (str): Column name used for matching (e.g. COMMON-NAME).
         dic_tsv_results (list of dict)): Output results list of dicts.
@@ -1547,7 +1547,7 @@ def mapping_run(
     Args:
         output_folder (str or Path): Path to the output directory.
         dictionary_db (dict): Dictionary where each key corresponds to
-          a metabolite from the MetaCyc database and the values contain
+          a metabolite from the MetaCyc/MetaNetX database and the values contain
           information such as IDs from other databases.
         maf_dictionnary (dict): Dictionary containing data from the
           MAF file used for matching against the conversion datatable.

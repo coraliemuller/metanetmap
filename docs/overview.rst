@@ -21,13 +21,16 @@ Successfully bridging metabolomic data and metabolic networks is complex but hig
 Metanetmap enables this bridging process. We developed a tool that primarily allows the construction of a knowledge base, based on:
 
 The ``datatable_conversion`` file acts as a bridge between the metabolomics data and the metabolic networks.  
-It combines all structured information extracted from the MetaCyc ``compounds.dat`` file, along with any additional identifiers or metadata provided by the user through the ``datatable_complementary`` file.  
+It combines all structured information extracted from the MetaCyc ``compounds.dat`` file or from MetaNetX files ``chem_xref.tsv`` and ``chem_prop.tsv``files, along with any additional identifiers or metadata provided by the user through the ``datatable_complementary`` file.  
 This unified table serves as a comprehensive knowledge base that allows the tool to search across all known identifiers for a given metabolite and match them between the input data and the metabolic networks.  
-By leveraging both the MetaCyc database and user-provided enhancements, the ``datatable_conversion`` enables robust and flexible mapping across diverse data sources.
+By leveraging both the MetaCyc/MetaNetX database and user-provided enhancements, the ``datatable_conversion`` enables robust and flexible mapping across diverse data sources.
+
 
 .. note::
-   MetaCyc database information related to the ontology of metabolites and pathways is not included in the test option.
-
+   The test option is designed to work with the MetaCyc database.  
+   However, information from MetaCyc related to the ontology of metabolites and pathways  
+   is **not included** in the test option.  
+   Only a simplified example (a "toy" version) of the ``datatable_conversion`` file is provided.
 
 
 After building this knowledge base - ``datatable_conversion``, it is possible to perform mapping in several ways

@@ -7,6 +7,7 @@ Two modes are available for testing, with an option to enable or disable **parti
 
 The **Partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
 
+A conversion data table has already been built and is provided from MetaNetX in ``data/metanetx_conversion_datatable.tsv``.
 
 Classic mode
 The classic mode allows you to input a single metabolomics data file (.maf) and a directory containing multiple metabolic networks (.sbml/.xml).

@@ -154,3 +154,4 @@ mirror_to_github:
     - git push github $CI_COMMIT_REF_NAME -f
   only:
     - main 
+

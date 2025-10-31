@@ -1,58 +1,21 @@
 #!/bin/python
-## MISTIC Project INRIA
+## MISTIC Project INRIA/INRAE
 ## Author Muller Coralie
 ## Date: 2025/08/19
-## Update: 2025/08/22
+## Update: 2025/10/31
 
 """
 Description:
 Test all the utils finctions
 """
 from os import path
-from pathlib import Path
-import ast
 import csv
-from pathlib import Path
 import pandas as pd
-import importlib
-import importlib.resources
 import pytest
 
 from metanetmap import utils
 
 
-#------------------------------------#
-#        DIRECTORIES AND FILES       #
-#------------------------------------#
-TEST_TOYS_DIR = Path(__file__).parent.parent
-TEST_EXPECTED_DIR = Path(__file__).parent
-
-
-DATATABLE_CONVERSION = path.join(TEST_TOYS_DIR,'src/metanetmap/toys_tests_data/conversion_datatable_toys.tsv')
-SBML_FILE_INPUT = path.join(TEST_TOYS_DIR,"src/metanetmap/toys_tests_data/toys/sbml/toys2.sbml")
-MAF_DIR_INPUT = path.join(TEST_TOYS_DIR,"src/metanetmap/toys_tests_data/toys/maf/")
-SBML_DIR_INPUT = path.join(TEST_TOYS_DIR,"src/metanetmap/toys_tests_data/toys/sbml/")
-
-#Timer
-START_TIME_PARTIAL = "XXXX-XX-XX_XX:XX:50"
-START_TIME = "XXXX-XX-XX_XX:XX:48"
-
-#Expected final files
-EXPECTED_FILE_COMMUNITY= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_2025-08-22_09_52_44.tsv")  # Ton fichier de référence
-EXPECTED_FILE_COMMUNITY_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_partial_match_2025-08-22_09_52_56.tsv") 
-EXPECTED_FILE_CLASSIC= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_2025-08-22_09_50_25.tsv")  # Ton fichier de référence
-EXPECTED_FILE_CLASSIC_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_partial_match_2025-08-22_09_50_33.tsv") 
-
-#Output:
-OUTPUT_FILENAME_CLASSIC = f"mapping_results_{START_TIME}.tsv"
-OUTPUT_FILENAME_CLASSIC_P = f"mapping_results_partial_match_{START_TIME_PARTIAL}.tsv"
-OUTPUT_FILENAME_COMM = f"community_mapping_results_{START_TIME}.tsv"
-OUTPUT_FILENAME_COMM_P = f"community_mapping_results_partial_match_{START_TIME_PARTIAL}.tsv"
-
-
-
-
-# ----------------------------------------------------------
 
 #--------------------------------------------------------#
 #             UTILS -> File management TEST              #
