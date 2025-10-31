@@ -46,7 +46,7 @@ Refer to the documentation to build your first mapping table, using MetaNetX dat
 After building this knowledge base - ``datatable_conversion``, it is possible to perform mapping in several ways
 
 - **Classic mode**:
-The classic mode allows you to input one or several metabolomic data files and a unique metabolic network.
+The classic mode allows you to input one metabolomic data file or a directory containing several of them, and a unique metabolic network.
 
 - **Community mode**:
 The "community" mode allows you to input a directory containing one or several metabolomic data files, as well as a directory containing multiple metabolic networks.
