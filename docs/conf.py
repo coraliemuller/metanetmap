@@ -31,8 +31,18 @@ import metanetmap
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
-extensions = ['sphinx.ext.autodoc', 'sphinx.ext.viewcode']
-
+extensions = [
+    'sphinx_rtd_theme',
+    "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
+    "sphinx.ext.coverage",
+    "sphinx.ext.doctest",
+    "sphinx.ext.extlinks",
+    "sphinx.ext.ifconfig",
+    "sphinx.ext.napoleon",
+    "sphinx.ext.todo",
+    "sphinx.ext.viewcode",
+]
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
@@ -47,8 +57,9 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'MetaNetMap'
-copyright = "2025, Coralie Muller"
 author = "Coralie Muller"
+year = '2025'
+copyright = f"{year}, {author}"
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -83,7 +94,7 @@ todo_include_todos = False
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = "sphinx_rtd_theme"
 
 # Theme options are theme-specific and customize the look and feel of a
 # theme further.  For a list of options available for each theme, see the
@@ -102,6 +113,13 @@ html_static_path = ['_static']
 # Output file base name for HTML help builder.
 htmlhelp_basename = 'metanetmapdoc'
 
+html_use_smartypants = True
+html_last_updated_fmt = "%b %d, %Y"
+html_split_index = False
+html_sidebars = {
+    "**": ["searchbox.html", "globaltoc.html", "sourcelink.html"],
+}
+html_short_title = f"{project}-{version}"
 
 # -- Options for LaTeX output ------------------------------------------
 
