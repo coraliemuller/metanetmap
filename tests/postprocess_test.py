@@ -1,8 +1,8 @@
 #!/bin/python
-## MISTIC Project INRIA
+## MISTIC Project INRIA/INRAE
 ## Author Muller Coralie
 ## Date: 2025/08/20
-## Update: 2025/08/23
+## Update: 2025/10/31
 
 """
 Description:
@@ -12,15 +12,13 @@ from os import path
 import pytest
 from pathlib import Path
 import pandas as pd
-from unittest.mock import MagicMock
-from cobra import Model, Metabolite
 
 
 
 from metanetmap import mapping
 from metanetmap import utils
 
-# /!\ INFO: 
+
 
 #------------------------------------#
 #        DIRECTORIES AND FILES       #
@@ -91,11 +89,11 @@ def test_setup_harmonisation_output_basic():
 def test_normalize_cell_preserve_case(input_val, expected):
     assert utils.normalize_cell_preserve_case(input_val) == expected
 
+
+
 # ----------------------------------
 # Tests for extract_metabolite_combinations
 # ----------------------------------
-
-
 def test_extract_combinations_single_hit():
     df = pd.DataFrame({
         'A': ['Glucose'],

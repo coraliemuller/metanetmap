@@ -34,7 +34,7 @@ This ensures that the **mapping mode** runs correctly.
    :doc:`input_data` section.
   
 
-- **Run database building mode for Metacyc**:
+- **Run database building mode for MetaCyc**:
 
   .. code-block:: bash
 

@@ -1,21 +1,16 @@
 #!/bin/python
-## MISTIC Project INRIA
+## MISTIC Project INRIA/INRAE
 ## Author Muller Coralie
 ## Date: 2025/08/19
-## Update: 2025/08/22
+## Update: 2025/10/31
 
 """
 Description:
 Test all the utils finctions
 """
 from os import path
-from pathlib import Path
-import ast
 import csv
-from pathlib import Path
 import pandas as pd
-import importlib
-import importlib.resources
 import pytest
 
 from metanetmap import utils

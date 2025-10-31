@@ -20,7 +20,7 @@ Input data details
     ├── species_4.tsv
     ├── species_10.tsv
     ├── ...
-    metacyc_compounds.dat (Metacyc)
+    metacyc_compounds.dat (MetaCyc)
     chem_xref.tsv (MetaNetX)
     chem_prop.tsv (MetaNetX)
     datatable_complementary.tsv (for MetaCyc/MetaNetX)
@@ -31,7 +31,7 @@ Input data details
 Input Files for Database Building Mode
 ---------------------------------------
 
-- **metacyc_compounds (Metacyc)**:  
+- **metacyc_compounds (MetaCyc)**:  
 Tabular file provided by the user with a licence for MetaCyc
 
 The following is a raw entry for the compound **WATER** from a MetaCyc flat file `.dat` extension. 
@@ -60,7 +60,7 @@ Some Key Characteristics (non-exhaustive)
 | `SYNONYMS`               | Alternate or common names for the compound. Can appear on multiple lines.                              |
 
 
-Example Compound Entry in the Metacyc
+Example Compound Entry in the MetaCyc file
 ::
 
     UNIQUE-ID - Primary identifier within the MetaCyc database (WATER).
@@ -182,7 +182,7 @@ Notes
 - **datatable_complementary**:  
   Tabular file provided by the user
 
-(Metacyc)
+(MetaCyc)
 +-----------------+-------------------------------------+------+------+
 | UNIQUE-ID       | ADD-COMPLEMENT                      | BIGG | SEED |
 +=================+=====================================+=============+
@@ -300,7 +300,7 @@ For **metabolic network data**, we typically extract the ID and name, as well as
 
 
 
-- **Datatable_conversion_metacyc**: 
+- **Datatable_conversion_MetaCyc**: 
 Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
 
 - Some Column Name are missing (non-exhaustive)

@@ -1,5 +1,5 @@
 #!/bin/python
-# MISTIC Project INRIA
+# MISTIC Project INRIA/INRAE
 # Author Muller Coralie
 # Date: 2025/08/16
 # Update: 2025/08/-

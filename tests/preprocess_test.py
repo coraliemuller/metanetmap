@@ -1,8 +1,8 @@
 #!/bin/python
-## MISTIC Project INRIA
+## MISTIC Project INRIA/INRAE
 ## Author Muller Coralie
 ## Date: 2025/08/20
-## Update: 2025/08/23
+## Update: 2025/10/31
 
 """
 Description:
@@ -26,9 +26,6 @@ from metanetmap import mapping
 #        DIRECTORIES AND FILES       #
 #------------------------------------#
 TEST_TOYS_DIR = Path(__file__).parent.parent
-# TEST_EXPECTED_DIR = Path(__file__).parent
-
-
 DATATABLE_CONVERSION = path.join(TEST_TOYS_DIR,'src/metanetmap/toys_tests_data/conversion_datatable_toys.tsv')
 
 
