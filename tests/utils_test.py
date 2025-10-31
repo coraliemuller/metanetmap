@@ -679,4 +679,3 @@ def test_smart_merge_no_overlap_returns_same():
     ]
     merged = utils.smart_merge(dicts)
     assert merged == dicts
-

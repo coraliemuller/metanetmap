@@ -47,8 +47,12 @@ jobs:
         #flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         #flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    # if the code got mirrored from gitlab, then all tests must have passed beforehand. 
+    # We cannot perform all of them here, because they depend on large data files not present here. 
+    # so we just run a small test to ensure that the package is properly installed and working
     - name: Test with pytest
       run: |
         pip install pytest
         pip install .
-        pytest
+        cd tests
+        pytest partial_methods_test.py
