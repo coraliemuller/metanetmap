@@ -77,23 +77,23 @@ test:
     - python3 -m pip install tox --user
 
   script:
-    - find "$LIBCHEBIPY_DOWNLOAD_DIR" -type f -ls
+    # - find "$LIBCHEBIPY_DOWNLOAD_DIR" -type f -ls
     - pip install -r requirements_dev.txt  # Install dependencies
     - pip install -r requirements.txt      # Install tool dependencies
     - pip install .                        # install the package itself
     - pytest -vv --log-cli-level=debug     # Run tests without changing directories
 
-coverage:
-  stage: test
-  script:
-    - tox run -e clean,py39,py312,report
-  # coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
-  artifacts:
-    paths:
-      - htmlcov/
-      - coverage.xml
-    reports:
-      junit: toxtests.xml
+# coverage:
+#   stage: test
+#   script:
+#     - tox run -e clean,py39,py312,report
+#   # coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+#   artifacts:
+#     paths:
+#       - htmlcov/
+#       - coverage.xml
+#     reports:
+#       junit: toxtests.xml
 
 
 # sonarqube-check:
@@ -154,3 +154,4 @@ mirror_to_github:
     - git push github $CI_COMMIT_REF_NAME -f
   only:
     - main 
+
