@@ -8,7 +8,7 @@
 #      Build database              #
 ####################################
 
-# Script to create a .tsv file with the UNIQUE-ID of Metacyc database
+# Script to create a .tsv file with the UNIQUE-ID of Metacyc or MetaNetX database
 # and the corresponding informations and ID from other database to do
 # the link between them The INCHI have been removed because it seems
 # not unique for each metabolite in the database.
@@ -423,7 +423,7 @@ def add_each_complement(dictionary_to_add, column_name_add, dictionary_db):
 
 # /!\ WARNING /!\
 # The complementary file need two columns at least:
-# -> col1: UNIQUE-ID corresponding to the metabolites id in metacyc
+# -> col1: UNIQUE-ID corresponding to the metabolites id in MetaCyc
 #    file where we want more information,
 # -> col2 the column with information to add
 
