@@ -498,7 +498,7 @@ Provides more information about each step and the corresponding results.
 
     ------ Main package version ------
     numpy version: 2.3.2
-    pandas version: 2.3.2
+    pandas version: 2.3.2 
     cobra version: 0.29.1
 
     Command run:
