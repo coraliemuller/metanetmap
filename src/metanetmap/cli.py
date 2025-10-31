@@ -51,7 +51,7 @@ def main():
     # Convert timestamp to datetime object
     dt = datetime.datetime.fromtimestamp(timestamp)
     # Format the datetime in a readable English format
-    start_time = dt.strftime("%Y-%m-%d_%H:%M:%S")
+    start_time = dt.strftime("%Y-%m-%d_%H_%M_%S")
     parser = argparse.ArgumentParser(
         prog="metanetmap",
         description=MESSAGE
