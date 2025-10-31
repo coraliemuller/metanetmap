@@ -10,19 +10,19 @@ Stable release
 
 To install MetaNetMap, run this command in your terminal:
 
-At the command line::
+At the command line:
 
-.. code-block:: bash
-    pip install metanetmap
+  .. code-block:: bash
+        pip install metanetmap
 
-To install the latest development version from source::
+To install the latest development version from source:
 
-.. code-block:: bash
-    git clone git@gitlab.inria.fr:mistic/metanetmap.git
-    cd metanetmap
-    pip install -r requirements.txt
-    pip install -r requirements_dev.txt
-    pip install .
+  .. code-block:: bash
+        git clone git@gitlab.inria.fr:mistic/metanetmap.git
+        cd metanetmap
+        pip install -r requirements.txt
+        pip install -r requirements_dev.txt
+        pip install .
 
 Dependencies
 ============

@@ -1,5 +1,7 @@
 
 
+[![PyPI version](https://img.shields.io/pypi/v/metanetmap.svg)](https://pypi.org/project/metanetmap/) [![GitHub license](https://img.shields.io/github/license/coraliemuller/metanetmap.svg)](https://github.com/coraliemuller/metanetmap/blob/main/LICENSE) [![Actions Status](https://github.com/coraliemuller/metanetmap/actions/workflows/pythonpackage.yml/badge.svg)](https://github.com/coraliemuller/metanetmap/actions/workflows/pythonpackage.yml) [![Documentation Status](https://readthedocs.org/projects/metanetmap/badge/?version=latest)](https://metanetmap.readthedocs.io/en/latest/?badge=latest)
+
 # Metabolomic data - metabolic Network Mapping (MetaNetMap)
 
 [MetaNetMap](https://github.com/coraliemuller/metanetmap) aims at map metabolites between metabolomic data and metabolic networks.
@@ -8,9 +10,8 @@ The goal is to facilitate the identification of metabolites from **metabolomics 
 This approach makes it possible to distinguish between metabolites that are easily identifiable through well-known identifiers and those that are more difficult to annotate or identify within metabolic networks.
 
 
-*"Figure needs to be redrawn."*
 <div align="center">
-  <img src="/docs/pictures/MetaNetMap_overview.png" alt="General overview of MetaNetMap" width="80%">
+  <img src="/docs/pictures/MetaNetMap_overview.png" alt="General overview of MetaNetMap" width="100%">
 </div>
 
 
