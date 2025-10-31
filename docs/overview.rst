@@ -1,51 +1,60 @@
 Overview
 ========
-MetaNetMap aims to map metabolites between metabolomic data and metabolic networks.
 
+General description
+-------------------
+
+[MetaNetMap](https://github.com/coraliemuller/metanetmap) is a Python tool dedicated to mapping metabolite information between metabolomic data and metabolic networks.
+The goal is to facilitate the identification of metabolites from **metabolomics data** that are also present in one or more **metabolic networks**, taking into consideration that data from the former has distinct identifier from the latter.
 
 .. image:: ./pictures/MetaNetMap_overview.png
    :alt: General overview of MetaNetMap
    :width: 80%
 
+Some metabolites can be rather easily identifiable using intermediate well-known identifiers, whereas for others, mapping is more difficult and may require partial matching. The picture below summarises the mapping procedure implemented in MetaNetMap. 
 
-There are several challenges to this task:
 
-- **ID homogenization in metabolic networks:**  
-  Automatic reconstruction of metabolic networks using different tools often assigns different IDs to the same metabolites. This inconsistency makes it difficult to cross-compare or transfer data across networks.
+Why using this tool to map metabolomic data?
+--------------------------------------------
 
-- **Metabolomic data complexities:**  
-  Due to the difficulty of annotating metabolomic profiles, identifications are often partial, incomplete, and inconsistently represented. For example, enantiomers are frequently not precisely specified as they are generally indistinguishable by standard LC–MS methods.
+- **ID variability in metabolic networks:**  
+  Automatic reconstruction of metabolic networks using different tools often assigns different IDs to the same metabolites. It is likely that those do not match the nomenclature of metabolomic annotations. To reconcile them, metadata from metabolic networks associating molecules to alternative databases can be used, so can third-party external databases such as [https://www.metanetx.org](MetaNetX). MetaNetMap provides such functionalities. 
 
-Successfully bridging metabolomic data and metabolic networks is complex but highly valuable, both for species-specific studies and community-level analyses.
+- **Metabolomic data complexity:**  
+  Due to the difficulty of annotating metabolomic profiles, identifications are often partial, incomplete, and inconsistently represented. For example, enantiomers are frequently not precisely specified because they are indistinguishable by LC/MS methods. Matching must account for this.
 
-Metanetmap enables this bridging process. We developed a tool that primarily allows the construction of a knowledge base, based on:
+MetaNetMap can match one or several metabolomic annotation tables to one or several metabolic networks. 
 
-The ``datatable_conversion`` file acts as a bridge between the metabolomics data and the metabolic networks.  
-It combines all structured information extracted from the MetaCyc ``compounds.dat`` file or from MetaNetX files ``chem_xref.tsv`` and ``chem_prop.tsv``files, along with any additional identifiers or metadata provided by the user through the ``datatable_complementary`` file.  
-This unified table serves as a comprehensive knowledge base that allows the tool to search across all known identifiers for a given metabolite and match them between the input data and the metabolic networks.  
-By leveraging both the MetaCyc/MetaNetX database and user-provided enhancements, the ``datatable_conversion`` enables robust and flexible mapping across diverse data sources.
+Third-party database for matching
+---------------------------------
+
+In case metadata from metabolic network do not match identifiers of the metabolomic data, a third-party database, referred to as *conversion_datatable* file acts as a bridge between the metabolomics data and the metabolic networks.  
+
+MetaNetMap enables the construction of such resource using MetaNetX or MetaCyc knowledge bases. In the former case, data from ``chem_xref.tsv`` and ``chem_prop.tsv`` MetaNetX files is used. In the latter case (requires a licence), metadata from the ``compounds.dat`` file is extracted. Additionally, users can provide another table with existing mapping data, referred to as *datatable_complementary*.
+  
+The resulting table serves as a comprehensive knowledge base that allows MetaNetMap to search across all known identifiers for a given metabolite and match them between the input data and the metabolic networks.  
+
+Refer to the documentation to build your first mapping table, using MetaNetX data.
 
 
 .. note::
-   The test option is designed to work with the MetaCyc database.  
-   However, information from MetaCyc related to the ontology of metabolites and pathways  
-   is **not included** in the test option.  
+   The ``test`` commands of MetaNetMap rely on MetaCyc database.  
+   However, complete information from MetaCyc related to the ontology of metabolites and pathways is **not included** in the test option because of licensing restrictions.  
    Only a simplified example (a "toy" version) of the ``datatable_conversion`` file is provided.
 
 
 After building this knowledge base - ``datatable_conversion``, it is possible to perform mapping in several ways
 
 - **Classic mode**:
-The classic mode allows you to input a single metabolomics data file and a directory containing multiple metabolic networks.
+The classic mode allows you to input one metabolomic data file or a directory containing several of them, and a unique metabolic network.
 
 - **Community mode**:
-The "community" mode allows you to input a directory containing multiple metabolomics data files, as well as a directory containing multiple metabolic networks.
+The "community" mode allows you to input a directory containing one or several metabolomic data files, as well as a directory containing multiple metabolic networks.
 
-- **Partial match (Option for mode classic and comminity)**:
+- **Partial match (Option for mode classic and community)**:
 The **partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
 
-
-More details in Application
+More details in `_Application_details`_ section.
 
 License
 -------
