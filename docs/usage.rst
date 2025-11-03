@@ -10,7 +10,7 @@ To use MetaNetMap in a project::
 Command-line usage
 ------------------
 
-Based on the input listed in :doc:`input_data`, ``metanetmap`` can be run in four mode:
+Based on the input listed in ::doc:`input_data`, ``metanetmap`` can be run in four mode
 
 .. note::
   Before running the different modes, you must first build your own **data table conversion**.
@@ -43,7 +43,7 @@ This ensures that the **mapping mode** runs correctly.
                   -f              metacyc_compounds_dat/file/path 
                   --compfiles     datatable_complementary_tsv/file/path
                   --out_db        output_conversion_datatable_tsv/file/path 
-                  -q              quiet_mode (True/False) # Optional
+                  -q              quiet_mode (True/False) # Optional: False by default
 
 
 - **Run database building mode for MetaNetX**:
@@ -55,7 +55,7 @@ This ensures that the **mapping mode** runs correctly.
                   -f              MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path
                   --compfiles     datatable_complementary_tsv/file/path
                   --out_db        output_conversion_datatable_tsv/file/path 
-                  -q              quiet_mode (True/False) # Optional
+                  -q              quiet_mode (True/False) # Optional: False by default
 
 
 .. note::
@@ -79,8 +79,11 @@ This ensures that the **mapping mode** runs correctly.
   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
 
 
-After this you can run MetaNetMap in two different modes with a partial match option :
 
+Run Mapping Mode
+------------------------
+
+After this you can run MetaNetMap in two different modes with a partial match option :
 
 - **Classic mode**:
 The classic mode allows you to input a single metabolomics data file and a directory containing multiple metabolic networks.
@@ -93,7 +96,7 @@ The classic mode allows you to input a single metabolomics data file and a direc
                   -d datatable_conversion_tsv/file/path \
                   -o save/path \  # Optional
                   -p partial_match(True/False) \  # Optional explanation below
-                  -q quiet_mode (True/False) # Optional
+                  -q quiet_mode (True/False) # Optional: False by default
                    
 
   
@@ -108,11 +111,12 @@ The "community" mode allows you to input a directory containing multiple metabol
                   -d datatable_conversion_tsv/file/path \
                   -o save/path \  # Optional
                   -p partial_match(True/False) \  # Optional, explanation below
-                  -q quiet_mode (True/False) # Optional
+                  -q quiet_mode (True/False) # Optional: False by default
 
 
 
-- **Partial match**:
+**Partial match:**
+~~~~~~~~~~~~~~~~~~~
 The **partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
 
 After this processing step, the entire mapping pipeline is re-executed, taking the modifications into account.
