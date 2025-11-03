@@ -45,11 +45,9 @@ Refer to the documentation to build your first mapping table, using MetaNetX dat
 
 After building this knowledge base - ``datatable_conversion``, it is possible to perform mapping in several ways
 
-- **Classic mode**:
-The classic mode allows you to input one metabolomic data file or a directory containing several of them, and a unique metabolic network.
+- **Classic mode**: The classic mode allows you to input one metabolomic data file or a directory containing several of them, and a unique metabolic network.
 
-- **Community mode**:
-The "community" mode allows you to input a directory containing one or several metabolomic data files, as well as a directory containing multiple metabolic networks.
+- **Community mode**: The "community" mode allows you to input a directory containing one or several metabolomic data files, as well as a directory containing multiple metabolic networks.
 
 ▸ **Partial match (Option for mode classic and community)**:
 The **partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
@@ -61,27 +59,30 @@ Overview of the procedure
 Pre-process mapping
 ~~~~~~~~~~~~~~~~~~~
 
-  For **metabolomic data**, whether provided as single or multiple files, the data will be grouped by the column names of their identifiers such as ``unique-id``, ``common-name``, etc. This allows verification in the output file of which column the metabolite matched on.
+For **metabolomic data**, whether provided as single or multiple files, the data will be grouped by the column names of their identifiers such as ``unique-id``, ``common-name``, etc. This allows verification in the output file of which column the metabolite matched on.
 
-  For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the networks for exemple: (chebi,InChIKey...).
+For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the networks for exemple: (chebi,InChIKey...).
 
-  Using these two knowledge tables along with the ``datatable_conversion``, we test for matches as follows:
+Using these two knowledge tables along with the ``datatable_conversion``, we test for matches as follows:
 
 
 Mapping procedure
 ~~~~~~~~~~~~~~~~~
 
-- **Step 1: Match metabolomic data vs. network metadata**\
+- **Step 1: Match metabolomic data vs. network metadata**
+  
   We first test for direct matches between the ids in metabolimic data and all the metadata in metabolomic networks without going through the ``datatable_conversion`` table to limit exchanges. 
   At the same time, for those that match, we verify if they have a unique ID in ``datatable_conversion``.
   
-- **Step 2: Match metabolomic data vs. datatable_conversion**\
+- **Step 2: Match metabolomic data vs. datatable_conversion**
+  
   Those that did not match in the previous step will be tested here. Duplicate checks will be performed, since multiple columns will be tested for the same metabolite (i.e., within a single row), it is possible that several identifiers for the same metabolite match. In this case, the matches will be merged into the same cell, separated by AND.
 
   If one of the identifiers does not match, but another identifier in the same row does, the non-matching one will be excluded from the output table.
 
 
-- **Step 3: Match metabolites in datatable_conversion vs. network metadata**\
+- **Step 3: Match metabolites in datatable_conversion vs. network metadata**
+  
   For those identified with a match in step 2, we retrieve all their identifiers present in the network metadata and check if any of them match the network metadata.
 
   If none of the identifiers in the row match any reference, they will still be merged into a single cell in the result file, as they represent the same metabolite. 

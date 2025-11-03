@@ -52,10 +52,10 @@ Input data
 Details input files 
 ~~~~~~~~~~~
 
-.. toggle:: MetaCyc Compounds
+.. toggle::
 
-   metacyc_compounds (MetaCyc):
-   ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   - **metacyc_compounds (MetaCyc):**
+
 
      ``compounds.dat`` has to be provided by the user. Access to this file requires a licence for MetaCyc
 
@@ -65,6 +65,7 @@ Details input files
    Some keys, such as `CHEMICAL-FORMULA`, `SYNONYMS`, or `DBLINKS`, may occur multiple times. Values can contain nested content, quotes, or formatting (e.g. HTML tags in names).
 
    *Some Key Characteristics (non-exhaustive)*
+
    +--------------------------+-------------------------------------------------------------------------------------------------------+
    | **Field**                | **Description**                                                                                       |
    +==========================+=======================================================================================================+
@@ -124,7 +125,9 @@ Details input files
        SYNONYMS - hydrogen oxide
        SYNONYMS - water
    
-   
+   _________________________________________________________________________________________________________________________________
+
+
    - **chem_xref.tsv (MetaNetX)**:
      Tabular file provided by the user from MetaNetX website. It can also be directly downloaded by MetaNetMap using the command:
      
@@ -149,14 +152,15 @@ Details input files
    |             |               | notes separated by ``||``                                |
    +-------------+---------------+----------------------------------------------------------+
    
-   - *Example Entries*
-   .. code-block:: text
+   - *Example Entries*\
+    .. code-block:: text
       Source          ID          Description
       BIOMASS         BIOMASS     BIOMASS
       mnx:BIOMASS     BIOMASS     BIOMASS
       seedM:cpd11416  BIOMASS     Biomass
       MNXM01          MNXM01      PMF||Translocated proton that accounts for the Proton Motive Force
       CHEBI:16234     MNXM02      hydroxide||HO-||Hydroxide ion||OH(-)||hydridooxygenate(1-)
+
 
    
    .. note::
@@ -166,7 +170,8 @@ Details input files
      metabolic network models.
    
    
-   
+   _________________________________________________________________________________________________________________________________
+
    - **chem_prop.tsv (MetaNetX):**
    
    This table lists basic information for metabolites or pseudo-metabolites,
@@ -216,8 +221,10 @@ Details input files
    .. note::
      - Some entries (like ``BIOMASS`` or ``PMF``) represent pseudo-metabolites used
      in constraint-based metabolic models.
+
      - ``InChI`` and ``SMILES`` are standard line notations for representing chemical
      structures computationally.
+
      - Charges and masses are provided for use in biochemical simulations and model
      balancing.
    
@@ -227,6 +234,7 @@ Details input files
      Tabular file provided by the user
    
    (MetaCyc)\
+
    +-----------------+---------------------------------------+----------+----------+
    | **UNIQUE-ID**   | **ADD-COMPLEMENT**                    | **BIGG** | **SEED** |
    +=================+=======================================+==========+==========+
@@ -241,6 +249,7 @@ Details input files
    
    
    (MetaNetX)\
+
    +-----------------+---------------------------------------+----------+----------+
    | **UNIQUE-ID**   | **ADD-COMPLEMENT**                    | **BIGG** | **SEED** |
    +=================+=======================================+==========+==========+
@@ -263,12 +272,12 @@ Details input files
    - All **following columns are free** and may contain any identifiers or names. Their column names will be automatically included in the main conversion datatable.
    - The file must be in tabular format (e.g., TSV), with headers.
    
-   **Important notes:**
-   
-   - If you have a metabolite **without a matching ``UNIQUE-ID`` in MetaCyc/MetaNetX**, you may assign it a **custom or fictional ID** in the first column.
-   - This fictional ``UNIQUE-ID`` will still be included in the conversion table, and **will be used if a match is found based on the name or identifier you provided.**
-   - Be sure to keep track of any custom or fictional IDs you create, so you can filter or manage them later if needed.
-   
+   .. important::
+      
+      - If you have a metabolite **without a matching ``UNIQUE-ID`` in MetaCyc/MetaNetX**, you may assign it a **custom or fictional ID** in the first column.
+      - This fictional ``UNIQUE-ID`` will still be included in the conversion table, and **will be used if a match is found based on the name or identifier you provided.**
+      - Be sure to keep track of any custom or fictional IDs you create, so you can filter or manage them later if needed.
+
 
   
 Output data

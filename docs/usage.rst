@@ -31,7 +31,7 @@ This ensures that the **mapping mode** runs correctly.
 .. note::
 
    The list and description of the required column names are available in the
-   :doc:`input_data` section.
+   :doc:`input_data_build` section.
   
 
 - **Run database building mode for MetaCyc**:
