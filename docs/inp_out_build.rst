@@ -54,7 +54,7 @@ Details input files
 
 .. toggle::
 
-   - **metacyc_compounds (MetaCyc):**
+   - **metacyc_compounds.dat (MetaCyc):**
 
 
      ``compounds.dat`` has to be provided by the user. Access to this file requires a licence for MetaCyc
@@ -228,7 +228,7 @@ Details input files
    ------------------------------
 
    
-   - **complementary_datatable**:  
+   - **complementary_datatable.tsv**:  
   
      Tabular file provided by the user
    

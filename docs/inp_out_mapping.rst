@@ -50,7 +50,7 @@ Details input files for mapping mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toggle:: 
 
-  -  **metabolomic_data**:
+  -  **Metabolomic data**:
     Column names must follow a specific naming convention and each line is a metabolite.
     Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
    
@@ -134,7 +134,7 @@ Details input files for mapping mode
    ------------------------------
 
   
-  - **Datatable_conversion_MetaCyc**: 
+  - **Datatable conversion MetaCyc**: 
   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
   
   - Some Column Name are missing (non-exhaustive)
@@ -198,7 +198,7 @@ Details input files for mapping mode
    +-------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
-   - **Datatable_conversion_metanetx**: 
+   - **Datatable conversion metanetx**: 
    Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
    
    - Some Column Name are missing (non-exhaustive)
