@@ -26,13 +26,14 @@ The classic mode allows you to input a single metabolomics data file (`.maf` or 
     metanetmap test
 
 Classic mode with partial match activated
+
 .. code-block:: bash
 
     metanetmap test --partial_match
 
 Community mode
 ----------------
-The "community" mode allows you to input a directory containing multiple metabolomics data files (`.maf` or `.tsv`), as well as a directory containing multiple metabolic networks (`.sbml` or `.xml`).
+The **"community"** mode allows you to input a directory containing multiple metabolomics data files (`.maf` or `.tsv`), as well as a directory containing multiple metabolic networks (`.sbml` or `.xml`).
 
 .. code-block:: bash
 
@@ -40,6 +41,7 @@ The "community" mode allows you to input a directory containing multiple metabol
 
 
 Community mode with partial match activated
+
 .. code-block:: bash
 
     metanetmap test --community --partial_match

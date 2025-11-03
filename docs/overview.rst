@@ -4,7 +4,7 @@ Overview
 General description
 -------------------
 
-[MetaNetMap](https://github.com/coraliemuller/metanetmap) is a Python tool dedicated to mapping metabolite information between metabolomic data and metabolic networks.
+`MetaNetMap <https://github.com/coraliemuller/metanetmap>`_ is a Python tool dedicated to mapping metabolite information between metabolomic data and metabolic networks.
 The goal is to facilitate the identification of metabolites from **metabolomics data** that are also present in one or more **metabolic networks**, taking into consideration that data from the former has distinct identifier from the latter.
 
 .. image:: ./pictures/MetaNetMap_overview.png
@@ -51,15 +51,16 @@ The classic mode allows you to input one metabolomic data file or a directory co
 - **Community mode**:
 The "community" mode allows you to input a directory containing one or several metabolomic data files, as well as a directory containing multiple metabolic networks.
 
-- **Partial match (Option for mode classic and community)**:
+▸ **Partial match (Option for mode classic and community)**:
 The **partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
 
 
 Overview of the procedure
 -------------------------
 
-Pre-process mapping:
----------------------------------
+Pre-process mapping
+~~~~~~~~~~~~~~~~~~~
+
 
   For **metabolomic data**, whether provided as single or multiple files, the data will be grouped by the column names of their identifiers such as ``unique-id``, ``common-name``, etc. This allows verification in the output file of which column the metabolite matched on.
 
@@ -69,30 +70,34 @@ Pre-process mapping:
 
 
 Mapping procedure
----------------------------------
+~~~~~~~~~~~~~~~~~
 
-- **Step 1: Match metadata of networks with metabolomic data**  
+- **Step 1: Match metabolomic data vs. network metadata**  
+  
   We first test for direct matches between the ids in metabolimic data and all the metadata in metabolomic networks without going through the ``datatable_conversion`` table to limit exchanges. 
   At the same time, for those that match, we verify if they have a unique ID in ``datatable_conversion``.
   
-- **Step 2: Metabolomic data vs. ``datatable_conversion``**  
+- **Step 2: Match metabolomic data vs. datatable_conversion** 
+-  
   Those that did not match in the previous step will be tested here. Duplicate checks will be performed, since multiple columns will be tested for the same metabolite (i.e., within a single row), it is possible that several identifiers for the same metabolite match. In this case, the matches will be merged into the same cell, separated by AND.
 
   If one of the identifiers does not match, but another identifier in the same row does, the non-matching one will be excluded from the output table.
 
-  When partial match mode is **disabled**, the tool only uses the unique ID (e.g., MetaCyc/MetaNetX UNIQUE-ID) to determine whether a metabolite from the input data matches one from the reference database.
-  In cases where two or more metabolites from the input potentially correspond to the same unique ID, this situation is flagged as a partial match. 
-  The tool does not attempt to resolve this conflict automatically.
-  Instead, these entries are explicitly marked so the user can manually review the potential ambiguity. This ensures data integrity and allows the user to decide whether:
- - The match is correct and can be accepted;
+.. important::
+    When partial match mode is **disabled**, the tool only uses the unique ID (e.g., MetaCyc/MetaNetX UNIQUE-ID) to determine whether a metabolite from the input data matches one from the reference database.
+    In cases where two or more metabolites from the input potentially correspond to the same unique ID, this situation is flagged as a partial match. 
+    The tool does not attempt to resolve this conflict automatically.
+    Instead, these entries are explicitly marked so the user can manually review the potential ambiguity. This ensures data integrity and allows the user to decide whether:
+   - The match is correct and can be accepted;
 
- - The mapping should be adjusted or ignored;
+   - The mapping should be adjusted or ignored;
 
- - Further curation is needed (e.g., manual verification against synonyms, names, or external identifiers).
+   - Further curation is needed (e.g., manual verification against synonyms, names, or external identifiers).
 
-  This behavior helps avoid/reduce false positives during automatic matching.
+    This behavior helps avoid/reduce false positives during automatic matching.
 
-- **Step 3: Match metabolites in ``datatable_conversion`` vs. network metadata**  
+- **Step 3: Match metabolites in datatable_conversion vs. network metadata** 
+   
   For those identified with a match in step 2, we retrieve all their identifiers present in the network metadata and check if any of them match the network metadata.
 
   If none of the identifiers in the row match any reference, they will still be merged into a single cell in the result file, as they represent the same metabolite. 
@@ -104,7 +109,7 @@ Mapping procedure
 
 
 Partial match 
----------------------------------
+~~~~~~~~~~~~~~~~~~~
 After this processing step, the entire mapping pipeline is re-executed, taking the modifications into account.
 
 **The following treatments are applied:**

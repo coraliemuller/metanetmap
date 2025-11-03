@@ -53,157 +53,180 @@ Input data
  
   The following column names are recognized:
 
-   ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``,
-   ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
-   ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,
-   ``CAS``, ``INCHI-KEY``, ``SMILES``
+   ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``,   ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
+   ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,   ``CAS``, ``INCHI-KEY``, ``SMILES``
 
 
 
 Details input files for mapping mode
 ---------------------------------------
-.. class:: details 
+.. toggle::
 
-- **metabolomic_data**:  
-  .. note::
-  For **metabolomic_data**:
-  Column names must follow a specific naming convention and each line is a metabolite.
-  Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
  
-  The following column names are recognized:
+    .. note::
+    For **metabolomic_data**:
+    Column names must follow a specific naming convention and each line is a metabolite.
+    Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
+   
+    The following column names are recognized:
+  
+       ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``,
+     ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
+     ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,
+     ``CAS``, ``INCHI-KEY``, ``SMILES``
+  
+  +------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  | UNIQUE-ID  | CHEBI       | COMMON-NAME                        | M/Z          | INCHI-KEY                                 | 
+  +============+=============+====================================+==============+===========================================+
+  |            | CHEBI:4167  |                                    | 179          |                                           |
+  +------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  |            |             | L-methionine                       | 150          |                                           |        
+  +------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  | CPD-17381  |             | roquefortine C                     | 389.185      |                                           |        
+  +------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  |            |             |                                    |              | InChIKey=CGBYBGVMDAPUIH-ARJAWSKDSA-L      |
+  +------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  | CPD-25370  | 84783       |                                    | 701.58056    |                                           |
+  +------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  |            | CHEBI:16708 | Adenine                            |              |                                           |
+  +------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  
+  - **Metabolic networks**: 
+  
+  Metabolite information is represented in SBML (Systems Biology Markup Language) format.
+  An example of a metabolite entry in SBML format is shown below.
 
-     ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``,
-   ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
-   ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,
-   ``CAS``, ``INCHI-KEY``, ``SMILES``
+  .. code-block:: xml
+     :linenos:
+  
+     <?xml version="1.0" encoding="UTF-8"?>
+     <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core"
+           level="3" version="1">
+       <model id="example_model" name="Example Metabolic Model">
+         <!-- Compartments -->
+         <listOfCompartments>
+           <compartment id="cytosol" name="Cytosol" constant="true"/>
+         </listOfCompartments>
+  
+         <listOfSpecies>
+           <species id="glucose_c" name="Glucose" compartment="cytosol" initialAmount="1.0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
+             <annotation>
+               <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+                 <rdf:Description rdf:about="#glucose_c">
+                   <bqbiol:is>
+                     <rdf:Bag>
+                       <rdf:li rdf:resource="http://identifiers.org/chebi/CHEBI:17234"/>
+                       <rdf:li rdf:resource="http://identifiers.org/inchikey/WQZGKKKJIJFFOK-GASJEMHNSA-N"/>
+                     </rdf:Bag>
+                   </bqbiol:is>
+                 </rdf:Description>
+               </rdf:RDF>
+             </annotation>
+           </species>
+         </listOfSpecies>
+       </model>
+     </sbml>
+  
 
-+------------+-------------+------------------------------------+--------------+-------------------------------------------+
-| UNIQUE-ID  | CHEBI       | COMMON-NAME                        | M/Z          | INCHI-KEY                                 | 
-+============+=============+====================================+==============+===========================================+
-|            | CHEBI:4167  |                                    | 179          |                                           |
-+------------+-------------+------------------------------------+--------------+-------------------------------------------+
-|            |             | L-methionine                       | 150          |                                           |        
-+------------+-------------+------------------------------------+--------------+-------------------------------------------+
-| CPD-17381  |             | roquefortine C                     | 389.185      |                                           |        
-+------------+-------------+------------------------------------+--------------+-------------------------------------------+
-|            |             |                                    |              | InChIKey=CGBYBGVMDAPUIH-ARJAWSKDSA-L      |
-+------------+-------------+------------------------------------+--------------+-------------------------------------------+
-| CPD-25370  | 84783       |                                    | 701.58056    |                                           |
-+------------+-------------+------------------------------------+--------------+-------------------------------------------+
-|            | CHEBI:16708 | Adenine                            |              |                                           |
-+------------+-------------+------------------------------------+--------------+-------------------------------------------+
+  
+  For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the networks for exemple: (chebi,InChIKey...) via annotation.
+  
+  +--------------------------+------------------------------------------------------------------------------+
+  | Element                  | Description                                                                  |
+  +==========================+==============================================================================+
+  | ``species``              | Defines a metabolite within a compartment                                    |
+  +--------------------------+------------------------------------------------------------------------------+
+  | ``annotation``           | Contains **metadata** in RDF format, including standardized cross-references |
+  +--------------------------+------------------------------------------------------------------------------+
+  | ``chebi`` / ``inchikey`` | Links to standardized identifiers for interoperability                       |
+  +--------------------------+------------------------------------------------------------------------------+
 
-- **Metabolic networks**: 
-
-Metabolite information is represented in SBML (Systems Biology Markup Language) format.
-An example of a metabolite entry in SBML format is shown below.
-
-.. code-block:: [langage]
-   <?xml version="1.0" encoding="UTF-8"?>
-   <sbml xmlns="http://www.sbml.org/sbml/level3/version1/core"
-      level="3" version="1">
-   <model id="example_model" name="Example Metabolic Model">
-    <!-- Compartments -->
-    <listOfCompartments>
-      <compartment id="cytosol" name="Cytosol" constant="true"/>
-    </listOfCompartments>
-
-    <listOfSpecies>
-      
-      <species id="glucose_c" name="Glucose" compartment="cytosol" initialAmount="1.0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
-        <annotation>
-          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
-            <rdf:Description rdf:about="#glucose_c">
-              <bqbiol:is>
-                <rdf:Bag>
-                  <rdf:li rdf:resource="http://identifiers.org/chebi/CHEBI:17234"/>
-                  <rdf:li rdf:resource="http://identifiers.org/inchikey/WQZGKKKJIJFFOK-GASJEMHNSA-N"/>
-                </rdf:Bag>
-              </bqbiol:is>
-            </rdf:Description>
-          </rdf:RDF>
-        </annotation>
-      </species>
-
-    </listOfSpecies>
-
-  </model>
-</sbml>
-
-For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the networks for exemple: (chebi,InChIKey...) via annotation.
-
-| Element              | Description                                                                   |
-|----------------------|-------------------------------------------------------------------------------|
-| `species`            | Defines a metabolite within a compartment                                     |
-| `annotation`         | Contains **metadata** in RDF format, including standardized cross-references  |
-| `chebi` / `inchikey` | Links to standardized identifiers for interoperability                        |
-
-
-
-- **Datatable_conversion_MetaCyc**: 
-Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
-
-- Some Column Name are missing (non-exhaustive)
-+---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
-|   UNIQUE-ID   | CHEBI  |      COMMON-NAME      | ABBREV-NAME |                                                                 SYNONYMS                                                                  | ADD-COMPLEMENT | MOLECULAR-WEIGHT | MONOISOTOPIC-MW | SEED |  BIGG  |
-+===============+========+=======================+=============+===========================================================================================================================================+================+==================+=================+======+========+
-|   CPD-17257   | 30828  |    trans-vaccenate    |             | ["trans-vaccenic acid", "(E)-octadec-11-enoate", "(E)-11-octadecenoic acid", "trans-11-octadecenoic acid", "trans-octadec-11-enoic acid"] |                |     281.457      | 282.2558803356  |      |        |
-|   CPD-24978   | 50258  | alpha-L-allofuranose  |             |                                                                                                                                           |                |     180.157      | 180.0633881178  |      |        |
-|   CPD-25014   | 147718 | alpha-D-talofuranoses |             |                                                                                                                                           |                |     180.157      | 180.0633881178  |      |        |
-|   CPD-25010   | 153460 | alpha-D-mannofuranose |             |                                                                                                                                           |                |     180.157      | 180.0633881178  |      |        |
-| Glucopyranose |  4167  |    D-glucopyranose    |             |                                           ["6-(hydroxymethyl)tetrahydropyran-2,3,4,5-tetraol"]                                            |                |     180.157      | 180.0633881178  |      | glc__D |
-+---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
-
-
-==================  ================================================================================================================================
-Column Name         Description
-==================  ================================================================================================================================
-UNIQUE-ID           The unique identifier for the compound, typically from the MetaCyc database (e.g., ``CPD-17257``).
-CHEBI               The corresponding ChEBI identifier (if available), used for chemical standardization and interoperability.
-COMMON-NAME         The common name of the metabolite as found in MetaCyc or other databases.
-ABBREV-NAME         Abbreviated name for the metabolite, if defined. Often used in metabolic modeling tools (e.g., COBRA models).
-SYNONYMS            A list of alternative names for the metabolite. These may include IUPAC names, trivial names, and other variants used in the literature/databases.
-ADD-COMPLEMENT      Reserved for additional manually added metadata or complement terms, if applicable.
-MOLECULAR-WEIGHT    The molecular weight (nominal or average) of the metabolite.
-MONOISOTOPIC-MW     The monoisotopic molecular weight — i.e., the exact mass based on the most abundant isotope of each element.
-SEED                Identifier from the SEED database, if available.
-BIGG                Identifier from the BiGG Models database, if available. Typically used in genome-scale metabolic models.
-HMDB                Identifier from the Human Metabolome Database (HMDB), if available.
-METANETX            Identifier from the MetaNetX database, if available. This field becomes the unique identifier in this dataset.
-LIGAND-CPD          Identifier from the KEGG Ligand Compound database (KEGG COMPOUND).
-REFMET              Identifier from the RefMet metabolite reference list, used in metabolomics.
-PUBCHEM             PubChem Compound Identifier (CID), if available.
-CAS                 Chemical Abstracts Service (CAS) Registry Number, if available.
-INCHI               IUPAC International Chemical Identifier string describing the compound structure.
-NON-STANDARD-INCHI  A non-standardized or modified InChI representation, if applicable.
-INCHI-KEY           The hashed InChIKey string derived from the InChI for compact referencing.
-SMILES              Simplified Molecular Input Line Entry System (SMILES) string representing the compound’s structure.
-==================  ================================================================================================================================
-
-- **Datatable_conversion_metanetx**: 
-Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
-
-- Some Column Name are missing (non-exhaustive)
-+---------------+--------------+----------------+------------------+----------------+------+--------+
-|   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC        | SEED |  BIGG  |
-+===============+==============+================+==================+================+======+========+
-|  MNXM1372018  | chebi:30828  |                |     281.457      | CPD-17257      |      |        |
-|   MNXM41337   | chebi:50258  |                |     180.157      | CPD-24978      |      |        |
-|  MNXM1113433  | chebi:147718 |                |     180.157      | CPD-25014      |      |        |
-|  MNXM1117556  | chebi:153460 |                |     180.157      | CPD-25010      |      |        |
-|  MNXM1364061  |  chebi:4167  |                |     180.157      | Glucopyranose  |      | glc__D |
-+---------------+--------------+----------------+------------------+-----------------+------+--------+
+  
+  
+  - **Datatable_conversion_MetaCyc**: 
+  Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
+  
+  - Some Column Name are missing (non-exhaustive)
+  +---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
+  |   UNIQUE-ID   | CHEBI  |      COMMON-NAME      | ABBREV-NAME |                                                                 SYNONYMS                                                                  | ADD-COMPLEMENT | MOLECULAR-WEIGHT | MONOISOTOPIC-MW | SEED |  BIGG  |
+  +===============+========+=======================+=============+===========================================================================================================================================+================+==================+=================+======+========+
+  |   CPD-17257   | 30828  |    trans-vaccenate    |             | ["trans-vaccenic acid", "(E)-octadec-11-enoate", "(E)-11-octadecenoic acid", "trans-11-octadecenoic acid", "trans-octadec-11-enoic acid"] |                |     281.457      | 282.2558803356  |      |        |
+  |   CPD-24978   | 50258  | alpha-L-allofuranose  |             |                                                                                                                                           |                |     180.157      | 180.0633881178  |      |        |
+  |   CPD-25014   | 147718 | alpha-D-talofuranoses |             |                                                                                                                                           |                |     180.157      | 180.0633881178  |      |        |
+  |   CPD-25010   | 153460 | alpha-D-mannofuranose |             |                                                                                                                                           |                |     180.157      | 180.0633881178  |      |        |
+  | Glucopyranose |  4167  |    D-glucopyranose    |             |                                           ["6-(hydroxymethyl)tetrahydropyran-2,3,4,5-tetraol"]                                            |                |     180.157      | 180.0633881178  |      | glc__D |
+  +---------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
+  
+  
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| Column Name       | Description                                                                                                                |
++===================+============================================================================================================================+
+| UNIQUE-ID         | The unique identifier for the compound, typically from the MetaCyc database (e.g., ``CPD-17257``).                        |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| CHEBI             | The corresponding ChEBI identifier (if available), used for chemical standardization and interoperability.                 |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| COMMON-NAME       | The common name of the metabolite as found in MetaCyc or other databases.                                                  |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| ABBREV-NAME       | Abbreviated name for the metabolite, if defined. Often used in metabolic modeling tools (e.g., COBRA models).              |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| SYNONYMS          | A list of alternative names for the metabolite. These may include IUPAC names, trivial names, and other variants used in the literature/databases. |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| ADD-COMPLEMENT    | Reserved for additional manually added metadata or complement terms, if applicable.                                        |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| MOLECULAR-WEIGHT  | The molecular weight (nominal or average) of the metabolite.                                                               |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| MONOISOTOPIC-MW   | The monoisotopic molecular weight — i.e., the exact mass based on the most abundant isotope of each element.              |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| SEED              | Identifier from the SEED database, if available.                                                                          |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| BIGG              | Identifier from the BiGG Models database, if available. Typically used in genome-scale metabolic models.                  |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| HMDB              | Identifier from the Human Metabolome Database (HMDB), if available.                                                       |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| METANETX          | Identifier from the MetaNetX database, if available. This field becomes the unique identifier in this dataset.            |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| LIGAND-CPD        | Identifier from the KEGG Ligand Compound database (KEGG COMPOUND).                                                         |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| REFMET            | Identifier from the RefMet metabolite reference list, used in metabolomics.                                               |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| PUBCHEM           | PubChem Compound Identifier (CID), if available.                                                                          |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| CAS               | Chemical Abstracts Service (CAS) Registry Number, if available.                                                          |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| INCHI             | IUPAC International Chemical Identifier string describing the compound structure.                                         |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| NON-STANDARD-INCHI| A non-standardized or modified InChI representation, if applicable.                                                      |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| INCHI-KEY         | The hashed InChIKey string derived from the InChI for compact referencing.                                                |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
+| SMILES            | Simplified Molecular Input Line Entry System (SMILES) string representing the compound’s structure.                        |
++-------------------+----------------------------------------------------------------------------------------------------------------------------+
 
 
-Use the same description for the columns as above, except for the exceptions below, and make METANTX the unique identifier.
-
-| Column Name        | Description                                                                                                                                        |
-| ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `UNIQUE-ID`        | The unique identifier for the compound, typically from the MetaNetX database (e.g., `CPD-17257`).                                                  |                                         |
-| `METACYC`          | Identifier from the METACYC database, if available. (exchanged with METANETX)  
-| `VMH`              | Identifier from the VMH database, if available.                                                                                               |
-
-.. class:: details open
+  - **Datatable_conversion_metanetx**: 
+  Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
+  
+  - Some Column Name are missing (non-exhaustive)
+  +---------------+--------------+----------------+------------------+----------------+------+--------+
+  |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC        | SEED |  BIGG  |
+  +===============+==============+================+==================+================+======+========+
+  |  MNXM1372018  | chebi:30828  |                |     281.457      | CPD-17257      |      |        |
+  |   MNXM41337   | chebi:50258  |                |     180.157      | CPD-24978      |      |        |
+  |  MNXM1113433  | chebi:147718 |                |     180.157      | CPD-25014      |      |        |
+  |  MNXM1117556  | chebi:153460 |                |     180.157      | CPD-25010      |      |        |
+  |  MNXM1364061  |  chebi:4167  |                |     180.157      | Glucopyranose  |      | glc__D |
+  +---------------+--------------+----------------+------------------+-----------------+------+--------+
+  
+  
+  Use the same description for the columns as above, except for the exceptions below, and make METANTX the unique identifier.
+  
+  | Column Name        | Description                                                                                                                                        |
+  | ------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+  | `UNIQUE-ID`        | The unique identifier for the compound, typically from the MetaNetX database (e.g., `CPD-17257`).                                                  |                                         |
+  | `METACYC`          | Identifier from the METACYC database, if available. (exchanged with METANETX)  
+  | `VMH`              | Identifier from the VMH database, if available.                                                                                               |
+  
+  
 
 Output data
 ~~~~~~~~~~~
@@ -232,21 +255,25 @@ The name of the output file depends on the processing mode:
 
 The output is a tabular file containing several columns with mapping results and metadata:
 
-1. **Metabolite Matches**  
+1. **Metabolite Matches** 
+    
    Lists the metabolite names that matched.  
    If multiple matches are found for a single input (i.e., duplicates), they are joined using ``_AND_``.  
 
 2. **MetaCyc/MetaNetX UNIQUE-ID Match (from `conversion_datatable`)**  
+   
    Indicates whether a match was found through the MetaCyc/MetaNetX conversion table using a ``UNIQUE-ID``.  
    If two UNIQUE-IDs match the same input, they are separated by ``_AND_`` and flagged as uncertain.  
    These entries are also reflected in the **partial** column due to ambiguity.
 
 3. **Input File Match (metabolomics data)**  
+   
    In **classic mode**, this column shows the identifier from the input file that matched with the SBML model.  
    In **community mode**, this column contains a list (e.g., ``[data1, data4]``) indicating the specific files in which matches were found.  
    Additional details about the exact identifiers used in the networks can be found in the logs.
 
 4. **Partial Match**  
+   
    This column contains any uncertain or ambiguous matches:
    
    - Duplicates (same metabolite matched multiple entries)
@@ -258,6 +285,7 @@ The output is a tabular file containing several columns with mapping results and
    These matches require manual review and are also logged in detail.
 
 5. **Other Columns**  
+   
    The remaining columns correspond to identifiers or metadata from the metabolomics data.  
    Each cell contains ``YES`` to indicate that a match was found on the ID of that column in the metabolomics data.
 
