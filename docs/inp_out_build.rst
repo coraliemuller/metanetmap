@@ -64,8 +64,7 @@ Details input files
 
    Some keys, such as `CHEMICAL-FORMULA`, `SYNONYMS`, or `DBLINKS`, may occur multiple times. Values can contain nested content, quotes, or formatting (e.g. HTML tags in names).
 
-   *Some Key Characteristics (non-exhaustive)*
-
+   - *Some Key Characteristics (non-exhaustive)*
    +--------------------------+-------------------------------------------------------------------------------------------------------+
    | **Field**                | **Description**                                                                                       |
    +==========================+=======================================================================================================+
@@ -139,7 +138,6 @@ Details input files
    Each line represents an entry linking different identifiers or names for the same metabolite.
    This kind of table is commonly used as a mapping table between databases such as MetaNetX, SEED, BiGG, or ChEBI.
    
-   
    +-------------+---------------+----------------------------------------------------------+
    | **Column**  | **Name**      | **Description**                                          |
    +=============+===============+==========================================================+
@@ -185,7 +183,7 @@ Details input files
          metanetmap build_db --db metanetx
    
    
-   - Table Structure\
+   - Table Structure
    +-------------+----------------+----------------------------------------------------------+
    | **Column**  | **Name**       | **Description**                                          |
    +=============+================+==========================================================+
@@ -233,8 +231,7 @@ Details input files
   
      Tabular file provided by the user
    
-   (MetaCyc)\
-
+   - (MetaCyc)
    +-----------------+---------------------------------------+----------+----------+
    | **UNIQUE-ID**   | **ADD-COMPLEMENT**                    | **BIGG** | **SEED** |
    +=================+=======================================+==========+==========+
@@ -248,8 +245,7 @@ Details input files
    +-----------------+---------------------------------------+----------+----------+
    
    
-   (MetaNetX)\
-
+   - (MetaNetX)
    +-----------------+---------------------------------------+----------+----------+
    | **UNIQUE-ID**   | **ADD-COMPLEMENT**                    | **BIGG** | **SEED** |
    +=================+=======================================+==========+==========+
