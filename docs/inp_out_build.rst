@@ -125,7 +125,7 @@ Details input files
        SYNONYMS - water
    
    
-   _________________________________________________________________________________________________________________________________
+   ------------------------------
 
 
    - **chem_xref.tsv (MetaNetX)**:
@@ -153,6 +153,7 @@ Details input files
    
    - *Example Entries*\
    .. code-block:: text
+
       Source          ID          Description
       BIOMASS         BIOMASS     BIOMASS
       mnx:BIOMASS     BIOMASS     BIOMASS
@@ -168,7 +169,7 @@ Details input files
      metabolic network models.
    
    
-   _________________________________________________________________________________________________________________________________
+   ------------------------------
 
    - **chem_prop.tsv (MetaNetX):**
    
@@ -224,7 +225,7 @@ Details input files
      - Charges and masses are provided for use in biochemical simulations and model balancing.
    
    
-      _________________________________________________________________________________________________________________________________
+   ------------------------------
 
    
    - **complementary_datatable**:  
