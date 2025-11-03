@@ -2,7 +2,8 @@
 Inputs and outputs: Mapping mode
 ==========
 
-**Note:** All input files are required to use tab characters as field delimiters.
+.. note:: 
+  All input files are required to use tab characters as field delimiters.
 
 Structure
 ------------------
@@ -38,7 +39,7 @@ Input data
 +---------------------+----------------------------------------------------------------------+
 | metabolic_networks  | Path to the directory with .sbml or/and .xml files                   |
 +---------------------+----------------------------------------------------------------------+
-| metabolomic_data   | Tabulated file, (cf note below for details)                           |
+| metabolomic_data    | Tabulated file, (cf note below for details)                          |
 +---------------------+----------------------------------------------------------------------+
 | conversion_datatable| Tabulated file, first column is the UNIQUE-ID in MetaCyc/MetaNetX    |
 +---------------------+----------------------------------------------------------------------+
@@ -49,7 +50,7 @@ Details input files for mapping mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toggle:: 
 
-  -  **metabolomic_data**:
+  -  **Metabolomic data**:
     Column names must follow a specific naming convention and each line is a metabolite.
     Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
    
@@ -78,7 +79,7 @@ Details input files for mapping mode
   +------------+-------------+------------------------------------+--------------+-------------------------------------------+
   
 
-  _________________________________________________________________________________________________________________________________
+   ------------------------------
 
 
   - **Metabolic networks**: 
@@ -130,10 +131,10 @@ Details input files for mapping mode
   +--------------------------+------------------------------------------------------------------------------+
 
   
-     _________________________________________________________________________________________________________________________________
+   ------------------------------
 
   
-  - **Datatable_conversion_MetaCyc**: 
+  - **Datatable conversion MetaCyc**: 
   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
   
   - Some Column Name are missing (non-exhaustive)
@@ -197,7 +198,7 @@ Details input files for mapping mode
    +-------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
-   - **Datatable_conversion_metanetx**: 
+   - **Datatable conversion metanetx**: 
    Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
    
    - Some Column Name are missing (non-exhaustive)
@@ -237,18 +238,18 @@ Output data
 | logs                    | Directory provides more detailed information                |
 +-------------------------+-------------------------------------------------------------+
 
+**Output file format**
 
+The name of the output file depends on the processing mode:
+- In **community mode**, the file is named as: ``community_mapping_results_YYYY-MM-DD_HH_MM_SS.tsv`` 
+- In **classic mode**, the file is named as: ``mapping_results_YYYY-MM-DD_HH_MM_SS.tsv``
+- If **partial match** is activated, the filename will include ``partial_match`` to indicate the use of the option.
+  
+
+Details output files for mapping mode
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toggle::
 
-   **Output file format**
-   
-   The name of the output file depends on the processing mode:
-   
-   - In **community mode**, the file is named as: ``community_mapping_results_YYYY-MM-DD_HH_MM_SS.tsv`` 
-   - In **classic mode**, the file is named as: ``mapping_results_YYYY-MM-DD_HH_MM_SS.tsv``
-   - If **partial match** is activated, the filename will include ``partial_match`` to indicate the use of the option.
-   
-   
    **File content and column structure**
    
    The output is a tabular file containing several columns with mapping results and metadata:

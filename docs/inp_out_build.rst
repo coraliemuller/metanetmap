@@ -54,7 +54,7 @@ Details input files
 
 .. toggle::
 
-   - **metacyc_compounds (MetaCyc):**
+   - **metacyc_compounds.dat (MetaCyc):**
 
 
      ``compounds.dat`` has to be provided by the user. Access to this file requires a licence for MetaCyc
@@ -125,7 +125,7 @@ Details input files
        SYNONYMS - water
    
    
-   _________________________________________________________________________________________________________________________________
+   ------------------------------
 
 
    - **chem_xref.tsv (MetaNetX)**:
@@ -153,6 +153,7 @@ Details input files
    
    - *Example Entries*\
    .. code-block:: text
+
       Source          ID          Description
       BIOMASS         BIOMASS     BIOMASS
       mnx:BIOMASS     BIOMASS     BIOMASS
@@ -168,7 +169,7 @@ Details input files
      metabolic network models.
    
    
-   _________________________________________________________________________________________________________________________________
+   ------------------------------
 
    - **chem_prop.tsv (MetaNetX):**
    
@@ -224,10 +225,10 @@ Details input files
      - Charges and masses are provided for use in biochemical simulations and model balancing.
    
    
-      _________________________________________________________________________________________________________________________________
+   ------------------------------
 
    
-   - **complementary_datatable**:  
+   - **complementary_datatable.tsv**:  
   
      Tabular file provided by the user
    
