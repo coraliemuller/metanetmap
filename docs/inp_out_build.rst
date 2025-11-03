@@ -229,6 +229,8 @@ Details input files
      balancing.
    
    
+      _________________________________________________________________________________________________________________________________
+
    
    - **complementary_datatable**:  
      Tabular file provided by the user

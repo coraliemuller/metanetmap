@@ -81,6 +81,10 @@ Details input files for mapping mode
   |            | CHEBI:16708 | Adenine                            |              |                                           |
   +------------+-------------+------------------------------------+--------------+-------------------------------------------+
   
+
+     _________________________________________________________________________________________________________________________________
+
+
   - **Metabolic networks**: 
   
   Metabolite information is represented in SBML (Systems Biology Markup Language) format.
@@ -132,6 +136,8 @@ Details input files for mapping mode
   +--------------------------+------------------------------------------------------------------------------+
 
   
+     _________________________________________________________________________________________________________________________________
+
   
   - **Datatable_conversion_MetaCyc**: 
   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
