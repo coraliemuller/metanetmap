@@ -46,17 +46,6 @@ Input data
 +---------------------+----------------------------------------------------------------------+
 
 
-.. note::
-  For **metabolomic_data**:
-  Column names must follow a specific naming convention. 
-  Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
- 
-  The following column names are recognized:
-
-   ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``,   ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
-   ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,   ``CAS``, ``INCHI-KEY``, ``SMILES``
-
-
 
 Details input files for mapping mode
 ---------------------------------------
@@ -92,6 +81,10 @@ Details input files for mapping mode
   |            | CHEBI:16708 | Adenine                            |              |                                           |
   +------------+-------------+------------------------------------+--------------+-------------------------------------------+
   
+
+     _________________________________________________________________________________________________________________________________
+
+
   - **Metabolic networks**: 
   
   Metabolite information is represented in SBML (Systems Biology Markup Language) format.
@@ -143,12 +136,13 @@ Details input files for mapping mode
   +--------------------------+------------------------------------------------------------------------------+
 
   
+     _________________________________________________________________________________________________________________________________
+
   
   - **Datatable_conversion_MetaCyc**: 
   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
   
   - Some Column Name are missing (non-exhaustive)
-.. toggle:: Exemple de composés MetaCyc détaillés
 
    +-----------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
    | **UNIQUE-ID**   | CHEBI  |      COMMON-NAME      | ABBREV-NAME |                                                                 SYNONYMS                                                                  | ADD-COMPLEMENT | MOLECULAR-WEIGHT | MONOISOTOPIC-MW | SEED |  BIGG  |
@@ -335,7 +329,7 @@ The output is a tabular file containing several columns with mapping results and
 | crnmock                                            |                      | ['toys3']                  |                       |                    |                 |
 +----------------------------------------------------+----------------------+----------------------------+-----------------------+--------------------+-----------------+
 
-.. toggle::
+
   
   Output File Content and Column Structure
   ------------------
