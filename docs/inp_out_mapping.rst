@@ -39,7 +39,7 @@ Input data
 +---------------------+----------------------------------------------------------------------+
 | metabolic_networks  | Path to the directory with .sbml or/and .xml files                   |
 +---------------------+----------------------------------------------------------------------+
-| metabolomic_data   | Tabulated file, (cf note below for details)                           |
+| metabolomic_data    | Tabulated file, (cf note below for details)                          |
 +---------------------+----------------------------------------------------------------------+
 | conversion_datatable| Tabulated file, first column is the UNIQUE-ID in MetaCyc/MetaNetX    |
 +---------------------+----------------------------------------------------------------------+
@@ -241,12 +241,11 @@ Output data
 **Output file format**
 
 The name of the output file depends on the processing mode:
-
 - In **community mode**, the file is named as: ``community_mapping_results_YYYY-MM-DD_HH_MM_SS.tsv`` 
 - In **classic mode**, the file is named as: ``mapping_results_YYYY-MM-DD_HH_MM_SS.tsv``
 - If **partial match** is activated, the filename will include ``partial_match`` to indicate the use of the option.
   
-  
+
 Details output files for mapping mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toggle::
