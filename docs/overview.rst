@@ -18,7 +18,7 @@ Why using this tool to map metabolomic data?
 --------------------------------------------
 
 - **ID variability in metabolic networks:**  
-  Automatic reconstruction of metabolic networks using different tools often assigns different IDs to the same metabolites. It is likely that those do not match the nomenclature of metabolomic annotations. To reconcile them, metadata from metabolic networks associating molecules to alternative databases can be used, so can third-party external databases such as [https://www.metanetx.org](MetaNetX). MetaNetMap provides such functionalities. 
+  Automatic reconstruction of metabolic networks using different tools often assigns different IDs to the same metabolites. It is likely that those do not match the nomenclature of metabolomic annotations. To reconcile them, metadata from metabolic networks associating molecules to alternative databases can be used, so can third-party external databases such as `MetaNetX <https://www.metanetx.org>`_. MetaNetMap provides such functionalities. 
 
 - **Metabolomic data complexity:**  
   Due to the difficulty of annotating metabolomic profiles, identifications are often partial, incomplete, and inconsistently represented. For example, enantiomers are frequently not precisely specified because they are indistinguishable by LC/MS methods. Matching must account for this.
@@ -61,7 +61,6 @@ Overview of the procedure
 Pre-process mapping
 ~~~~~~~~~~~~~~~~~~~
 
-
   For **metabolomic data**, whether provided as single or multiple files, the data will be grouped by the column names of their identifiers such as ``unique-id``, ``common-name``, etc. This allows verification in the output file of which column the metabolite matched on.
 
   For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the networks for exemple: (chebi,InChIKey...).
@@ -72,16 +71,21 @@ Pre-process mapping
 Mapping procedure
 ~~~~~~~~~~~~~~~~~
 
-- **Step 1: Match metabolomic data vs. network metadata**  
-  
+- **Step 1: Match metabolomic data vs. network metadata**\
   We first test for direct matches between the ids in metabolimic data and all the metadata in metabolomic networks without going through the ``datatable_conversion`` table to limit exchanges. 
   At the same time, for those that match, we verify if they have a unique ID in ``datatable_conversion``.
   
-- **Step 2: Match metabolomic data vs. datatable_conversion** 
--  
+- **Step 2: Match metabolomic data vs. datatable_conversion**\
   Those that did not match in the previous step will be tested here. Duplicate checks will be performed, since multiple columns will be tested for the same metabolite (i.e., within a single row), it is possible that several identifiers for the same metabolite match. In this case, the matches will be merged into the same cell, separated by AND.
 
   If one of the identifiers does not match, but another identifier in the same row does, the non-matching one will be excluded from the output table.
+
+
+- **Step 3: Match metabolites in datatable_conversion vs. network metadata**\
+  For those identified with a match in step 2, we retrieve all their identifiers present in the network metadata and check if any of them match the network metadata.
+
+  If none of the identifiers in the row match any reference, they will still be merged into a single cell in the result file, as they represent the same metabolite. 
+  This allows all information for one metabolite to be grouped on a single row, improving clarity and readability.
 
 .. important::
     When partial match mode is **disabled**, the tool only uses the unique ID (e.g., MetaCyc/MetaNetX UNIQUE-ID) to determine whether a metabolite from the input data matches one from the reference database.
@@ -96,21 +100,14 @@ Mapping procedure
 
     This behavior helps avoid/reduce false positives during automatic matching.
 
-- **Step 3: Match metabolites in datatable_conversion vs. network metadata** 
-   
-  For those identified with a match in step 2, we retrieve all their identifiers present in the network metadata and check if any of them match the network metadata.
 
-  If none of the identifiers in the row match any reference, they will still be merged into a single cell in the result file, as they represent the same metabolite. 
-  This allows all information for one metabolite to be grouped on a single row, improving clarity and readability.
-
-.. note::
-   If the partial match mode is activated, processing steps are applied on the three knowledge tables (enantiomers, CHEBI, etc.), and then all the previous steps are repeated.  
-   CHEBI/ InChIKey processing is only done if present in the metabolomic data table.
-
-
-Partial match 
+Partial match option
 ~~~~~~~~~~~~~~~~~~~
-After this processing step, the entire mapping pipeline is re-executed, taking the modifications into account.
+When partial match mode is activated, the processing steps are first applied to the three knowledge tables (e.g., enantiomers, CHEBI). Afterward, all previous steps are repeated.
+
+CHEBI/InChIKey processing is only performed if these identifiers are present in the metabolomic data table.
+
+Once this processing is complete, the entire mapping pipeline is re-run, incorporating the modifications.
 
 **The following treatments are applied:**
 

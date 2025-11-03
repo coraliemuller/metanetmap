@@ -41,8 +41,8 @@ This ensures that the **mapping mode** runs correctly.
     metanetmap     build_db   \
                   --db            metacyc\
                   -f              metacyc_compounds_dat/file/path 
-                  --compfiles     datatable_complementary_tsv/file/path
-                  --out_db        output_conversion_datatable_tsv/file/path 
+                  --compfiles     datatable_complementary_tsv/file/path # Optional
+                  --out_db        output_conversion_datatable_tsv/file/path # Optional
                   -q              quiet_mode (True/False) # Optional: False by default
 
 
@@ -52,9 +52,9 @@ This ensures that the **mapping mode** runs correctly.
 
     metanetmap     build_db   \
                   --db            metanetx\
-                  -f              MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path
-                  --compfiles     datatable_complementary_tsv/file/path
-                  --out_db        output_conversion_datatable_tsv/file/path 
+                  -f              MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path # Optional
+                  --compfiles     datatable_complementary_tsv/file/path # Optional
+                  --out_db        output_conversion_datatable_tsv/file/path # Optional
                   -q              quiet_mode (True/False) # Optional: False by default
 
 

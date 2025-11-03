@@ -46,7 +46,7 @@ Community mode with partial match activated
 
     metanetmap test --community --partial_match
 
-For more details on modes refer to (see :doc:`usage` and :doc:`application_details`).
+For more details on modes refer to :doc:`usage`.
 
 .. note::
    Complete MetaCyc database information related to the ontology of metabolites and pathways is not included in test option because of licensing restrictions.
