@@ -8,8 +8,8 @@ Welcome to MetaNetMap's documentation!
    overview
    installation
    quickstart
-   application_details
-   input_data
+   inp_out_build
+   inp_out_mapping
    usage
    modules
    contributing
