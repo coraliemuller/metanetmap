@@ -51,19 +51,15 @@ Details input files for mapping mode
 ---------------------------------------
 .. toggle::
 
- 
-
-    For **metabolomic_data**:
+  -  **metabolomic_data**:
     Column names must follow a specific naming convention and each line is a metabolite.
     Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
    
     .. note::
       The following column names are recognized:
 
-         ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``,
-       ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
-       ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``,
-       ``CAS``, ``INCHI-KEY``, ``SMILES``
+       ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``, ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
+       ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``, ``CAS``, ``INCHI-KEY``, ``SMILES``
 
   +------------+-------------+------------------------------------+--------------+-------------------------------------------+
   | UNIQUE-ID  | CHEBI       | COMMON-NAME                        | M/Z          | INCHI-KEY                                 | 
@@ -82,7 +78,7 @@ Details input files for mapping mode
   +------------+-------------+------------------------------------+--------------+-------------------------------------------+
   
 
-     _________________________________________________________________________________________________________________________________
+  _________________________________________________________________________________________________________________________________
 
 
   - **Metabolic networks**: 
@@ -132,8 +128,6 @@ Details input files for mapping mode
   +--------------------------+------------------------------------------------------------------------------+
   | ``annotation``           | Contains **metadata** in RDF format, including standardized cross-references |
   +--------------------------+------------------------------------------------------------------------------+
-  | ``chebi`` / ``inchikey`` | Links to standardized identifiers for interoperability                       |
-  +--------------------------+------------------------------------------------------------------------------+
 
   
      _________________________________________________________________________________________________________________________________
@@ -158,7 +152,8 @@ Details input files for mapping mode
    | Glucopyranose   | 4167   | D-glucopyranose       |             | ["6-(hydroxymethyl)tetrahydropyran-2,3,4,5-tetraol"]                                                                                      |                | 180.157          | 180.0633881178  |      | glc__D |
    +-----------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
 
-   Description\
+  - Description
+
    +-------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
    | Column Name       | Description                                                                                                                                        |
    +===================+====================================================================================================================================================+
@@ -208,28 +203,28 @@ Details input files for mapping mode
    Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
    
    - Some Column Name are missing (non-exhaustive)
-   +---------------+--------------+----------------+------------------+----------------+------+--------+
-   |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC        | SEED |  BIGG  |
-   +===============+==============+================+==================+================+======+========+
-   |  MNXM1372018  | chebi:30828  |                |     281.457      | CPD-17257      |      |        |
-   |   MNXM41337   | chebi:50258  |                |     180.157      | CPD-24978      |      |        |
-   |  MNXM1113433  | chebi:147718 |                |     180.157      | CPD-25014      |      |        |
-   |  MNXM1117556  | chebi:153460 |                |     180.157      | CPD-25010      |      |        |
-   |  MNXM1364061  |  chebi:4167  |                |     180.157      | Glucopyranose  |      | glc__D |
+   +---------------+--------------+----------------+------------------+-----------------+------+--------+
+   |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC         | SEED |  BIGG  |
+   +===============+==============+================+==================+=================+======+========+
+   |  MNXM1372018  | chebi:30828  |                |     281.457      | CPD-17257       |      |        |
+   |   MNXM41337   | chebi:50258  |                |     180.157      | CPD-24978       |      |        |
+   |  MNXM1113433  | chebi:147718 |                |     180.157      | CPD-25014       |      |        |
+   |  MNXM1117556  | chebi:153460 |                |     180.157      | CPD-25010       |      |        |
+   |  MNXM1364061  |  chebi:4167  |                |     180.157      | Glucopyranose   |      | glc__D |
    +---------------+--------------+----------------+------------------+-----------------+------+--------+
    
    
    Use the same description for the columns as above, except for the exceptions below, and make METANTX the unique identifier.
    
-   +-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+
-   | Column Name       | Description                                                                                                                                      |
-   +===================+==================================================================================================================================================+
-   | UNIQUE-ID         | The unique identifier for the compound, typically from the MetaNetX database (e.g., ``CPD-17257``).                                             |
-   +-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+
-   | METACYC           | Identifier from the METACYC database, if available. (exchanged with METANETX)                                                                   |
-   +-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+
-   | VMH               | Identifier from the VMH database, if available.                                                                                                   |
-   +-------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+   +-------------------+----------------------------------------------------------------------------------------------------+
+   | Column Name       | Description                                                                                        |
+   +===================+====================================================================================================+
+   | UNIQUE-ID         | The unique identifier for the compound, typically from the MetaNetX database (e.g., ``CPD-17257``).|
+   +-------------------+----------------------------------------------------------------------------------------------------+
+   | METACYC           | Identifier from the METACYC database, if available. (exchanged with METANETX)                      |
+   +-------------------+----------------------------------------------------------------------------------------------------+
+   | VMH               | Identifier from the VMH database, if available.                                                    |
+   +-------------------+----------------------------------------------------------------------------------------------------+
 
   
 

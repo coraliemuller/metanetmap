@@ -125,6 +125,7 @@ Details input files
        SYNONYMS - hydrogen oxide
        SYNONYMS - water
    
+   
    _________________________________________________________________________________________________________________________________
 
 
@@ -153,14 +154,13 @@ Details input files
    +-------------+---------------+----------------------------------------------------------+
    
    - *Example Entries*\
-    .. code-block:: text
+   .. code-block:: text
       Source          ID          Description
       BIOMASS         BIOMASS     BIOMASS
       mnx:BIOMASS     BIOMASS     BIOMASS
       seedM:cpd11416  BIOMASS     Biomass
       MNXM01          MNXM01      PMF||Translocated proton that accounts for the Proton Motive Force
       CHEBI:16234     MNXM02      hydroxide||HO-||Hydroxide ion||OH(-)||hydridooxygenate(1-)
-
 
    
    .. note::
@@ -219,20 +219,18 @@ Details input files
    
    
    .. note::
-     - Some entries (like ``BIOMASS`` or ``PMF``) represent pseudo-metabolites used
-     in constraint-based metabolic models.
+     - Some entries (like ``BIOMASS`` or ``PMF``) represent pseudo-metabolites used in constraint-based metabolic models.
 
-     - ``InChI`` and ``SMILES`` are standard line notations for representing chemical
-     structures computationally.
+     - ``InChI`` and ``SMILES`` are standard line notations for representing chemical structures computationally.
 
-     - Charges and masses are provided for use in biochemical simulations and model
-     balancing.
+     - Charges and masses are provided for use in biochemical simulations and model balancing.
    
    
       _________________________________________________________________________________________________________________________________
 
    
    - **complementary_datatable**:  
+  
      Tabular file provided by the user
    
    (MetaCyc)\
