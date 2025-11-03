@@ -10,7 +10,7 @@ To use MetaNetMap in a project::
 Command-line usage
 ------------------
 
-Based on the input listed in ::doc:`input_data`, ``metanetmap`` can be run in four mode
+Based on the input listed in ::doc:`inp_out_mapping`, ``metanetmap`` can be run in four mode
 
 .. note::
   Before running the different modes, you must first build your own **data table conversion**.
@@ -31,7 +31,7 @@ This ensures that the **mapping mode** runs correctly.
 .. note::
 
    The list and description of the required column names are available in the
-   :doc:`input_data_build` section.
+   :doc:`inp_out_build` section.
   
 
 - **Run database building mode for MetaCyc**:
