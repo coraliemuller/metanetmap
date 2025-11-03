@@ -36,9 +36,9 @@ Get test data:
   script:
     - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/sri.com/metacyc/2025-04-18/29.0/compounds_29.dat tests/data/compounds_29.dat
     - aws s3 cp s3://$MISTIC_BUCKET/gen/metanetmap/kb/20250916/conversion_datatable.tsv tests/data/conversion_datatable.tsv
-    - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/metanetx.org/2025-10-30/4.5/chem_prop.tsv tests/data/chem_prop.tsv
-    - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/metanetx.org/2025-10-30/4.5/chem_xref.tsv tests/data/chem_xref.tsv
-    - aws s3 cp s3://$MISTIC_BUCKET/gen/metanetmap/mo/20251031/metanetx_conversion_datatable.tsv tests/data/metanetx_conversion_datatable.tsv
+    # - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/metanetx.org/2025-10-30/4.5/chem_prop.tsv tests/data/chem_prop.tsv
+    # - aws s3 cp s3://$MISTIC_BUCKET/ref/ontology/metanetx.org/2025-10-30/4.5/chem_xref.tsv tests/data/chem_xref.tsv
+    # - aws s3 cp s3://$MISTIC_BUCKET/gen/metanetmap/mo/20251031/metanetx_conversion_datatable.tsv tests/data/metanetx_conversion_datatable.tsv
   artifacts:
     paths:
       - $MYCACHE
