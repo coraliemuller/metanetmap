@@ -27,11 +27,9 @@ Structure
     logs/
 
 
-Mapping mode
---------------
 
 Input data
-~~~~~~~~~~~
+--------------
 
 +---------------------+----------------------------------------------------------------------+
 | File/Directory      | Description                                                          |
@@ -40,7 +38,7 @@ Input data
 +---------------------+----------------------------------------------------------------------+
 | metabolic_networks  | Path to the directory with .sbml or/and .xml files                   |
 +---------------------+----------------------------------------------------------------------+
-| metabolomic_data   | Tabulated file, (cf note below for details)                          |
+| metabolomic_data   | Tabulated file, (cf note below for details)                           |
 +---------------------+----------------------------------------------------------------------+
 | conversion_datatable| Tabulated file, first column is the UNIQUE-ID in MetaCyc/MetaNetX    |
 +---------------------+----------------------------------------------------------------------+
@@ -48,7 +46,7 @@ Input data
 
 
 Details input files for mapping mode
----------------------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toggle::
 
   -  **metabolomic_data**:
@@ -229,7 +227,7 @@ Details input files for mapping mode
   
 
 Output data
-~~~~~~~~~~~
+--------------
 
 +-------------------------+-------------------------------------------------------------+
 | File/Directory          | Description                                                 |
@@ -326,32 +324,31 @@ The output is a tabular file containing several columns with mapping results and
 
 
   
-  Output File Content and Column Structure
-  ------------------
-  +-------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-  | **Column Name**               | **Description**                                                                                                                                                                                                                                                            |
-  +===============================+============================================================================================================================================================================================================================================================================+
-  | `Metabolite`                  | Name of the input metabolite (from the experimental data). May be a name, SMILES, InChIKey, or identifier. If multiple matches are found, they are joined with "\_AND\_".                                                                                                  |
-  | `Match in database`           | Main match found in the reference database (e.g., MetaCyc/MetaNetX). May be a MetaCyc/MetaNetX ID like `CPD-XXXX` or a named entity. Multiple matches are joined with "\_AND\_" and flagged in **Partial Match**.                                                                            |
-  | `Match in metabolic networks` | List of metabolite matches in the metabolic network (SBML model). Typically uses short IDs like `met__L`. Returned as a list: `['met__L']`. In community mode, the list indicates each SBML model where the metabolite is present. The name is in the log for more details |
-  | `Partial match`               | Shows ambiguous or post-processed matches, e.g.: <br> - Duplicates <br> - CHEBI ontology expansion <br> - INCHIKEY simplification <br> - Enantiomer removal                                                                                                                |
-  | `Match via UNIQUE-ID`         | Indicates whether a match was found using the MetaCyc/MetaNetX `UNIQUE-ID` from the `datatable_conversion`. Displays `YES` if matched.                                                                                                                                              |
-  | `Match via CHEBI`             | Match based on **ChEBI** identifier. Displays `YES` if a ChEBI ID in the data matched the network.                                                                                                                                                                         |
-  | `Match via COMMON-NAME`       | Match based on common (non-abbreviated) name of the metabolite. E.g., `"methionine"`.                                                                                                                                                                                      |
-  | `Match via ABBREV-NAME`       | Match based on abbreviated names, often from SBML or COBRA models. E.g., `"met__L"`, `"pnto__R"`.                                                                                                                                                                          |
-  | `Match via SYNONYMS`          | Match using any of the listed synonyms for the metabolite. Useful when matching trivial or alternate names.                                                                                                                                                                |
-  | `Match via ADD-COMPLEMENT`    | Match using manually added complementary fields (from `ADD-COMPLEMENT` column in your input data).                                                                                                                                                                         |
-  | `Match via BIGG`              | Match using **BiGG Models** identifiers. Typically abbreviated and used in genome-scale models.                                                                                                                                                                            |
-  | `Match via HMDB`              | Match via **Human Metabolome Database (HMDB)** identifiers.                                                                                                                                                                                                                |
-  | `Match via METANETX`          | Match via **MetaNetX** IDs, used for cross-database integration.                                                                                                                                                                                                           |
-  | `Match via LIGAND-CPD`        | Match via identifiers from **KEGG Ligand** or other ligand-based databases.                                                                                                                                                                                                |
-  | `Match via REFMET`            | Match via **RefMet**, a reference nomenclature system for metabolomics.                                                                                                                                                                                                    |
-  | `Match via PUBCHEM`           | Match via **PubChem Compound IDs (CIDs)**.                                                                                                                                                                                                                                 |
-  | `Match via CAS`               | Match using **CAS numbers** (Chemical Abstracts Service).                                                                                                                                                                                                                  |
-  | `Match via INCHI-KEY`         | Match based on the **InChIKey**, a hashed version of the InChI chemical identifier.                                                                                                                                                                                        |
-  | `Match via SMILES`            | Match via the **SMILES** string (Simplified Molecular Input Line Entry System) representing the molecular structure.                                                                                                                                                       |
-  | `Match via FORMULA`           | Match based on **molecular formula**, e.g., `C6H12O6`.                                                                                                                                                                                                                     |
-  +-------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+- Output File Content and Column Structure
++-------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| **Column Name**               | **Description**                                                                                                                                                                                                                                                            |
++===============================+============================================================================================================================================================================================================================================================================+
+| `Metabolite`                  | Name of the input metabolite (from the experimental data). May be a name, SMILES, InChIKey, or identifier. If multiple matches are found, they are joined with "\_AND\_".                                                                                                  |
+| `Match in database`           | Main match found in the reference database (e.g., MetaCyc/MetaNetX). May be a MetaCyc/MetaNetX ID like `CPD-XXXX` or a named entity. Multiple matches are joined with "\_AND\_" and flagged in **Partial Match**.                                                          |
+| `Match in metabolic networks` | List of metabolite matches in the metabolic network (SBML model). Typically uses short IDs like `met__L`. Returned as a list: `['met__L']`. In community mode, the list indicates each SBML model where the metabolite is present. The name is in the log for more details |
+| `Partial match`               | Shows ambiguous or post-processed matches, e.g.: <br> - Duplicates <br> - CHEBI ontology expansion <br> - INCHIKEY simplification <br> - Enantiomer removal                                                                                                                |
+| `Match via UNIQUE-ID`         | Indicates whether a match was found using the MetaCyc/MetaNetX `UNIQUE-ID` from the `datatable_conversion`. Displays `YES` if matched.                                                                                                                                     |
+| `Match via CHEBI`             | Match based on **ChEBI** identifier. Displays `YES` if a ChEBI ID in the data matched the network.                                                                                                                                                                         |
+| `Match via COMMON-NAME`       | Match based on common (non-abbreviated) name of the metabolite. E.g., `"methionine"`.                                                                                                                                                                                      |
+| `Match via ABBREV-NAME`       | Match based on abbreviated names, often from SBML or COBRA models. E.g., `"met__L"`, `"pnto__R"`.                                                                                                                                                                          |
+| `Match via SYNONYMS`          | Match using any of the listed synonyms for the metabolite. Useful when matching trivial or alternate names.                                                                                                                                                                |
+| `Match via ADD-COMPLEMENT`    | Match using manually added complementary fields (from `ADD-COMPLEMENT` column in your input data).                                                                                                                                                                         |
+| `Match via BIGG`              | Match using **BiGG Models** identifiers. Typically abbreviated and used in genome-scale models.                                                                                                                                                                            |
+| `Match via HMDB`              | Match via **Human Metabolome Database (HMDB)** identifiers.                                                                                                                                                                                                                |
+| `Match via METANETX`          | Match via **MetaNetX** IDs, used for cross-database integration.                                                                                                                                                                                                           |
+| `Match via LIGAND-CPD`        | Match via identifiers from **KEGG Ligand** or other ligand-based databases.                                                                                                                                                                                                |
+| `Match via REFMET`            | Match via **RefMet**, a reference nomenclature system for metabolomics.                                                                                                                                                                                                    |
+| `Match via PUBCHEM`           | Match via **PubChem Compound IDs (CIDs)**.                                                                                                                                                                                                                                 |
+| `Match via CAS`               | Match using **CAS numbers** (Chemical Abstracts Service).                                                                                                                                                                                                                  |
+| `Match via INCHI-KEY`         | Match based on the **InChIKey**, a hashed version of the InChI chemical identifier.                                                                                                                                                                                        |
+| `Match via SMILES`            | Match via the **SMILES** string (Simplified Molecular Input Line Entry System) representing the molecular structure.                                                                                                                                                       |
+| `Match via FORMULA`           | Match based on **molecular formula**, e.g., `C6H12O6`.                                                                                                                                                                                                                     |
++-------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
 
