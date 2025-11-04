@@ -1,25 +1,25 @@
-Metabolites	Match in database	Match in metabolic networks	Partial match	Match via UNIQUE-ID	Match via CHEBI	Match via COMMON-NAME	Match via ABBREV-NAME	Match via SYNONYMS	Match via ADD-COMPLEMENT	Match via MOLECULAR-WEIGHT	Match via MONOISOTOPIC-MW	Match via SEED	Match via BIGG	Match via HMDB	Match via METANETX	Match via METACYC	Match via LIGAND-CPD	Match via REFMET	Match via PUBCHEM	Match via CAS	Match via INCHI	Match via NON-STANDARD-INCHI	Match via INCHI-KEY	Match via SMILES	Match via FORMULA
-CPD-17381 _AND_ roquefortine C	CPD-17381			YES		YES																			
-CHEBI:84783 _AND_ CPD-25370	CPD-25370	['toys1']		YES	YES																				
-CHEBI:4167 _AND_ Glucopyranose _AND_ glc__D	Glucopyranose	['toys1', 'toys3']			YES																				
-L-methionine _AND_ MET _AND_ met__L _AND_ methionine	MET	['toys1', 'toys2', 'toys3']				YES																			
-ADENINE _AND_ Adenine _AND_ CHEBI:16708 _AND_ ade	ADENINE	['toys1', 'toys3']				YES																			
-Beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-R _AND_ Gal-13-GlcN-R _AND_ beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-R	Gal-13-GlcN-R _AND_ beta-Gal-13-beta-GlcNac-R	['toys1', 'toys2']	Gal-13-GlcN-R _AND_ beta-Gal-13-beta-GlcNac-R			YES																			
-8-O-methylfusarubin alcohol _AND_ CPD-18186	CPD-18186	['toys2']				YES																			
-orot _AND_ orotic acid	OROTATE	['toys2', 'toys3']						YES																	
-Carbamyl-phosphate _AND_ cbp	CARBAMOYL-P	['toys3']						YES																	
-pantothenic acid _AND_ pnto__R	PANTOTHENATE	['toys2', 'toys3']							YES																
-aprut	CPD-569												YES												
-f1p	CPD-15970 _AND_ FRU1P	['toys3']	CPD-15970 _AND_ FRU1P										YES												
-crnmock		['toys3']											YES												
-DIMETHYLMAL-CPD _AND_ INCHIKEY=CGBYBGVMDAPUIH-ARJAWSKDSA-L	DIMETHYLMAL-CPD	['toys1']																					YES		
-CCCC(=O)OCC(/C=C=C1([C@](C)(O)C[C@@H](OC(=O)C)CC(C)(C)1))=C/C=C/C(\C)=C/C=C/C=C(C)/C=C/C=C(C)/C(=O)C[C@]23(C(C)(C)C[C@H](O)C[C@@](C)(O2)3) _AND_ CPD-26454	CPD-26454	['toys2']																						YES	
-C9H16NO5		['toys3']	C9H16NO5																						YES
-CHEBI:36023 _AND_ vaccenic																									
-CHEBI:90488																									
-INCHIKEY=AVVWPBAENSWJCB-VSOTGSRCSA-C																									
-delphinidin 3-O-(4-coumaroyl-rhamnosyl-(1->6)-glucoside																									
-CHEBI:15756																									
-C(S)[C@@H](C(NCCC(=O)[O-])=O)NC(=O)CC[C@@H](C([O-])=O)NC(=O)[C@H](CS)NC(=O)CC[C@H]([NH3+])C([O-])																									
-INCHIKEY=FSCYHDCTAZZSKN-DJNGBR																									
-thionine																									
+Metabolites	Match in database	Match in metabolic networks	Partial match	Match via UNIQUE-ID	Match via CHEBI	Match via COMMON-NAME	Match via ABBREV-NAME	Match via SYNONYMS	Match via ADD-COMPLEMENT	Match via MOLECULAR-WEIGHT	Match via MONOISOTOPIC-MW	Match via SEED	Match via BIGG	Match via HMDB	Match via METANETX	Match via METACYC	Match via LIGAND-CPD	Match via REFMET	Match via PUBCHEM	Match via VMH	Match via CAS	Match via INCHI	Match via NON-STANDARD-INCHI	Match via INCHI-KEY	Match via SMILES	Match via FORMULA
+CPD-17381 _AND_ roquefortine C	CPD-17381			YES		YES																				
+CHEBI:84783 _AND_ CPD-25370	CPD-25370	['toys1']		YES	YES																					
+CHEBI:4167 _AND_ Glucopyranose _AND_ glc__D	Glucopyranose	['toys1', 'toys3']			YES																					
+L-methionine _AND_ MET _AND_ met__L _AND_ methionine	MET	['toys1', 'toys2', 'toys3']				YES																				
+ADENINE _AND_ Adenine _AND_ CHEBI:16708 _AND_ ade	ADENINE	['toys1', 'toys3']				YES																				
+Beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-R _AND_ Gal-13-GlcN-R _AND_ beta-D-galactosyl-(1->3)-N-acetyl-beta-D-glucosaminyl-R	Gal-13-GlcN-R _AND_ beta-Gal-13-beta-GlcNac-R	['toys1', 'toys2']	Gal-13-GlcN-R _AND_ beta-Gal-13-beta-GlcNac-R			YES																				
+8-O-methylfusarubin alcohol _AND_ CPD-18186	CPD-18186	['toys2']				YES																				
+orot _AND_ orotic acid	OROTATE	['toys2', 'toys3']						YES																		
+Carbamyl-phosphate _AND_ cbp	CARBAMOYL-P	['toys3']						YES																		
+pantothenic acid _AND_ pnto__R	PANTOTHENATE	['toys2', 'toys3']							YES																	
+aprut	CPD-569												YES													
+f1p	CPD-15970 _AND_ FRU1P	['toys3']	CPD-15970 _AND_ FRU1P										YES													
+crnmock		['toys3']											YES													
+DIMETHYLMAL-CPD _AND_ INCHIKEY=CGBYBGVMDAPUIH-ARJAWSKDSA-L	DIMETHYLMAL-CPD	['toys1']																						YES		
+CCCC(=O)OCC(/C=C=C1([C@](C)(O)C[C@@H](OC(=O)C)CC(C)(C)1))=C/C=C/C(\C)=C/C=C/C=C(C)/C=C/C=C(C)/C(=O)C[C@]23(C(C)(C)C[C@H](O)C[C@@](C)(O2)3) _AND_ CPD-26454	CPD-26454	['toys2']																							YES	
+C9H16NO5		['toys3']	C9H16NO5																							YES
+CHEBI:36023 _AND_ vaccenic																										
+CHEBI:90488																										
+INCHIKEY=AVVWPBAENSWJCB-VSOTGSRCSA-C																										
+delphinidin 3-O-(4-coumaroyl-rhamnosyl-(1->6)-glucoside																										
+CHEBI:15756																										
+C(S)[C@@H](C(NCCC(=O)[O-])=O)NC(=O)CC[C@@H](C([O-])=O)NC(=O)[C@H](CS)NC(=O)CC[C@H]([NH3+])C([O-])																										
+INCHIKEY=FSCYHDCTAZZSKN-DJNGBR																										
+thionine																										

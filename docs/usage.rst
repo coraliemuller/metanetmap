@@ -22,7 +22,7 @@ There are two main ways to do this:
 
    - `MetaNetX Reference Data <https://www.metanetx.org/mnxdoc/mnxref.html>`_
 
-Custom Conversion Tables
+Custom third party database
 ------------------------
 
 You can also provide your **own custom conversion data table**, as long as it follows the required column naming convention.  
@@ -80,7 +80,7 @@ This ensures that the **mapping mode** runs correctly.
 
 
 
-Run Mapping Mode
+Run mapping mode
 ------------------------
 
 After this you can run MetaNetMap in two different modes with a partial match option :
