@@ -46,7 +46,7 @@ Input data
 
 
 
-Details input files for mapping mode
+Details on input files for mapping mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toggle:: 
 
@@ -246,7 +246,7 @@ The name of the output file depends on the processing mode:
 - If **partial match** is activated, the filename will include ``partial_match`` to indicate the use of the option.
   
 
-Details output files for mapping mode
+Details on output files for mapping mode
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. toggle::
 
