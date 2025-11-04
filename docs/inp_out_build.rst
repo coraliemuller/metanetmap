@@ -64,7 +64,7 @@ Details input files
 
    Some keys, such as `CHEMICAL-FORMULA`, `SYNONYMS`, or `DBLINKS`, may occur multiple times. Values can contain nested content, quotes, or formatting (e.g. HTML tags in names).
 
-   - *Some Key Characteristics (non-exhaustive)*
+   - *Some key characteristics (non-exhaustive)*
    +--------------------------+-------------------------------------------------------------------------------------------------------+
    | **Field**                | **Description**                                                                                       |
    +==========================+=======================================================================================================+
@@ -100,7 +100,7 @@ Details input files
    +--------------------------+-------------------------------------------------------------------------------------------------------+
  
    
-   *Example Compound Entry in the MetaCyc file*
+   *Example compound entry in the MetaCyc file*
    ::
        UNIQUE-ID - Primary identifier within the MetaCyc database (WATER).
        TYPES - Declares the entity as a Compound.
@@ -151,7 +151,7 @@ Details input files
    |             |               | notes separated by ``||``                                |
    +-------------+---------------+----------------------------------------------------------+
    
-   - *Example Entries*\
+   - *Example entries*\
    .. code-block:: text
 
       Source          ID          Description
@@ -184,7 +184,7 @@ Details input files
          metanetmap build_db --db metanetx
    
    
-   - Table Structure
+   - Table structure
    +-------------+----------------+----------------------------------------------------------+
    | **Column**  | **Name**       | **Description**                                          |
    +=============+================+==========================================================+
@@ -207,7 +207,7 @@ Details input files
    | 9           | SMILES         | Simplified molecular structure in SMILES format          |
    +-------------+----------------+----------------------------------------------------------+
    
-   - *Example Entries*\
+   - *Example entries*\
    .. code-block:: text
    
       BIOMASS BIOMASS mnx:BIOMASS

@@ -61,7 +61,7 @@ Details input files for mapping mode
        ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``, ``CAS``, ``INCHI-KEY``, ``SMILES``
 
 
-  - *Some Key Characteristics (non-exhaustive)*
+  - *Some key characteristics (non-exhaustive)*
   +------------+-------------+------------------------------------+--------------+-------------------------------------------+
   | UNIQUE-ID  | CHEBI       | COMMON-NAME                        | M/Z          | INCHI-KEY                                 | 
   +============+=============+====================================+==============+===========================================+
@@ -137,7 +137,7 @@ Details input files for mapping mode
   - **Datatable conversion MetaCyc**: 
   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
   
-  - Some Column Name are missing (non-exhaustive)
+  - Some column name are missing (non-exhaustive)
    +-----------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
    | **UNIQUE-ID**   | CHEBI  |      COMMON-NAME      | ABBREV-NAME |                                                                 SYNONYMS                                                                  | ADD-COMPLEMENT | MOLECULAR-WEIGHT | MONOISOTOPIC-MW | SEED |  BIGG  |
    +=================+========+=======================+=============+===========================================================================================================================================+================+==================+=================+======+========+
@@ -201,7 +201,7 @@ Details input files for mapping mode
    - **Datatable conversion metanetx**: 
    Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
    
-   - Some Column Name are missing (non-exhaustive)
+   - Some column name are missing (non-exhaustive)
    +---------------+--------------+----------------+------------------+-----------------+------+--------+
    |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC         | SEED |  BIGG  |
    +===============+==============+================+==================+=================+======+========+
@@ -254,24 +254,24 @@ Details output files for mapping mode
    
    The output is a tabular file containing several columns with mapping results and metadata:
    
-   1. **Metabolite Matches** 
+   1. **Metabolite matches** 
        
       Lists the metabolite names that matched.  
       If multiple matches are found for a single input (i.e., duplicates), they are joined using ``_AND_``.  
    
-   2. **MetaCyc/MetaNetX UNIQUE-ID Match (from `conversion_datatable`)**  
+   2. **MetaCyc/MetaNetX UNIQUE-ID match (from `conversion_datatable`)**  
       
       Indicates whether a match was found through the MetaCyc/MetaNetX conversion table using a ``UNIQUE-ID``.  
       If two UNIQUE-IDs match the same input, they are separated by ``_AND_`` and flagged as uncertain.  
       These entries are also reflected in the **partial** column due to ambiguity.
    
-   3. **Input File Match (metabolomics data)**  
+   3. **Input file match (metabolomics data)**  
       
       In **classic mode**, this column shows the identifier from the input file that matched with the SBML model.  
       In **community mode**, this column contains a list (e.g., ``[data1, data4]``) indicating the specific files in which matches were found.  
       Additional details about the exact identifiers used in the networks can be found in the logs.
    
-   4. **Partial Match**  
+   4. **Partial match**  
       
       This column contains any uncertain or ambiguous matches:
       
@@ -283,7 +283,7 @@ Details output files for mapping mode
    
       These matches require manual review and are also logged in detail.
    
-   5. **Other Columns**  
+   5. **Other columns**  
       
       The remaining columns correspond to identifiers or metadata from the metabolomics data.  
       Each cell contains ``YES`` to indicate that a match was found on the ID of that column in the metabolomics data.
@@ -291,7 +291,7 @@ Details output files for mapping mode
    
    
    
-   - Some Column Name are missing (non-exhaustive)
+   - Some column name are missing (non-exhaustive)
    +----------------------------------------------------+----------------------+----------------------------+-----------------------+--------------------+-----------------+
    | Metabolites                                        | Match in database    | Match in metabolic         | Partial match         | Match via UNIQUE-ID| Match via CHEBI |
    |                                                    |                      | networks                   |                       |                    |                 |
@@ -325,7 +325,7 @@ Details output files for mapping mode
    
    
      
-   - Output File Content and Column Structure
+   - Output file content and column structure
    +-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | **Column Name**               | **Description**                                                                                                                                                                                                                                |
    +===============================+================================================================================================================================================================================================================================================+
