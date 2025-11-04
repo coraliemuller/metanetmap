@@ -282,7 +282,10 @@ def extract_metadata_sbml(model, meta_data_sbml):
             # New entry
             tmp_data = {k: [] for k in annotations.keys()}
             tmp_data["ID"] = [m.id]
-            tmp_data["ID"].append(m.id.rsplit("_", 1)[0])
+            if m.id.endswith(']'):
+                tmp_data["ID"].append(m.id.rsplit("[", 1)[0])
+            else:
+                tmp_data["ID"].append(m.id.rsplit("_", 1)[0])
             if m.formula:
                 tmp_data["formula"] = [m.formula]
             else:
@@ -326,7 +329,14 @@ def setup_merge_list_sbml_metabolites(List_SBML_paths):
         flat_list = [ value for compound in meta_data_sbml.values() for v in compound.values()  for value in v]
 
         # Remove compartment suffix (e.g., "_c", "_e") from metabolite IDs
-        list_metabolites_id = [m.id.rsplit("_", 1)[0] for m in model.metabolites]
+        list_metabolites_id=[]
+
+        for m in model.metabolites:
+            if m.id.endswith(']'):
+                clean_id=m.id.rsplit("[", 1)[0]
+            else:
+                clean_id=m.id.rsplit("_", 1)[0]
+            list_metabolites_id.append(clean_id)
 
         # Add to global merged list
         list_metabolites_id_merge.append(list_metabolites_id)
@@ -383,6 +393,7 @@ def setup_merged_list_maf_metabolites(List_MAF_paths):
         "LIGAND-CPD",
         "REFMET",
         "PUBCHEM",
+        "VMH",
         "CAS",
         "INCHI",
         "NON-STANDARD-INCHI",
@@ -628,49 +639,6 @@ def remove_enantiomer_and_Inchey_metadata(metadata):
 
     return metadata
 
-
-# # ------------------------------------------------------------#
-# #             Chebi unmatch preparation                       #
-# # ------------------------------------------------------------#
-
-
-# def chebi_parents_childrens(list_unmatch_to_reload, list_relation_chebi, key):
-#     """
-#     Updates the 'list_unmatch_to_reload' dictionary with information
-#     about parent or child ChEBI entries.
-
-#     For each entry in the provided kinship list (parents or children),
-#     it adds the ChEBI ID (without the 'CHEBI:' prefix) and the name
-#     (if available) to the corresponding key in the dictionary.
-
-#     Args:
-#         list_unmatch_to_reload (dict): Dictionary to update with ChEBI
-#           relationships.
-#         list_relation_chebi (dict): Dictionary of
-#           ChEBI entries representing in key ->parents/children and value
-#           -> [CHEBI].
-#         key (str): The ChEBI ID of the original
-#           metabolite (without 'CHEBI:').
-
-#     Returns:
-#         dict: The updated 'list_unmatch_to_reload' dictionary.
-#     """
-#     for key_type, entry_list in list_relation_chebi.items():
-#         if key_type == "outgoings" and list_relation_chebi[key_type]:
-#             logger.info("   --Parents are :")
-#         elif key_type == "incomings" and list_relation_chebi[key_type]:
-#             logger.info("   --Children are : ")
-#         for entry in entry_list:
-#             # Remove the 'CHEBI:' prefix
-#             short_chebi = str(entry.get_id()).replace("CHEBI:", "")
-#             if entry.get_name():
-#                 list_unmatch_to_reload[key].append(short_chebi)
-#                 list_unmatch_to_reload[key].append(entry.get_name())
-#                 logger.info(f"     -- CHEBI:{key} is related to {entry.get_name()}")
-#             else:
-#                 list_unmatch_to_reload[key].append(short_chebi)
-#                 logger.info(f"     --CHEBI:{key} has no name. ")
-#     return list_unmatch_to_reload
 
 
 # ------------------------------------------------------------#
@@ -1212,9 +1180,16 @@ def match_met_sbml(
 
     # Find sub-dictionary that contains the metabolite
     sub_dict = utils.find_sub_dict_by_nested_value(meta_data_sbml, met)
+    print(met)
+    print(sub_dict)
+    print("")
 
     if sub_dict:
-        id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]
+        if sub_dict["ID"][0].endswith(']'):
+            id_unique_sbml = sub_dict["ID"][0].rsplit("[", 1)[0]
+            print(id_unique_sbml)
+        else:
+            id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]            
 
         # COMMUNITY MODE — associate match with SBML filename
         if choice == "community":
@@ -1224,6 +1199,7 @@ def match_met_sbml(
                 f'--"{met}" is present directly in "{sbml_name}" metabolic network '
                 f'with the ID "{id_unique_sbml}" via "{column_name}"'
             )
+            
             dic_temp["Match in metabolic networks"] = list(set(temp_list))
         else:
             # CLASSIC MODE — only store ID
@@ -1234,7 +1210,7 @@ def match_met_sbml(
             )
 
         # Add to dic_temp regardless the MODE
-        dic_temp["Metabolites"] = met
+        dic_temp["Metabolites"] = f"{met} _AND_ {id_unique_sbml}"
         dic_temp[f"Match via {column_name}"] = "YES"
         dic_temp["Match in database"] = ""
         Match_id[met] = "NO UNIQUE-ID"
@@ -1300,11 +1276,16 @@ def match_db_sbml(
     if not sub_dict:
         return dic_tsv_results
     
-    id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]
+    if sub_dict["ID"][0].endswith(']'):
+        id_unique_sbml = sub_dict["ID"][0].rsplit("[", 1)[0]
+    else:
+        id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]    
+
     sub_results_dic = utils.find_matching_dict_all_key(dic_tsv_results, set_list)
     sbml_names = utils.find_keys_with_value_in_dict(dic_couple_sbml, met)
 
     temp_list.add(tuple(sbml_names))  # Add SBML names as a tuple for hashability
+
 
     if not sub_results_dic or "Metabolites" not in sub_results_dic:
         return dic_tsv_results
@@ -1474,7 +1455,10 @@ def partial_match_met_sbml(
         return dic_tsv_results, Match_id, doublons, database_info, dic_temp, temp_list
 
     # Extract base unique SBML ID
-    id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]
+    if sub_dict["ID"][0].endswith(']'):
+        id_unique_sbml = sub_dict["ID"][0].rsplit("[", 1)[0]
+    else:
+        id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]    
 
     if choice == "community":
         sbml_name = utils.find_key_by_list_value(dic_couple_sbml, id_unique_sbml)

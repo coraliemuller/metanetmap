@@ -199,7 +199,7 @@ def test_setup_merged_list_maf_metabolites(mock_maf_files):
 
     assert "CHEBI" in maf_dict
     assert sorted(maf_dict["CHEBI"]) == ["CHEBI:12345", "CHEBI:67890"] # check duplicates
-    assert keys == ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT','MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC','LIGAND-CPD','REFMET','PUBCHEM','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY','SMILES','FORMULA'] # check list of key
+    assert keys == ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT','MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC','LIGAND-CPD','REFMET','PUBCHEM','VMH','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY','SMILES','FORMULA'] # check list of key
     assert merged_df.shape[0] == 3  # C001, C002, C003
 
 
