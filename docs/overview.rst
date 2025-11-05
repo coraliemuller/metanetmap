@@ -51,7 +51,7 @@ After building this knowledge base, mapping can be performed in two modes:
 - **Community mode**: The "community" mode allows you to input a directory containing one or several metabolomic data files, as well as a directory containing multiple metabolic networks. It will map each metabolomic data file against each metabolic network file, resulting in a comprehensive mapping across all combinations. This mode is useful for large-scale analyses involving a microbial community where multiple organisms and their associated networks are considered in the metabolomic study.
 
 ▸ **Partial match (Option for mode classic and community)**:
-The **partial match** is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification). This step is optional, as it can be time-consuming depending on the number of unmatched entries.
+The **partial match** is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via ChEBI, InChIKey, or enantiomer simplification). This step is optional, as it can be time-consuming depending on the number of unmatched entries.
 
 
 Overview of the procedure
@@ -60,9 +60,9 @@ Overview of the procedure
 Pre-process mapping
 ~~~~~~~~~~~~~~~~~~~
 
-For **metabolomic data**, whether provided as single or multiple files, metabolite information will be uniquely considered by a unique identifier such as ``unique-id``, ``common-name``, etc that is expected to be described in the first column of the input. Those identifiers will also be the unique values to which the output file relates to, indicating which metabolites were matched. Other columns, such as ``CHEBI``, ``InChIKey``, etc, available in the metabolite annotation tables will be considered as metadata to improve matching chances.
+For **metabolomic data**, whether provided as single or multiple files, metabolite information will be uniquely considered by a unique identifier such as ``unique-id``, ``common-name``, etc that is expected to be described in the first column of the input. Those identifiers will also be the unique values to which the output file relates to, indicating which metabolites were matched. Other columns, such as ``CHEBI``, ``INCHIKEY``, etc, available in the metabolite annotation tables will be considered as metadata to improve matching chances.
 
-**Metabolic network data** is processed by extracting the identifiers and names of metabolites, together with all available metadata, such as ``CHEBI`` or ``InChIKey`` for instance.
+**Metabolic network data** is processed by extracting the identifiers and names of metabolites, together with all available metadata, such as ``ChEBI`` or ``InChIKey`` for instance.
 
 Using the data above along with the ``conversion_datatable``, we test for matches as explained below.
 
@@ -76,7 +76,8 @@ Mapping procedure
   
 - **Step 2: Match metabolomic data vs. conversion_datatable**
   
-  Metabolites from metabolomics that did not match in the previous step will be tested here. Duplicate checks will be performed, since multiple columns from the metabolomic inputs will be tested for the same metabolite (i.e., within a single row). It is therefore possible that several identifiers of the conversion table match the same metabolite. In this case, the matches will be merged in the output table, separated by ``AND``.
+  Metabolites from metabolomics that did not match in the previous step will be tested here. Duplicate checks will be performed, since multiple columns from the metabolomic inputs will be tested for the same metabolite (i.e., within a single row). It is therefore possible that several identifiers of the conversion table match the same metabolite. In this case, the matches will be merged in the output table, separated by ``_AND_``. 
+  For example, the UNIQUE-ID **CPD-17381** and the COMMON-NAME **roquefortine C** are identifiers that correspond to the same metabolite. In this case, it will be written as **CPD-17381 _AND_ roquefortine C**.
 
   Only matches are provided as outputs. Non-matching identifiers for a given metabolite will be excluded from MetaNetMap outputs to improve readability.
 
@@ -108,17 +109,17 @@ Partial match (optional)
 
 When partial match mode is activated, the processing steps are first applied to the three knowledge tables (e.g., enantiomers, CHEBI). Afterward, all previous steps are repeated.
 
-CHEBI/InChIKey processing is only performed if these identifiers are present in the metabolomic data table.
+ChEBI/InChIKey processing is only performed if these identifiers are present in the metabolomic data table.
 
 Once this processing is complete, the entire mapping pipeline is re-run, incorporating the modifications.
 
 **The following treatments are applied:**
 
 - **CHEBI** *(only if a CHEBI column exists in the metabolomics data)*:  
-  For each row containing a CHEBI ID, the API of EBI is used to retrieve the full CHEBI ontology of the metabolite. These related terms are then remapped against the target databases.
+  For each row containing a ChEBI ID, the API of EBI is used to retrieve the full ChEBI ontology of the metabolite. These related terms are then remapped against the target databases.
 
 - **INCHIKEY**:  
-  An INCHIKEY is structured as `XXXXXXXXXXXXXX-YYYYYYYAB-Z`. The first block (`X`) represents the core molecular structure. We extract this primary structure to increase the chances of a match during the second mapping phase.
+  An InChIKey is structured as `XXXXXXXXXXXXXX-YYYYYYYAB-Z`. The first block (`X`) represents the core molecular structure. We extract this primary structure to increase the chances of a match during the second mapping phase.
 
 - **Enantiomers**:  
   Stereochemistry indicators (L, D, R, S) are removed from both the metabolomic data and the databases. This improves matching rates, since stereochemical information is often missing in metabolomic datasets.
