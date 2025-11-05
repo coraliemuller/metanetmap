@@ -213,7 +213,7 @@ Details on input files for mapping mode
    +---------------+--------------+----------------+------------------+-----------------+------+--------+
    
    
-   The table uses the same description for the columns as above, except for the exceptions below, and makes METANTX the unique identifier.
+   The table uses the same description for the columns as above, except for the exceptions below, and makes METANETX the unique identifier.
    
    +-------------------+----------------------------------------------------------------------------------------------------+
    | Column Name       | Description                                                                                        |
