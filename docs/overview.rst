@@ -89,8 +89,9 @@ Mapping procedure
   This allows all information for one metabolite to be grouped on a single row, improving clarity and readability.
 
 .. important::
-    When partial match mode is **disabled**, the tool only uses the unique identifier (e.g., MetaCyc/MetaNetX UNIQUE-ID) to determine whether a metabolite from the input data matches one from the reference database.
-    In cases where two or more metabolites from the input potentially correspond to the same unique identifier, this situation is flagged as a partial match. 
+    Regardless of whether partial match mode is disabled, the tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX UNIQUE-ID) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database.
+    When multiple input metabolites correspond to the same unique identifier, or vice versa, this situation is flagged as a partial match.
+
     The tool does not attempt to resolve this conflict automatically.
     Instead, these entries are explicitly marked, so the user can manually review and resolve the potential ambiguity. This ensures data integrity and allows the user to decide whether:
    - The match is correct and can be accepted;
