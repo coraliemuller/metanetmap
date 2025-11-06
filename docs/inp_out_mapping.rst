@@ -220,7 +220,7 @@ Details on input files for mapping mode
    +===================+====================================================================================================+
    | UNIQUE-ID         | The unique identifier for the compound, typically from the MetaNetX database (e.g., ``CPD-17257``).|
    +-------------------+----------------------------------------------------------------------------------------------------+
-   | METACYC           | Identifier from the METACYC database, if available. (exchanged with METANETX)                      |
+   | METACYC           | Identifier from the METACYC database, if available.                                                |
    +-------------------+----------------------------------------------------------------------------------------------------+
    | VMH               | Identifier from the VMH database, if available.                                                    |
    +-------------------+----------------------------------------------------------------------------------------------------+

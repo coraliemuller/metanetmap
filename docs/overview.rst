@@ -86,7 +86,7 @@ Mapping procedure
   
   This step continues the matching process for the metabolites that were mapped on the conversion datatable at Step 2, in order to associate them to metabolic network information, considering the additional identifiers that this knowledge base contains. Step 3 therefore search for matches against any metabolic network metadata.
 
-  If none of the metabolic network identifiers match any conversion table reference, the information that a match with the conversion table occurred will still be provided in the output. If several distinct matches occurred, all of them will be merged in the result file (separated by ``AND``), as they represent the same metabolite. 
+  If none of the metabolic network identifiers match any conversion table reference, the information that a match with the conversion table occurred will still be provided in the output. If several distinct matches occurred, all of them will be merged in the result file (separated by ``_AND_``), as they represent the same metabolite. 
   This allows all information for one metabolite to be grouped on a single row, improving clarity and readability.
 
 .. important::
