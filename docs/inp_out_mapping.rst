@@ -379,7 +379,7 @@ Details on output files for mapping mode
 
 - **log**:
 
-Provides more information about each step and the corresponding results.
+Logs provide more information about each step and the corresponding results.
 
 .. code-block:: none
 
