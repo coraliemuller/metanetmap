@@ -448,10 +448,11 @@ def setup_merged_list_maf_metabolites(List_MAF_paths):
                 df[col] = df[col].astype(str).str.strip()
 
                 # Fix floats formatted as strings with trailing '.0' (e.g., '123456.0' → '123456')
-                if col_upper == "CHEBI" or "PUBCHEM":
+                if col_upper in ["CHEBI", "PUBCHEM"]:
                     df[col] = df[col].apply(
-                        lambda x: x.rstrip(".0") if x.endswith(".0") and x.replace(".0", "").isdigit() else x
+                        lambda x: x[:-2] if isinstance(x, str) and x.endswith(".0") else x
                     )
+
 
                 # Normalize identifiers for CHEBI column
                 if col_upper == "CHEBI":
