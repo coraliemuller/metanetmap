@@ -190,6 +190,10 @@ def manage_id_in_metadata_sbml(annotations, tmp_data):
             tmp_data[key] = [f"INCHIKEY={str(value).strip()}"]
             continue
 
+        if key == "pubchem.compound":
+            tmp_data[key] = [f"PUBCHEM:{str(value).strip()}"]
+            continue
+
         tmp_data[key] = []
         if isinstance(value, list):
             tmp_data[key] = [
@@ -198,7 +202,6 @@ def manage_id_in_metadata_sbml(annotations, tmp_data):
         else:
             value_clean = str(value).replace("META:", "")
             tmp_data[key].append(value_clean)
-
     return tmp_data
 
 
@@ -1180,14 +1183,14 @@ def match_met_sbml(
 
     # Find sub-dictionary that contains the metabolite
     sub_dict = utils.find_sub_dict_by_nested_value(meta_data_sbml, met)
-    print(met)
-    print(sub_dict)
-    print("")
+    # print(met)
+    # print(sub_dict)
+    # print("")
 
     if sub_dict:
         if sub_dict["ID"][0].endswith(']'):
             id_unique_sbml = sub_dict["ID"][0].rsplit("[", 1)[0]
-            print(id_unique_sbml)
+            # print(id_unique_sbml)
         else:
             id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]            
 
