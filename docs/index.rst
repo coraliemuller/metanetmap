@@ -11,6 +11,7 @@ Welcome to MetaNetMap's documentation!
    inp_out_build
    inp_out_mapping
    usage
+   usage_advanced
    tutorial
    modules
    contributing
