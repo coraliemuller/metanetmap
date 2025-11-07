@@ -301,3 +301,4 @@ Output data
 
 Output data details for database building mode are below in :doc:`inp_out_mapping`: *Datatable_conversion_metacyc* and *Datatable_conversion_metanetx*
 
+For more details on how to custom you own third-party database and advanced methods (partial match, ambiguities, ...), see :doc:`usage_advanced`

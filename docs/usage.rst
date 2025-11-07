@@ -79,6 +79,8 @@ This ensures that the **mapping mode** runs correctly.
   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
 
 
+For more details on input/output data and directory structure, see :doc:`inp_out_build`
+
 
 Run mapping mode
 ------------------------
@@ -114,25 +116,5 @@ The "community" mode allows you to input a directory containing multiple metabol
                   -q quiet_mode (True/False) # Optional: False by default
 
 
-
-**Partial match:**
-~~~~~~~~~~~~~~~~~~~
-The **partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
-
-After this processing step, the entire mapping pipeline is re-executed, taking the modifications into account.
-
-**The following treatments are applied:**
-
-- **CHEBI** *(only if a CHEBI column exists in the metabolomics data)*:  
-  For each row containing a CHEBI ID, the API from EBI is used to retrieve the full CHEBI ontology of the metabolite. These related terms are then remapped against the target databases.
-
-- **INCHIKEY**:  
-  An INCHIKEY is structured as `XXXXXXXXXXXXXX-YYYYYYYAB-Z`. The first block (`X`) represents the core molecular structure. We extract only this primary structure to increase the chances of a match during the second mapping phase.
-
-- **Enantiomers**:  
-  Stereochemistry indicators (L, D, R, S) are removed from both the metabolomics data and the databases. This improves matching rates, since stereochemical information is often missing in metabolomics datasets.
-
-
-
-For more details on input/output data and directory structure, see below.
+For more details on input/output data and directory structure, see :doc:`inp_out_mapping`, for more details on advanced methods (partial match, ambiguities, ...), see :doc:`usage_advanced`
 

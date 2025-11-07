@@ -72,12 +72,12 @@ Mapping procedure
 - **Step 1: Match metabolomic data vs. metabolic network metadata**
   
   We first test for direct matches between metabolite information in metabolomic data and all the metadata in metabolic networks without going through the ``conversion_datatable`` table. 
-  At the same time, for those that match, we verify whether they have a unique ID in ``conversion_datatable``.
+  At the same time, for those that match, we verify whether they have a correspondance in ``conversion_datatable``.
   
 - **Step 2: Match metabolomic data vs. conversion_datatable**
   
   Metabolites from metabolomics that did not match in the previous step will be tested here. Duplicate checks will be performed, since multiple columns from the metabolomic inputs will be tested for the same metabolite (i.e., within a single row). It is therefore possible that several identifiers of the conversion table match the same metabolite. In this case, the matches will be merged in the output table, separated by ``_AND_``. 
-  For example, the UNIQUE-ID **CPD-17381** and the COMMON-NAME **roquefortine C** are identifiers that correspond to the same metabolite. In this case, it will be written as **CPD-17381 _AND_ roquefortine C**.
+  For example, the **CPD-17381** and **roquefortine C** are identifiers that correspond to the same metabolite. In this case, it will be written as **CPD-17381 _AND_ roquefortine C**.
 
   Only matches are provided as outputs. Non-matching identifiers for a given metabolite will be excluded from MetaNetMap outputs to improve readability.
 
@@ -89,40 +89,8 @@ Mapping procedure
   If none of the metabolic network identifiers match any conversion table reference, the information that a match with the conversion table occurred will still be provided in the output. If several distinct matches occurred, all of them will be merged in the result file (separated by ``_AND_``), as they represent the same metabolite. 
   This allows all information for one metabolite to be grouped on a single row, improving clarity and readability.
 
-.. important::
-    Regardless of whether partial match mode is disabled, the tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX UNIQUE-ID) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database.
-    When multiple input metabolites correspond to the same unique identifier, or vice versa, this situation is flagged as a partial match.
 
-    The tool does not attempt to resolve this conflict automatically.
-    Instead, these entries are explicitly marked, so the user can manually review and resolve the potential ambiguity. This ensures data integrity and allows the user to decide whether:
-   - The match is correct and can be accepted;
-
-   - The mapping should be adjusted or ignored;
-
-   - Further curation is needed (e.g., manual verification against synonyms, names, or external identifiers).
-
-    This behaviour helps avoid/reduce false positives during automatic matching.
-
-
-Partial match (optional)
-~~~~~~~~~~~~~~~~~~~~~~~~
-
-When partial match mode is activated, the processing steps are first applied to the three knowledge tables (e.g., enantiomers, CHEBI). Afterward, all previous steps are repeated.
-
-ChEBI/InChIKey processing is only performed if these identifiers are present in the metabolomic data table.
-
-Once this processing is complete, the entire mapping pipeline is re-run, incorporating the modifications.
-
-**The following treatments are applied:**
-
-- **CHEBI** *(only if a CHEBI column exists in the metabolomics data)*:  
-  For each row containing a ChEBI ID, the API of EBI is used to retrieve the full ChEBI ontology of the metabolite. These related terms are then remapped against the target databases.
-
-- **INCHIKEY**:  
-  An InChIKey is structured as `XXXXXXXXXXXXXX-YYYYYYYAB-Z`. The first block (`X`) represents the core molecular structure. We extract this primary structure to increase the chances of a match during the second mapping phase.
-
-- **Enantiomers**:  
-  Stereochemistry indicators (L, D, R, S) are removed from both the metabolomic data and the databases. This improves matching rates, since stereochemical information is often missing in metabolomic datasets.
+For more details on advanced methods (partial match, ambiguities, ...), see :doc:`usage_advanced`
 
 
 

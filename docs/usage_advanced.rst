@@ -1,122 +1,46 @@
 =====
-Usage
+Usage Advanced
 =====
 
-To use MetaNetMap in a project::
 
-    import metanetmap
+**UNIQUE-ID:**
+--------------------
 
+The UNIQUE-ID column must always be the first column and represents the unique identifier for each metabolite identified in the database used to create the conversion table (e.g., MetaCyc:Glucopyranose, MetaNetX:MNXM1364061 , etc.).
 
-Command-line usage
-------------------
+This identifier is unique and facilitates data transfer and matching between different sources, as all complementary information related to a metabolite is associated with it. 
 
-Based on the input listed in ::doc:`inp_out_mapping`, ``metanetmap`` can be run in four mode
-
-.. note::
-  Before running the different modes, you must first build your own **data table conversion**.
-
-There are two main ways to do this:
-
-1. **Using MetaCyc files** (not provided with this package). You need access and permission to use MetaCyc data — specifically the ``compounds.dat`` (or ``compounds_version.dat``) file — in order to build this datatable conversion.
-2. **Using MetaNetX reference files**, which can be downloaded from:
-
-   - `MetaNetX Reference Data <https://www.metanetx.org/mnxdoc/mnxref.html>`_
-
-Custom third party database
-------------------------
-
-You can also provide your **own custom conversion data table**, as long as it follows the required column naming convention.  
-This ensures that the **mapping mode** runs correctly.
-
-.. note::
-
-   The list and description of the required column names are available in the
-   :doc:`inp_out_build` section.
-  
-
-- **Run database building mode for MetaCyc**:
-
-  .. code-block:: bash
-
-    metanetmap     build_db   \
-                  --db            metacyc\
-                  -f              metacyc_compounds_dat/file/path 
-                  --compfiles     datatable_complementary_tsv/file/path # Optional
-                  --out_db        output_conversion_datatable_tsv/file/path # Optional
-                  -q              quiet_mode (True/False) # Optional: False by default
-
-
-- **Run database building mode for MetaNetX**:
-  
-  .. code-block:: bash
-
-    metanetmap     build_db   \
-                  --db            metanetx\
-                  -f              MetaNetX_chem_prop/file/path  MetaNetX_chem_xref/file/path # Optional
-                  --compfiles     datatable_complementary_tsv/file/path # Optional
-                  --out_db        output_conversion_datatable_tsv/file/path # Optional
-                  -q              quiet_mode (True/False) # Optional: False by default
-
-
-.. note::
-
-   The parameters ``output_conversion_datatable_tsv/file/path`` and 
-   ``datatable_complementary_tsv/file/path`` are optional.
-
-   - If ``output_conversion_datatable_tsv/file/path`` is empty, the file will be downloaded 
-     to the root directory.
-   - If ``datatable_complementary_tsv/file/path`` is empty, the complementary step will 
-     be ignored.
-
-   For the ``metanetx`` option, the ``-f`` argument specifies the input files. 
-   If not provided by the user, the default ``chem_prop`` and ``chem_xref`` files 
-   will be downloaded automatically.
-
-   The file ``datatable_complementary_tsv/file/path`` may also be a manually curated file 
-   created by users to include specific or custom IDs. 
-   See the documentation for more details.
-
-  Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the mode as a prefix.
+It therefore serves as the central link for detecting potential ambiguities between datasets and eliminating redundancies.
 
 
 
-Run mapping mode
-------------------------
+**Create your own Third-party database  :**
+--------------------
 
-After this you can run MetaNetMap in two different modes with a partial match option :
+   **Requirements and structure:**
+   
+   - The **first column must be** a ``UNIQUE-ID`` that links to the MetaCyc/MetaNetX database or your own unqiue identifiers.
+   
+   - All following columns normally follow the column names listed below, but you can add others with different names if needed.
 
-- **Classic mode**:
-The classic mode allows you to input a single metabolomics data file and a directory containing multiple metabolic networks.
+   - It is recommended to keep the columns ``CHEBI``, ``PUBCHEM``, and ``INCHI-KEY`` with the same names, as Metanetmap performs a preprocessing step to check that they contain the correct prefixes (CHEBI:, PUBCHEM:, or InChIKey=) and adds them if necessary., If the columns do not have the correct name, this preprocessing will not be performed.
 
-  .. code-block:: bash
+   - For ``SYNONYMS``, the synonyms column also undergoes preprocessing, since in our data tables, the expected syntax is a list: ['synonym1', 'synonym2']. If you want to include synonyms, please use this syntax.
 
-    metanetmap     classic
-                  -s metabolic_networks_dir/directory/path \
-                  -a metabolomics_data/file/path \
-                  -d datatable_conversion_tsv/file/path \
-                  -o save/path \  # Optional
-                  -p partial_match(True/False) \  # Optional explanation below
-                  -q quiet_mode (True/False) # Optional: False by default
-                   
+   - The file must be in tabular format (e.g., TSV), with headers.
+   
+    .. note::
+      The following column names are recognised:
 
-  
-- **Community mode**:
-The "community" mode allows you to input a directory containing multiple metabolomics data files, as well as a directory containing multiple metabolic networks.
+       ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``, ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
+       ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``, ``CAS``, ``INCHI-KEY``, ``SMILES``
 
-  .. code-block:: bash
-
-    metanetmap     community
-                  -s metabolic_networks_dir/directory/path \
-                  -a metabolomics_data/directory/path \
-                  -d datatable_conversion_tsv/file/path \
-                  -o save/path \  # Optional
-                  -p partial_match(True/False) \  # Optional, explanation below
-                  -q quiet_mode (True/False) # Optional: False by default
 
 
 
 **Partial match:**
-~~~~~~~~~~~~~~~~~~~
+--------------------
+
 The **partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
 
 After this processing step, the entire mapping pipeline is re-executed, taking the modifications into account.
@@ -132,7 +56,33 @@ After this processing step, the entire mapping pipeline is re-executed, taking t
 - **Enantiomers**:  
   Stereochemistry indicators (L, D, R, S) are removed from both the metabolomics data and the databases. This improves matching rates, since stereochemical information is often missing in metabolomics datasets.
 
+To facilitate the analysis of the results, every match found during this process will be automatically added to the "Partial match" column in the output. 
+The user should be cautious when using these matches, as they require manual validation before any interpretation.
 
 
-For more details on input/output data and directory structure, see below.
+**Handling Ambiguities:**
+--------------------
+
+ Using a large amount of cross-referenced data increases the number of matches for certain entries and, consequently, the risk of ambiguity. The same metabolite may match multiple times in the conversion table or in the metabolomics data, and this risk applies to all three types of data.
+
+ The tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX *UNIQUE-ID*) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database.
+
+ When multiple input metabolites correspond to the same unique identifier—or vice versa—this situation is flagged as an ambiguity and is automatically added to the *"Partial match"* column in the output.
+
+
+The tool does not attempt to resolve this conflict automatically.
+Instead, these entries are explicitly marked, so the user can manually review and resolve the potential ambiguity. This ensures data integrity and allows the user to decide whether:
+- The match is correct and can be accepted;
+
+- The mapping should be adjusted or ignored;
+
+- Further curation is needed (e.g., manual verification against synonyms, names, or external identifiers).
+
+This behaviour helps avoid/reduce false positives during automatic matching.
+
+
+.. note::
+    A new version with broader ambiguity management will be released soon. It will handle, for example, identifiers that are most prone to duplication (such as *COMMON-NAME*, *InChI*, etc.).
+    It should be noted that, depending on how the data are structured (metabolic data, GSMN, or conversion tables), ambiguities may be handled with varying levels of accuracy.
+
 
