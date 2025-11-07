@@ -6,7 +6,7 @@ Usage Advanced
 **UNIQUE-ID:**
 --------------------
 
-The UNIQUE-ID column must always be the first column and represents the unique identifier for each metabolite identified in the database used to create the conversion table (e.g., MetaCyc:Glucopyranose, MetaNetX:MNXM1364061 , etc.).
+The UNIQUE-ID column must always be the first column and represents the unique identifier for each metabolite identified in the database used to create the conversion datatable (e.g., MetaCyc:Glucopyranose, MetaNetX:MNXM1364061 , etc.).
 
 This identifier is unique and facilitates data transfer and matching between different sources, as all complementary information related to a metabolite is associated with it. 
 
@@ -63,7 +63,7 @@ The user should be cautious when using these matches, as they require manual val
 **Handling Ambiguities:**
 --------------------
 
- Using a large amount of cross-referenced data increases the number of matches for certain entries and, consequently, the risk of ambiguity. The same metabolite may match multiple times in the conversion table or in the metabolomics data, and this risk applies to all three types of data.
+ Using a large amount of cross-referenced data increases the number of matches for certain entries and, consequently, the risk of ambiguity. The same metabolite may match multiple times in the conversion datatable or in the metabolomics data, and this risk applies to all three types of data.
 
  The tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX *UNIQUE-ID*) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database.
 
@@ -83,6 +83,6 @@ This behaviour helps avoid/reduce false positives during automatic matching.
 
 .. note::
     A new version with broader ambiguity management will be released soon. It will handle, for example, identifiers that are most prone to duplication (such as *COMMON-NAME*, *InChI*, etc.).
-    It should be noted that, depending on how the data are structured (metabolic data, GSMN, or conversion tables), ambiguities may be handled with varying levels of accuracy.
+    It should be noted that, depending on how the data are structured (metabolic data, GSMN, or conversion datatables), ambiguities may be handled with varying levels of accuracy.
 
 
