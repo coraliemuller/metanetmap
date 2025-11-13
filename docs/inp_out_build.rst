@@ -165,8 +165,7 @@ Details on input files
    .. note::
      - The ``||`` separator indicates multiple synonyms or alternative names.
      - Identifiers such as ``MNXM##`` correspond to MetaNetX universal metabolite IDs.
-     - Lines describing ``BIOMASS`` or ``PMF`` represent pseudo-metabolites used in
-     metabolic network models.
+     - Lines describing ``BIOMASS`` or ``PMF`` represent pseudo-metabolites used in metabolic network models.
    
    
    ------------------------------
@@ -291,7 +290,7 @@ Output data
 .. note::
 
   The ``conversion_datatable`` file acts as a bridge between the metabolomic data and the metabolic networks.
-  It combines all structured information extracted from the MetaCyc ``compounds.dat`` file or from MetaNetX files ``chem_xref.tsv`` and ``chem_prop.tsv``files, along with any additional identifiers or metadata provided by the user through the ``complementary_datatable`` file.
+  It combines all structured information extracted from the MetaCyc ``compounds.dat`` file or from MetaNetX files ``chem_xref.tsv`` and ``chem_prop.tsv`` files, along with any additional identifiers or metadata provided by the user through the ``complementary_datatable`` file.
   This unified table serves as a comprehensive knowledge base that allows the tool to search across all known identifiers for a given metabolite, and match them between the input metabolomic data and the metabolic networks.
   By leveraging both the MetaCyc/MetaNetX database and user-provided knowledge, the ``conversion_datatable`` enables robust and flexible mapping across diverse data sources.
 

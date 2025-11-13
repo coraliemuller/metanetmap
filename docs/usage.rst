@@ -11,7 +11,9 @@ Command-line usage
 ------------------
 
 Based on the input listed in ::doc:`inp_out_mapping`, ``metanetmap`` can be run with two main modes:
+
 1. **Database building mode**: to create a third-party conversion datatable from MetaCyc or MetaNetX data.
+   
 2. **Mapping mode**: to map metabolomic data against metabolic networks using the conversion datatable. The mapping mode can be run in two different ways: 
     - classic mode: one or multiple metabolomic data files against a single metabolic network. 
     - community mode: one or multiple metabolomic data files against multiple metabolic networks.
@@ -28,10 +30,11 @@ Custom third party database
 Non-trivial mapping between metabolomic data and metabolic networks requires a comprehensive knowledge base that links various identifiers from both sources. This is achieved through a third-party conversion datatable that acts as a bridge between the two datasets. It can currently be built using two different knowledge bases:
 
 1. **Using MetaCyc files** (not provided with this package). You need a license to use MetaCyc data; here we use the information stored in the ``compounds.dat`` (or ``compounds_version.dat``) file — in order to build this conversion datatable.
+
 2. **Using MetaNetX reference files**, which can be downloaded from `MetaNetX Reference Data <https://www.metanetx.org/mnxdoc/mnxref.html>`_
 
 You can also provide your **own custom conversion data table**, as long as it follows the required column naming convention.  
-This ensures that the **mapping mode** runs correctly.
+This ensures that the **mapping mode** runs correctly. See the :doc:`usage_advanced` for more details.
 
 .. note::
 
@@ -77,7 +80,7 @@ This ensures that the **mapping mode** runs correctly.
 
    The file ``file/path/to/complementary_datatable.tsv`` can also be a manually curated file 
    created by users to include specific or custom IDs. 
-   See the :doc:`usage_advanced` for more details.
+
 
   Depending on the selected knowledge base (``metanetx`` or ``metacyc``), the output file name will include the database as a prefix.
 
@@ -107,7 +110,10 @@ The classic mode allows you to input a single metabolomic annotation profile (ta
   
 - **Community mode**:
 The **"community"** mode allows you to input a directory containing multiple metabolomic annotation profiles (tabulated files, `.maf` or `.tsv`), as well as a directory containing multiple metabolic networks (`.sbml` or `.xml`).
-It will map each metabolomic data file against each metabolic network file, resulting in a comprehensive mapping across all combinations. This mode is useful for large-scale analyses involving a microbial community where multiple organisms and their associated networks are considered in the metabolomic study.
+
+It will map each metabolomic data file against each metabolic network file, resulting in a comprehensive mapping across all combinations. 
+
+This mode is useful for large-scale analyses involving a microbial community where multiple organisms and their associated networks are considered in the metabolomic study.
 
 
   .. code-block:: bash
@@ -121,4 +127,11 @@ It will map each metabolomic data file against each metabolic network file, resu
                   -q quiet_mode (True/False) # Optional: False by default
 
 
-For more details on input/output data and directory structure, see :doc:`inp_out_mapping`, for more details on advanced methods (partial match, ambiguities, ...), see :doc:`usage_advanced`. In particular, the **partial match** option aims at increasing the chances of finding a match for metabolites that were not mapped during the initial run. This step is optional, as it can be time-consuming depending on the number of unmatched entries. To rescue those unmatched entries, specific strategies are applied, such as searching via ChEBI, InChIKey, or enantiomer simplification.
+.. note:: 
+    The **partial match** option aims at increasing the chances of finding a match for metabolites that were not mapped during the initial run. 
+    
+    This step is optional, as it can be time-consuming depending on the number of unmatched entries. To rescue those unmatched entries, specific strategies are applied, such as searching via ChEBI, InChIKey, or enantiomer simplification.
+
+
+For more details on input/output data and directory structure, see :doc:`inp_out_mapping`, for more details on advanced methods (partial match, ambiguities, ...), see :doc:`usage_advanced`. 
+
