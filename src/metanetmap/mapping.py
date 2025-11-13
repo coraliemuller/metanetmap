@@ -190,6 +190,10 @@ def manage_id_in_metadata_sbml(annotations, tmp_data):
             tmp_data[key] = [f"INCHIKEY={str(value).strip()}"]
             continue
 
+        if key == "pubchem.compound":
+            tmp_data[key] = [f"PUBCHEM:{str(value).strip()}"]
+            continue
+
         tmp_data[key] = []
         if isinstance(value, list):
             tmp_data[key] = [
@@ -198,7 +202,6 @@ def manage_id_in_metadata_sbml(annotations, tmp_data):
         else:
             value_clean = str(value).replace("META:", "")
             tmp_data[key].append(value_clean)
-
     return tmp_data
 
 
@@ -445,10 +448,11 @@ def setup_merged_list_maf_metabolites(List_MAF_paths):
                 df[col] = df[col].astype(str).str.strip()
 
                 # Fix floats formatted as strings with trailing '.0' (e.g., '123456.0' → '123456')
-                if col_upper == "CHEBI" or "PUBCHEM":
+                if col_upper in ["CHEBI", "PUBCHEM"]:
                     df[col] = df[col].apply(
-                        lambda x: x.rstrip(".0") if x.endswith(".0") and x.replace(".0", "").isdigit() else x
+                        lambda x: x[:-2] if isinstance(x, str) and x.endswith(".0") else x
                     )
+
 
                 # Normalize identifiers for CHEBI column
                 if col_upper == "CHEBI":
@@ -1180,14 +1184,14 @@ def match_met_sbml(
 
     # Find sub-dictionary that contains the metabolite
     sub_dict = utils.find_sub_dict_by_nested_value(meta_data_sbml, met)
-    print(met)
-    print(sub_dict)
-    print("")
+    # print(met)
+    # print(sub_dict)
+    # print("")
 
     if sub_dict:
         if sub_dict["ID"][0].endswith(']'):
             id_unique_sbml = sub_dict["ID"][0].rsplit("[", 1)[0]
-            print(id_unique_sbml)
+            # print(id_unique_sbml)
         else:
             id_unique_sbml = sub_dict["ID"][0].rsplit("_", 1)[0]            
 
