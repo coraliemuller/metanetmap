@@ -68,7 +68,7 @@ Using a large amount of cross-referenced data increases the probability that inc
 
 The tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX ``UNIQUE-ID`` ) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database. 
 
-When multiple input metabolites correspond to the same unique identifier — or vice versa — this situation is flagged as an ambiguity and is automatically added to the *"Partial match"* column in the output.
+When multiple input metabolites correspond to the same unique identifier or vice versa this situation is flagged as an ambiguity and is automatically added to the *"Partial match"* column in the output.
 
 The tool does not attempt to resolve this conflict automatically.
 Instead, these entries are explicitly marked, so the user can manually review and resolve the ambiguity. This ensures data integrity and allows the user to decide whether:
