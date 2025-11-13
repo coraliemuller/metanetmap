@@ -68,9 +68,8 @@ This ensures that the **mapping mode** runs correctly.
    The parameters ``file/path/to/output_conversion_datatable.tsv`` and 
    ``file/path/to/complementary_datatable.tsv`` are optional.
 
-   - If ``file/path/to/output_conversion_datatable.tsv`` is empty, the file will be downloaded 
-     to the root directory. #TODO this is unclear, please clarify
-   - If ``file/path/to/complementary_datatable.tsv`` is empty, the step aiming at completing the conversion datatable with the user's additional mapping data will be ignored.
+   - If the output argument **--out_db** is not provided, the output file ``file/path/to/output_conversion_datatable.tsv`` will be created by default in the current working directory.
+   - If the argument **--compfiles** is not provided, the step for completing the conversion datatable with the user's additional mapping data ``file/path/to/complementary_datatable.tsv`` will be skipped.
 
    For the ``metanetx`` option, the ``-f`` argument specifies the input files. 
    If not provided by the user, the default ``chem_prop`` and ``chem_xref`` files 
@@ -78,7 +77,7 @@ This ensures that the **mapping mode** runs correctly.
 
    The file ``file/path/to/complementary_datatable.tsv`` can also be a manually curated file 
    created by users to include specific or custom IDs. 
-   See the documentation for more details. #TODO where??
+   See the :doc:`usage_advanced` for more details.
 
   Depending on the selected knowledge base (``metanetx`` or ``metacyc``), the output file name will include the database as a prefix.
 
@@ -92,13 +91,13 @@ Mapping mode
 Once a conversion data table is built, you can run MetaNetMap in two different sub-modes with a partial match option :
 
 - **Classic mode**:
-The classic mode allows users to input one metabolomic data file or a directory containing several of them, and a unique metabolic network. Annotation profiles from metabolomic data will be mapped against the metabolic network using the conversion datatable. #TODO check
+The classic mode allows you to input a single metabolomic annotation profile (tabulated file, `.maf` or `.tsv`) or a directory containing multiple metabolomic annotation profiles, and a unique metabolic network (`.sbml` or `.xml`) to which metabolites will be mapped.
 
   .. code-block:: bash
 
     metanetmap     classic
-                  -s path/to/metabolic_networks.sbml  # Single file 
-                  -a path/to/metabolomic_data/  # Single file or directory #TODO check
+                  -s path/to/metabolic_networks.sbml  # Single SBML file
+                  -a path/to/metabolomic_data/  # Single file or directory 
                   -d path/to/conversion_datatable.tsv 
                   -o path/to/output/directory/ # Optional
                   -p partial_match(True/False) # Optional explanation below
@@ -107,13 +106,15 @@ The classic mode allows users to input one metabolomic data file or a directory 
 
   
 - **Community mode**:
-The community mode allows users to input a directory containing one or several metabolomic data files, as well as a directory containing multiple metabolic networks. It will map each metabolomic data file against each metabolic network file, resulting in a comprehensive mapping across all combinations. This mode is useful for large-scale analyses involving a microbial community where multiple organisms and their associated networks are considered in the metabolomic study. #TODO check
+The **"community"** mode allows you to input a directory containing multiple metabolomic annotation profiles (tabulated files, `.maf` or `.tsv`), as well as a directory containing multiple metabolic networks (`.sbml` or `.xml`).
+It will map each metabolomic data file against each metabolic network file, resulting in a comprehensive mapping across all combinations. This mode is useful for large-scale analyses involving a microbial community where multiple organisms and their associated networks are considered in the metabolomic study.
+
 
   .. code-block:: bash
 
     metanetmap     community
                   -s path/to/metabolic_networks_directory/ # Directory containing multiple SBML files
-                  -a path/to/metabolomic_data/ # Single file or directory #TODO check
+                  -a path/to/metabolomic_data/ # Single file or directory 
                   -d path/to/conversion_datatable.tsv
                   -o path/to/output/directory/ # Optional
                   -p partial_match(True/False) # Optional, explanation below

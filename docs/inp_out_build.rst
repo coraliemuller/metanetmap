@@ -142,7 +142,7 @@ Details on input files
    | **Column**  | **Name**      | **Description**                                          |
    +=============+===============+==========================================================+
    | 1           | source        | Source database and identifier (e.g. mnx:BIOMASS,        |
-   |             |               | seedM:cpd11416, CHEBI:16234...)                          |
+   |             |               | seedM:cpd11416, ChEBI:16234...)                          |
    +-------------+---------------+----------------------------------------------------------+
    | 2           | ID            | Corresponding MetaNetX or normalized identifier (e.g.    |
    |             |               | MNXM01, MNXM02, BIOMASS)                                 |

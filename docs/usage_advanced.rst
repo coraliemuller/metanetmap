@@ -6,13 +6,13 @@ Advanced usage
 UNIQUE-ID
 ----------
 
-#TODO lacking context here. 
+The UNIQUE-ID is defined as the primary identifier for a specific metabolite.
 
-The UNIQUE-ID column must always be the first column of #TODO what? and represents the unique identifier for each metabolite identified in the database used to create the conversion datatable (e.g., MetaCyc:Glucopyranose, MetaNetX:MNXM1364061, etc.).
+It represents the unique reference assigned to each metabolite in the database used to generate the conversion datatable (e.g., MetaCyc:Glucopyranose, MetaNetX:MNXM1364061, etc.). It also serves as the central reference point to which all other identifiers related to this metabolite, such as InChI, COMMON-NAME, ChEBI, ... are linked.
 
-This identifier is unique and facilitates data transfer and matching between different sources, as all complementary information related to a metabolite is associated with it. 
+In both the third-party database and the complementary datatable, the UNIQUE-ID must appear as the first column. This ensures consistency, as the identifier uniquely facilitates data validation and matching across different sources, with all complementary information related to a metabolite linked to it.
 
-It therefore serves as the central link for detecting potential ambiguities between datasets and eliminating redundancies.
+Therefore, the UNIQUE-ID serves as the central reference point for detecting potential ambiguities between datasets and for eliminating redundancies.
 
 
 
@@ -67,12 +67,13 @@ Handling Ambiguities
 
 Using a large amount of cross-referenced data increases the probability that inconsistent mappings will occur and, consequently, the risk of ambiguity. The same metabolite may match multiple times in the conversion datatable, in the metabolomic data, or in the metabolic networks.
 
-The tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX *UNIQUE-ID*) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database. #TODO conflicting matches occur only with unique IDs??
+The tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX *UNIQUE-ID*) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database. 
 
 When multiple input metabolites correspond to the same unique identifier — or vice versa — this situation is flagged as an ambiguity and is automatically added to the *"Partial match"* column in the output.
 
 The tool does not attempt to resolve this conflict automatically.
 Instead, these entries are explicitly marked, so the user can manually review and resolve the ambiguity. This ensures data integrity and allows the user to decide whether:
+
 - The match is correct and can be accepted;
 
 - The mapping should be adjusted or ignored;
@@ -83,5 +84,10 @@ This behaviour helps avoid/reduce false positives during automatic matching.
 
 
 .. note::
-    A new version with broader ambiguity management will be released soon. It will handle, for example, identifiers that are most prone to duplication (such as *COMMON-NAME*, *InChI*, etc.).
-    It should be noted that, depending on how the data are structured (metabolic data, metabolic networks, or conversion datatables), ambiguities may be handled with varying levels of accuracy. #TODO unclear.
+    A new version with enhanced ambiguity management will be released soon. It will improve the handling of identifiers that are particularly prone to duplication, such as COMMON-NAME and InChI.
+    
+    It should be noted that the effectiveness of ambiguity handling may vary depending on the structure of the data, whether they are metabolic datasets, metabolic networks, or conversion tables.
+    
+    For example, although the InChI is theoretically unique for a single metabolite, in practice, some databases or metabolic networks may associate one InChI with multiple metabolites, which introduces ambiguity.
+    
+    Similarly, in metabolomic data, certain columns may combine or concatenate several types of identifiers. This can reduce the likelihood of accurate matching, as the identifiers are not clearly separated. Specific preprocessing steps are implemented, for example, adding prefixes to identifiers such as PUBCHEM or ChEBI to standardize IDs and prevent conflicts between numeric values, ultimately improving comparison accuracy.

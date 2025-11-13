@@ -8,7 +8,7 @@ The following quickstart guide will help you get started with MetaNetMap. Code e
 
 Two modes are available for testing, with an option to enable or disable **partial match**.
 
-The **Partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via CHEBI, INCHIKEY, or enantiomer simplification).
+The **Partial match** is optional, as it can be time-consuming. It is a post-processing step applied to metabolites or IDs that were not successfully mapped during the initial run. These unmatched entries are re-evaluated using specific strategies, which increase the chances of finding a match (e.g., via ChEBI, InChIKey, or enantiomer simplification).
 
 Tests use a dedicated third-party conversion table relying on MetaCyc data. Because licence restrictions apply, we provide the possibility to create such a table using freely available MetaNetX data. This conversion datatable can be created easily using the folowing command: 
 

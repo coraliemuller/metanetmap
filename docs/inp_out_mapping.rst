@@ -120,7 +120,7 @@ Details on input files for mapping mode
   
 
   
-  For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the metabolite annotations, for instance: CHEBI, InChIKey....
+  For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the metabolite annotations, for instance: ChEBI, InChIKey....
   
   +--------------------------+------------------------------------------------------------------------------+
   | Element                  | Description                                                                  |
@@ -277,8 +277,8 @@ Details on output files for mapping mode
       
       - Duplicates (same metabolite matched multiple entries)
       - Matches resulting from post-processing (enabled when partial matching is active), such as:
-        - CHEBI ontology expansion
-        - INCHIKEY simplification
+        - ChEBI ontology expansion
+        - InChIKey simplification
         - Enantiomer removal
    
       These matches require manual review and are also logged in detail.
@@ -337,8 +337,8 @@ Details on output files for mapping mode
    +-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | ``Partial match``             | Shows ambiguous or post-processed matches, e.g.:                                                                                                                                                                                               |
    |                               | - Duplicates                                                                                                                                                                                                                                   |
-   |                               | - CHEBI ontology expansion                                                                                                                                                                                                                     |
-   |                               | - INCHIKEY simplification                                                                                                                                                                                                                      |
+   |                               | - ChEBI ontology expansion                                                                                                                                                                                                                     |
+   |                               | - InChIKey simplification                                                                                                                                                                                                                      |
    |                               | - Enantiomer removal                                                                                                                                                                                                                           |
    +-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | ``Match via UNIQUE-ID``       | Indicates whether a match was found using the MetaCyc/MetaNetX ``UNIQUE-ID`` from the ``datatable_conversion``. Displays ``YES`` if matched.                                                                                                   |
@@ -420,7 +420,7 @@ Logs provide more information about each step and the corresponding results.
     -- ""C9H16NO5"" has a partial match. We have a formula as identifier for this metabolite: "C9H16NO5"
 
     ++ Match step for "4167":
-    -- "4167" is present directly in "toys3" metabolic network with the ID "glc__D" via "CHEBI"
+    -- "4167" is present directly in "toys3" metabolic network with the ID "glc__D" via "ChEBI"
     .....
 
     --"NO" is present directly in metabolic network with the corresponding ID "NITRIC-OXIDE" via the match ID "nitric-oxide"

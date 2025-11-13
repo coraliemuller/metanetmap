@@ -60,7 +60,7 @@ Overview of the procedure
 Pre-process mapping
 ~~~~~~~~~~~~~~~~~~~
 
-For **metabolomic data**, whether provided as single or multiple files, metabolite information will be uniquely considered by a unique identifier such as ``unique-id``, ``common-name``, etc that is expected to be described in the first column of the input. Those identifiers will also be the unique values to which the output file relates to, indicating which metabolites were matched. Other columns, such as ``CHEBI``, ``INCHIKEY``, etc, available in the metabolite annotation tables will be considered as metadata to improve matching chances.
+For **metabolomic data**, whether provided as single or multiple files, metabolite information will be uniquely considered by a unique identifier such as ``unique-id``, ``common-name``, etc that is expected to be described in the first column of the input. Those identifiers will also be the unique values to which the output file relates to, indicating which metabolites were matched. Other columns, such as ``ChEBI``, ``INCHIKEY``, etc, available in the metabolite annotation tables will be considered as metadata to improve matching chances.
 
 **Metabolic network data** is processed by extracting the identifiers and names of metabolites, together with all available metadata, such as ``ChEBI`` or ``InChIKey`` for instance.
 
