@@ -37,7 +37,7 @@ Input data
 +=====================+======================================================================+
 | MetaNetMap output   | Output directory for mapping results and logs                        |
 +---------------------+----------------------------------------------------------------------+
-| metabolic_networks  | Path to the directory with .sbml or/and .xml files                   |
+| metabolic_networks  | Path to the directory (``.sbml`` or/and ``.xml`` files)              |
 +---------------------+----------------------------------------------------------------------+
 | metabolomic_data    | Tabulated file, (cf note below for details)                          |
 +---------------------+----------------------------------------------------------------------+
@@ -52,16 +52,16 @@ Details on input files for mapping mode
 
   -  **Metabolomic data**:
     Column names must follow a specific naming convention and each line is a metabolite.
-    Metabolomic data files must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
+    Metabolomic annotation tables must include column names that follow a specific naming convention in order to be properly processed by the tool during the mapping step.
    
     .. note::
-      The following column names are recognized:
+      The following column names are recognised:
 
        ``UNIQUE-ID``, ``CHEBI``, ``COMMON-NAME``, ``ABBREV-NAME``, ``SYNONYMS``, ``ADD-COMPLEMENT``, ``MOLECULAR-WEIGHT``, ``MONOISOTOPIC-MW``, ``SEED``,
        ``BIGG``, ``HMDB``, ``METANETX``, ``METACYC``, ``LIGAND-CPD``, ``REFMET``, ``PUBCHEM``, ``CAS``, ``INCHI-KEY``, ``SMILES``
 
 
-  - *Some key characteristics (non-exhaustive)*
+  - *An example of a metabolomic annotation table*:
   +------------+-------------+------------------------------------+--------------+-------------------------------------------+
   | UNIQUE-ID  | CHEBI       | COMMON-NAME                        | M/Z          | INCHI-KEY                                 | 
   +============+=============+====================================+==============+===========================================+
@@ -120,24 +120,24 @@ Details on input files for mapping mode
   
 
   
-  For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the networks for exemple: (chebi,InChIKey...) via annotation.
+  For **metabolic network data**, we typically extract the ID and name, as well as all possible metadata present in the metabolite annotations, for instance: ChEBI, InChIKey....
   
   +--------------------------+------------------------------------------------------------------------------+
   | Element                  | Description                                                                  |
   +==========================+==============================================================================+
   | ``species``              | Defines a metabolite within a compartment                                    |
   +--------------------------+------------------------------------------------------------------------------+
-  | ``annotation``           | Contains **metadata** in RDF format, including standardized cross-references |
+  | ``annotation``           | Contains **metadata** in RDF format, including standardised cross-references |
   +--------------------------+------------------------------------------------------------------------------+
 
   
    ------------------------------
 
   
-  - **Datatable conversion MetaCyc**: 
-  Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the third-party knowledge base as a prefix.
-  
-  - Some column name are missing (non-exhaustive)
+  - **MetaCyc conversion datatable**: 
+  Depending on the selected knowledge base (``MetaNetX`` or ``MetaCyc``), the output filename of the newly created conversion datatable will include the third-party knowledge base as a prefix.
+
+  - *An example of a conversion datatable relying on MetaCyc*
    +-----------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
    | **UNIQUE-ID**   | CHEBI  |      COMMON-NAME      | ABBREV-NAME |                                                                 SYNONYMS                                                                  | ADD-COMPLEMENT | MOLECULAR-WEIGHT | MONOISOTOPIC-MW | SEED |  BIGG  |
    +=================+========+=======================+=============+===========================================================================================================================================+================+==================+=================+======+========+
@@ -152,7 +152,7 @@ Details on input files for mapping mode
    | Glucopyranose   | 4167   | D-glucopyranose       |             | ["6-(hydroxymethyl)tetrahydropyran-2,3,4,5-tetraol"]                                                                                      |                | 180.157          | 180.0633881178  |      | glc__D |
    +-----------------+--------+-----------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+----------------+------------------+-----------------+------+--------+
 
-  - Description
+  - Description of the columns:
    +-------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
    | Column Name       | Description                                                                                                                                        |
    +===================+====================================================================================================================================================+
@@ -198,10 +198,10 @@ Details on input files for mapping mode
    +-------------------+----------------------------------------------------------------------------------------------------------------------------------------------------+
 
 
-   - **Datatable conversion metanetx**: 
-   Depending on the selected mode (``metanetx`` or ``metacyc``), the output file name will include the knowledge base as a prefix.
-   
-   - Some column name are missing (non-exhaustive)
+   - **MetaNetX conversion datatable**: 
+  Depending on the selected knowledge base (``MetaNetX`` or ``MetaCyc``), the output filename of the newly created conversion datatable will include the third-party knowledge base as a prefix.
+
+   - *An example of a conversion datatable relying on MetaNetX*   
    +---------------+--------------+----------------+------------------+-----------------+------+--------+
    |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC         | SEED |  BIGG  |
    +===============+==============+================+==================+=================+======+========+
@@ -213,14 +213,14 @@ Details on input files for mapping mode
    +---------------+--------------+----------------+------------------+-----------------+------+--------+
    
    
-   Use the same description for the columns as above, except for the exceptions below, and make METANTX the unique identifier.
+   The table uses the same description for the columns as above, except for the exceptions below, and makes METANETX the unique identifier.
    
    +-------------------+----------------------------------------------------------------------------------------------------+
    | Column Name       | Description                                                                                        |
    +===================+====================================================================================================+
    | UNIQUE-ID         | The unique identifier for the compound, typically from the MetaNetX database (e.g., ``CPD-17257``).|
    +-------------------+----------------------------------------------------------------------------------------------------+
-   | METACYC           | Identifier from the METACYC database, if available. (exchanged with METANETX)                      |
+   | METACYC           | Identifier from the METACYC database, if available.                                                |
    +-------------------+----------------------------------------------------------------------------------------------------+
    | VMH               | Identifier from the VMH database, if available.                                                    |
    +-------------------+----------------------------------------------------------------------------------------------------+
@@ -277,8 +277,8 @@ Details on output files for mapping mode
       
       - Duplicates (same metabolite matched multiple entries)
       - Matches resulting from post-processing (enabled when partial matching is active), such as:
-        - CHEBI ontology expansion
-        - INCHIKEY simplification
+        - ChEBI ontology expansion
+        - InChIKey simplification
         - Enantiomer removal
    
       These matches require manual review and are also logged in detail.
@@ -296,7 +296,7 @@ Details on output files for mapping mode
    | Metabolites                                        | Match in database    | Match in metabolic         | Partial match         | Match via UNIQUE-ID| Match via CHEBI |
    |                                                    |                      | networks                   |                       |                    |                 |
    +====================================================+======================+============================+=======================+====================+=================+
-   | CPD-17381 _AND_ roquefortine C                     | CPD-17381            |                            | YES                   |                    |                 |
+   | CPD-17381 _AND_ roquefortine C                     | CPD-17381            |                            |                       | YES                |                 |
    +----------------------------------------------------+----------------------+----------------------------+-----------------------+--------------------+-----------------+
    | 84783 _AND_ CPD-25370                              | CPD-25370            | ['toys1']                  |                       | YES                | YES             |
    +----------------------------------------------------+----------------------+----------------------------+-----------------------+--------------------+-----------------+
@@ -337,8 +337,8 @@ Details on output files for mapping mode
    +-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | ``Partial match``             | Shows ambiguous or post-processed matches, e.g.:                                                                                                                                                                                               |
    |                               | - Duplicates                                                                                                                                                                                                                                   |
-   |                               | - CHEBI ontology expansion                                                                                                                                                                                                                     |
-   |                               | - INCHIKEY simplification                                                                                                                                                                                                                      |
+   |                               | - ChEBI ontology expansion                                                                                                                                                                                                                     |
+   |                               | - InChIKey simplification                                                                                                                                                                                                                      |
    |                               | - Enantiomer removal                                                                                                                                                                                                                           |
    +-------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
    | ``Match via UNIQUE-ID``       | Indicates whether a match was found using the MetaCyc/MetaNetX ``UNIQUE-ID`` from the ``datatable_conversion``. Displays ``YES`` if matched.                                                                                                   |
@@ -379,7 +379,7 @@ Details on output files for mapping mode
 
 - **log**:
 
-Provides more information about each step and the corresponding results.
+Logs provide more information about each step and the corresponding results.
 
 .. code-block:: none
 
@@ -420,7 +420,7 @@ Provides more information about each step and the corresponding results.
     -- ""C9H16NO5"" has a partial match. We have a formula as identifier for this metabolite: "C9H16NO5"
 
     ++ Match step for "4167":
-    -- "4167" is present directly in "toys3" metabolic network with the ID "glc__D" via "CHEBI"
+    -- "4167" is present directly in "toys3" metabolic network with the ID "glc__D" via "ChEBI"
     .....
 
     --"NO" is present directly in metabolic network with the corresponding ID "NITRIC-OXIDE" via the match ID "nitric-oxide"
@@ -463,5 +463,3 @@ Provides more information about each step and the corresponding results.
     
     --- Total runtime 1478.55 seconds ---
      --- MAPPING COMPLETED'
-
-

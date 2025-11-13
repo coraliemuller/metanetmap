@@ -142,7 +142,7 @@ Details on input files
    | **Column**  | **Name**      | **Description**                                          |
    +=============+===============+==========================================================+
    | 1           | source        | Source database and identifier (e.g. mnx:BIOMASS,        |
-   |             |               | seedM:cpd11416, CHEBI:16234...)                          |
+   |             |               | seedM:cpd11416, ChEBI:16234...)                          |
    +-------------+---------------+----------------------------------------------------------+
    | 2           | ID            | Corresponding MetaNetX or normalized identifier (e.g.    |
    |             |               | MNXM01, MNXM02, BIOMASS)                                 |
@@ -301,3 +301,4 @@ Output data
 
 Output data details for database building mode are below in :doc:`inp_out_mapping`: *Datatable_conversion_metacyc* and *Datatable_conversion_metanetx*
 
+For more details on how to custom you own third-party database and advanced methods (partial match, ambiguities, ...), see :doc:`usage_advanced`
