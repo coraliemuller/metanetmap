@@ -202,15 +202,20 @@ Details on input files for mapping mode
   Depending on the selected knowledge base (``MetaNetX`` or ``MetaCyc``), the output filename of the newly created conversion datatable will include the third-party knowledge base as a prefix.
 
    - *An example of a conversion datatable relying on MetaNetX*   
-   +---------------+--------------+----------------+------------------+-----------------+------+--------+
-   |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC         | SEED |  BIGG  |
-   +===============+==============+================+==================+=================+======+========+
-   |  MNXM1372018  | chebi:30828  |                |     281.457      | CPD-17257       |      |        |
-   |   MNXM41337   | chebi:50258  |                |     180.157      | CPD-24978       |      |        |
-   |  MNXM1113433  | chebi:147718 |                |     180.157      | CPD-25014       |      |        |
-   |  MNXM1117556  | chebi:153460 |                |     180.157      | CPD-25010       |      |        |
-   |  MNXM1364061  |  chebi:4167  |                |     180.157      | Glucopyranose   |      | glc__D |
-   +---------------+--------------+----------------+------------------+-----------------+------+--------+
+    +---------------+--------------+----------------+------------------+-----------------+------+--------+
+    |   UNIQUE-ID   |     CHEBI    | ADD-COMPLEMENT | MOLECULAR-WEIGHT | METACYC         | SEED |  BIGG  |
+    +===============+==============+================+==================+=================+======+========+
+    | MNXM1372018   | chebi:30828  |                | 281.457          | CPD-17257       |      |        |
+    +---------------+--------------+----------------+------------------+-----------------+------+--------+
+    | MNXM41337     | chebi:50258  |                | 180.157          | CPD-24978       |      |        |
+    +---------------+--------------+----------------+------------------+-----------------+------+--------+
+    | MNXM1113433   | chebi:147718 |                | 180.157          | CPD-25014       |      |        |
+    +---------------+--------------+----------------+------------------+-----------------+------+--------+
+    | MNXM1117556   | chebi:153460 |                | 180.157          | CPD-25010       |      |        |
+    +---------------+--------------+----------------+------------------+-----------------+------+--------+
+    | MNXM1364061   | chebi:4167   |                | 180.157          | Glucopyranose   |      | glc__D |
+    +---------------+--------------+----------------+------------------+-----------------+------+--------+
+
    
    
    The table uses the same description for the columns as above, except for the exceptions below, and makes METANETX the unique identifier.
@@ -241,8 +246,11 @@ Output data
 **Output file format**
 
 The name of the output file depends on the processing mode:
+
 - In **community mode**, the file is named as: ``community_mapping_results_YYYY-MM-DD_HH_MM_SS.tsv`` 
+  
 - In **classic mode**, the file is named as: ``mapping_results_YYYY-MM-DD_HH_MM_SS.tsv``
+  
 - If **partial match** is activated, the filename will include ``partial_match`` to indicate the use of the option.
   
 
