@@ -30,7 +30,7 @@ While a few metabolites can be matched manually with limited effort, large-scale
 Third-party database for matching
 ---------------------------------
 
-In case metadata from metabolic network do not match identifiers of the metabolomic data, a third-party database, referred to as *conversion_datatable* file acts as a bridge between the metabolomic data and the metabolic networks.  
+In case metadata from metabolic network do not match identifiers of the metabolomic data, a ``conversion_datatable`` file acts as a bridge between the metabolomic data and the metabolic networks.  
 
 MetaNetMap enables the construction of such resource using MetaNetX or MetaCyc knowledge bases. In the former case, data from ``chem_xref.tsv`` and ``chem_prop.tsv`` MetaNetX files is used. In the latter case (requires a licence), metadata from the ``compounds.dat`` file is extracted. Additionally, users can provide another table with existing mapping data resulting from previous curation efforts for instance, referred to as *datatable_complementary*.
   

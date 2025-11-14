@@ -8,13 +8,13 @@ UNIQUE-ID
 
 The **UNIQUE-ID** is defined as the primary identifier for a specific metabolite. It represents the **unique reference** assigned to each metabolite in the database used to generate the conversion datatable *(e.g., MetaCyc:Glucopyranose, MetaNetX:MNXM1364061, etc.)*. It also serves as the central reference point to which all other identifiers related to this metabolite, such as InChI, COMMON-NAME, ChEBI, ... are linked.
 
-In both the third-party database and the complementary datatable, the  ``UNIQUE-ID `` must appear as the first column. This ensures consistency, as the identifier uniquely facilitates data validation and matching across different sources, with all complementary information related to a metabolite linked to it.
+In both the conversion datatable and the complementary datatable, the  ``UNIQUE-ID `` must appear as the first column. This ensures consistency, as the identifier uniquely facilitates data validation and matching across different sources, with all complementary information related to a metabolite linked to it.
 
 Therefore, the  ``UNIQUE-ID`` serves as the **central reference point** for detecting potential ambiguities between datasets and for eliminating redundancies.
 
 
 
-Creating your own Third-party database
+Creating your own conversion datatable
 ---------------------------------------
 
 **Requirements and structure:**
