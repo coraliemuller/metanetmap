@@ -103,7 +103,7 @@ The classic mode allows you to input a single metabolomic annotation profile (ta
                   -a path/to/metabolomic_data/  # Single file or directory 
                   -d path/to/conversion_datatable.tsv 
                   -o path/to/output/directory/ # Optional
-                  -p partial_match(True/False) # Optional explanation below
+                  -p partial_match(True/False) # Optional explanation below: False by default
                   -q quiet_mode (True/False) # Optional: False by default
                    
 
@@ -123,7 +123,7 @@ This mode is useful for large-scale analyses involving a microbial community whe
                   -a path/to/metabolomic_data/ # Single file or directory 
                   -d path/to/conversion_datatable.tsv
                   -o path/to/output/directory/ # Optional
-                  -p partial_match(True/False) # Optional, explanation below
+                  -p partial_match(True/False) # Optional, explanation below: False by default
                   -q quiet_mode (True/False) # Optional: False by default
 
 
