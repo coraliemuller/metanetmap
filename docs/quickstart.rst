@@ -48,5 +48,3 @@ Community mode with partial match activated:
 
 For more details on modes refer to :doc:`usage`.
 
-.. note::
-   Complete MetaCyc database information related to the ontology of metabolites and pathways is not included in test option because of licence restrictions.

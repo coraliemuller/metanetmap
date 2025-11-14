@@ -23,7 +23,7 @@ Mapping metabolomic data to metabolic networks is a challenging task for several
   Automatic reconstruction of metabolic networks using different tools and associated databases often assigns distinct identifiers to the same metabolites. It is likely that those do not match the nomenclature of metabolomic annotations. To reconcile them, a first solution is to rely on metadata extracted from metabolic networks associating molecules to alternative databases. Additionally, third-party external databases such as `MetaNetX <https://www.metanetx.org>`_ can be used, in order to provide more matching possibilities.  
 
 - **Metabolomic data complexity:**  
-  Due to the difficulty of annotating metabolomic profiles, identifications are often partial, incomplete, and inconsistently represented. For example, enantiomers are frequently not precisely specified because they are indistinguishable by LC/MS methods. Matching must account for this.
+  Due to the difficulty of annotating metabolomic profiles, identifications are often partial, incomplete, and inconsistently represented. For example, enantiomers are frequently not precisely specified because they are almost indistinguishable by classical LC/MS methods.
 
 While a few metabolites can be matched manually with limited effort, large-scale metabolomic datasets require automated tools to perform mapping efficiently and accurately. MetaNetMap addresses these challenges by providing a robust framework for mapping metabolomic data to metabolic networks, leveraging multiple strategies to maximize matching success. In practice, MetaNetMap can match one or several metabolomic annotation tables to one or several metabolic networks. 
 
@@ -66,13 +66,16 @@ For **metabolomic data**, whether provided as single or multiple files, metaboli
 
 Using the data above along with the ``conversion_datatable``, we test for matches as explained below.
 
+
 Mapping procedure
 ~~~~~~~~~~~~~~~~~
 
 - **Step 1: Match metabolomic data vs. metabolic network metadata**
   
-  We first test for direct matches between metabolite information in metabolomic data and all the metadata in metabolic networks without going through the ``conversion_datatable`` table. 
-  At the same time, for those that match, we verify whether they have a correspondance in ``conversion_datatable``.
+  We first test for direct matches between the metabolite information in the metabolomic data and all the metadata available in the metabolic networks, without initially using the ``conversion_datatable``. 
+  For each metabolite that matches, we then look up the matched identifier in the ``conversion_datatable`` to retrieve its unique ID within this database. 
+  This step will later allow us to detect potential ambiguities with other matches during the indirect matching and to confirm its presence in the database.  
+
   
 - **Step 2: Match metabolomic data vs. conversion_datatable**
   

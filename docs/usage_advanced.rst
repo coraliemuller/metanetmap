@@ -19,7 +19,7 @@ Creating your own Third-party database
 
 **Requirements and structure:**
 
-- The **first column must be** a ``UNIQUE-ID`` that links to the MetaCyc/MetaNetX database or your own unqiue identifiers.
+- The **first column must be** a ``UNIQUE-ID`` that links to the MetaCyc/MetaNetX database or your own unique identifiers.
 
 - All following columns normally follow the column names listed below, but you can add others with different names if needed.
 

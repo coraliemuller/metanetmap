@@ -55,6 +55,16 @@ pip install -r requirements.txt
 pip install .
 ```
 
+To install the latest development version from source :
+
+```sh
+git clone git@github.com:coraliemuller/metanetmap.git
+cd metanetmap
+pip install -r requirements.txt
+pip install -r requirements_dev.txt
+pip install .
+```
+
 ## Quickstart
 
 > <picture>

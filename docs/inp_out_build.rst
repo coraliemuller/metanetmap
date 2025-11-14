@@ -14,7 +14,7 @@ Structure
 
     example:
     MetaCyc_db
-    ├── metacyc_compounds.dat (MetaCyc)
+    ├── compounds.dat (MetaCyc)
     MetaNetX_db
     ├── chem_xref.tsv (MetaNetX)
     ├── chem_prop.tsv (MetaNetX)
@@ -59,7 +59,7 @@ Details on input files
 
      ``compounds.dat`` has to be provided by the user. Access to this file requires a licence for MetaCyc
 
-   The following is a raw entry for the compound **WATER** from a MetaCyc flat file `.dat` extension. 
+   The following is an exemple of entry for the compound **WATER** from a MetaCyc flat file `.dat` extension. 
    The file is structured as key-value pairs, where each line represents a specific property or annotation of the compound.
 
    Some keys, such as `CHEMICAL-FORMULA`, `SYNONYMS`, or `DBLINKS`, may occur multiple times. Values can contain nested content, quotes, or formatting (e.g. HTML tags in names).
@@ -154,14 +154,39 @@ Details on input files
    - *Example entries*\
    .. code-block:: text
 
-      Source          ID          Description
-      BIOMASS         BIOMASS     BIOMASS
-      mnx:BIOMASS     BIOMASS     BIOMASS
-      seedM:cpd11416  BIOMASS     Biomass
-      MNXM01          MNXM01      PMF||Translocated proton that accounts for the Proton Motive Force
-      CHEBI:16234     MNXM02      hydroxide||HO-||Hydroxide ion||OH(-)||hydridooxygenate(1-)
+      Source                  ID          Description
+        
+      BIOMASS	                BIOMASS	    BIOMASS
+      mnx:BIOMASS	            BIOMASS	    BIOMASS
+      seed.compound:cpd11416	BIOMASS	    Biomass
+      seedM:M_cpd11416	      BIOMASS	    secondary/obsolete/fantasy identifier
+      seedM:cpd11416	        BIOMASS	    Biomass
+      MNXM01	                MNXM01	    PMF||Translocated proton that acccounts for the Proton Motive Force||Not to be confused with H(+) (MNXM1)
+      mnx:PMF	                MNXM01	    PMF||Translocated proton that acccounts for the Proton Motive Force||Not to be confused with H(+) (MNXM1)
+      CHEBI:16234	            MNXM02	    hydroxide||HO-||HYDROXIDE ION||Hydroxide ion||OH(-)||OH-||hydridooxygenate(1-)||oxidanide
+      CHEBI:29356	            MNXM02	    oxide(2-)||O(2-)||oxide
+      MNXM02	                MNXM02	    OH(-)||hydroxyde
+      bigg.metabolite:oh1	    MNXM02	    Hydroxide ion
+      biggM:M_oh1	            MNXM02	    secondary/obsolete/fantasy identifier
+      biggM:oh1	              MNXM02	    Hydroxide ion
+      chebi:13365	            MNXM02	    secondary/obsolete/fantasy identifier
+      chebi:13419	            MNXM02	    secondary/obsolete/fantasy identifier
+      chebi:16234	            MNXM02	    hydroxide||HO-||HYDROXIDE ION||Hydroxide ion||OH(-)||OH-||hydridooxygenate(1-)||oxidanide
+      chebi:29356	            MNXM02	    oxide(2-)||O(2-)||oxide
+      chebi:44641	            MNXM02	    secondary/obsolete/fantasy identifier
+      chebi:5594	            MNXM02	    secondary/obsolete/fantasy identifier
+      metacyc.compound:OH	    MNXM02	    OH-||OH||hydroxide||hydroxide ion||hydroxyl||hydroxyl ion
+      metacycM:OH	            MNXM02	    OH-||OH||hydroxide||hydroxide ion||hydroxyl||hydroxyl ion
+      mnx:HYDROXYDE	          MNXM02	    OH(-)||hydroxyde
+      seed.compound:cpd15275	MNXM02	    hydroxide ion||oh1
+      seedM:M_cpd15275	      MNXM02	    secondary/obsolete/fantasy identifier
+      seedM:cpd15275	        MNXM02	    hydroxide ion||oh1
+      vmhM:M_oh1	            MNXM02	    secondary/obsolete/fantasy identifier
+      vmhM:oh1	              MNXM02	    hydroxide ion||hydroxide
+      vmhmetabolite:oh1	      MNXM02	    hydroxide ion||hydroxide
 
-   
+
+
    .. note::
      - The ``||`` separator indicates multiple synonyms or alternative names.
      - Identifiers such as ``MNXM##`` correspond to MetaNetX universal metabolite IDs.
