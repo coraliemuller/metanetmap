@@ -45,7 +45,7 @@ For **metabolomic data**, whether provided as single or multiple files, metaboli
 
 **Metabolic network data** is processed by extracting the identifiers and names of metabolites, together with all available metadata, such as ``ChEBI`` or ``InChIKey`` for instance.
 
-MetaNetMap performs a preprocessing step to ensure that certain columns contain the correct prefixes (``ChEBI:`` , ``PUBCHEM:`` , or ``InChIKey=`` ). This helps avoid conflicts between numerical values in different columns and reduces the risk of mismatches by harmonizing identifiers as much as possible between metabolomic data, GSMN models, and the conversion table.
+MetaNetMap performs a preprocessing step to ensure that certain columns contain the correct prefixes (``ChEBI:`` , ``PUBCHEM:`` , or ``InChIKey=`` ). This helps avoid conflicts between numerical values in different columns and reduces the risk of mismatches by harmonizing identifiers as much as possible between metabolomic data, metabolic network, and the conversion datatable.
 
 
 
