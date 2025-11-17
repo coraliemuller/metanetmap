@@ -952,21 +952,22 @@ def match_metab_main(
             dic_tsv_results, dic["UNIQUE-ID"]
         )
         for sub_sub_results_dic in sub_results_dic:
-            for i in sub_sub_results_dic["Metabolites"].split(" _AND_ "):
-                if i != met:
-                    logger.info(
-                        '--"%s" is a metabolite duplicate of '
-                        '"%s" and matches via "%s" ',
-                        met,
-                        sub_sub_results_dic["Metabolites"],
-                        column_name,
-                    )
-                    sub_sub_results_dic["Metabolites"] += f" _AND_ {met}"
-                    sub_sub_results_dic[f"Match via {column_name}"] = (
-                        "YES"  # Add "YES" to the specific column for
-                        # the doublon name which match.
-                    )
-                    Match_id[met] = dic["UNIQUE-ID"]
+            # Match each metabolite listed in the result dictionary
+            metabolites_list = [m.strip() for m in sub_sub_results_dic["Metabolites"].split(" _AND_ ")]
+            if met not in metabolites_list:
+                logger.info(
+                    '--"%s" is a metabolite duplicate of '
+                    '"%s" and matches via "%s" ',
+                    met,
+                    sub_sub_results_dic["Metabolites"].split("_AND_", 2)[0].strip(),
+                    column_name,
+                )
+                sub_sub_results_dic["Metabolites"] += f" _AND_ {met}"
+                sub_sub_results_dic[f"Match via {column_name}"] = (
+                    "YES"  # Add "YES" to the specific column for
+                    # the doublon name which match.
+                )
+                Match_id[met] = dic["UNIQUE-ID"]
 
     # --- Case 2: New match or partial duplicate
     else:
