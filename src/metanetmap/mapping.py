@@ -1210,13 +1210,22 @@ def match_met_sbml(
         dic_temp["Match in metabolic networks"] = list(set(temp_list))
     else:
         # CLASSIC MODE — only store ID
+        if len(id_unique_sbml) > 1:
+            dic_temp["Partial match"] = id_unique_sbml_list
+            logger.info(
+            f'--""{met}"" has a partial match. We have match for '
+            f'more than one id in metabolic network: "{id_unique_sbml}"'
+        )
         dic_temp["Match in metabolic networks"] = id_unique_sbml
         logger.info(
             f'--"{met}" is present directly in metabolic network with the ID '
             f'"{id_unique_sbml}" via "{column_name}"'
         )
     # Add to dic_temp regardless the MODE
-    dic_temp["Metabolites"] = f"{met} _AND_ {id_unique_sbml_list}"
+    if choice == "community" :
+        dic_temp["Metabolites"] = f"{met}"
+    else:
+        dic_temp["Metabolites"] = f"{met} _AND_ {id_unique_sbml_list}"
     dic_temp[f"Match via {column_name}"] = "YES"
     dic_temp["Match in database"] = ""
     Match_id[met] = "NO UNIQUE-ID"
@@ -1650,6 +1659,27 @@ def mapping_run(
     # Groups similar dictionaries based on shared values in key fields, then merges
     # them.
     dic_tsv_results = utils.smart_merge(dic_tsv_results)
+    if choice != "community":
+        for dic in dic_tsv_results:
+            if dic.get("Match in metabolic networks"):
+                if len(dic["Match in metabolic networks"]) > 1 :
+                    if dic.get("Partial match"):
+                        id_unique_sbml_list = " _AND_ ".join(dic["Match in metabolic networks"])
+                        merge = " _AND_ ".join(
+                            dict.fromkeys([dic["Partial match"], id_unique_sbml_list])
+                            )
+                        dic["Partial match"]=  merge
+                        logger.info(
+                            f'--Partial match. We have match for '
+                            f'more than one id in metabolic network: "{merge}"'
+                            )
+                    else:
+                        id_unique_sbml_list = " _AND_ ".join(dic["Match in metabolic networks"])
+                        dic["Partial match"]=  id_unique_sbml_list
+                    logger.info(
+                    f'--Partial match. We have match for '
+                    f'more than one id in metabolic network: "{dic["Match in metabolic networks"]}"'
+        )
 
     if partial_match:
         logger.info("\n\n------------------------------------------------")
@@ -1877,6 +1907,7 @@ def mapping_run(
         # Groups similar dictionaries based on shared values in key
         # fields, then merges them.
         dic_tsv_results = utils.smart_merge(dic_tsv_results)
+        
 
     # #    #----------------------------#
     # #    #  Umatch set up the output  #
