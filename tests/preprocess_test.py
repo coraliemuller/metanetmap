@@ -327,7 +327,7 @@ def test_extract_metadata_sbml(create_mock_sbml_files):
     assert "Glucose" in updated_meta
     assert "ID" in updated_meta["Glucose"]
     assert "formula" in updated_meta["Glucose"]
-    assert updated_meta["Glucose"]["ID"] == ["glc_0_c", "glc_0"]
+    assert updated_meta["Glucose"]["ID"] == ["glc_0"]
     assert updated_meta["Glucose"]["formula"] == ["C6H12O6"]
     assert updated_meta["Glucose"]["chebi"] == ["CHEBI:0001"]
     assert updated_meta["Glucose"]["hmdb"] == ["HMDB00001231"]
