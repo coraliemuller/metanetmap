@@ -1485,9 +1485,6 @@ def partial_match_met_sbml(
     # Extract base unique SBML ID
     id_unique_sbml = [ id_val for sub_sub_dict in sub_dict if "ID" in sub_sub_dict for id_val in sub_sub_dict["ID"]]
 
-    # id_unique_sbml_list = " _AND_ ".join(id_unique_sbml)
-    
-
     if choice == "community":
         for id_unique in id_unique_sbml:
             sbml_name = utils.find_key_by_list_value(dic_couple_sbml, id_unique)

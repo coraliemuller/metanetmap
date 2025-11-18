@@ -185,33 +185,63 @@ def test_fix_arrows_in_parentheses():
 
 
 
-#find_sub_dict_by_nested_value TEST
 
-def test_match_exact_id():
+
+def test_match_single_result():
     data = {
         'OROTATE': {'ID': ['OROTATE_e', 'OROTATE'], 'formula': ''},
         'Carbamyl-phosphate': {'ID': ['Carbamyl-phosphate_c', 'Carbamyl-phosphate'], 'formula': ''},
     }
-    assert utils.find_sub_dict_by_nested_value(data, 'OROTATE') == {'ID': ['OROTATE_e', 'OROTATE'], 'formula': ''}
-    assert utils.find_sub_dict_by_nested_value(data, 'carbamyl-phosphate_c') == {'ID': ['Carbamyl-phosphate_c', 'Carbamyl-phosphate'], 'formula': ''}
+
+    result = utils.find_all_sub_dicts_by_nested_value(data, 'OROTATE')
+    assert result == [
+        {'ID': ['OROTATE_e', 'OROTATE'], 'formula': ''}
+    ]
+
+    result = utils.find_all_sub_dicts_by_nested_value(data, 'carbamyl-phosphate_c')
+    assert result == [
+        {'ID': ['Carbamyl-phosphate_c', 'Carbamyl-phosphate'], 'formula': ''}
+    ]
+
+
+def test_match_multiple_results():
+    data = {
+        'A': {'ID': ['X', 'Y'], 'other': ['shared']},
+        'B': {'ID': ['shared'], 'formula': ''},
+        'C': {'ID': ['not_shared'], 'formula': ''}
+    }
+
+    result = utils.find_all_sub_dicts_by_nested_value(data, 'shared')
+
+    assert len(result) == 2
+    assert {'ID': ['X', 'Y'], 'other': ['shared']} in result
+    assert {'ID': ['shared'], 'formula': ''} in result
 
 
 def test_match_case_insensitive():
     data = {
         'L-methionine': {'ID': ['MET_e', 'MET', 'MET_c'], 'formula': []}
     }
-    assert utils.find_sub_dict_by_nested_value(data, 'met') == {'ID': ['MET_e', 'MET', 'MET_c'], 'formula': []}
-    assert utils.find_sub_dict_by_nested_value(data, 'met_e') == {'ID': ['MET_e', 'MET', 'MET_c'], 'formula': []}
+
+    result = utils.find_all_sub_dicts_by_nested_value(data, 'met')
+    assert result == [{'ID': ['MET_e', 'MET', 'MET_c'], 'formula': []}]
+
+    result = utils.find_all_sub_dicts_by_nested_value(data, 'met_e')
+    assert result == [{'ID': ['MET_e', 'MET', 'MET_c'], 'formula': []}]
+
 
 def test_no_match():
     data = {
         'BIOMASS': {'ID': ['BIOMASS_c', 'BIOMASS'], 'formula': ''}
     }
-    assert utils.find_sub_dict_by_nested_value(data, 'NOT_FOUND') is None
+
+    result = utils.find_all_sub_dicts_by_nested_value(data, 'NOT_FOUND')
+    assert result == []  # empty list for no match
 
 
 def test_empty_data():
-    assert utils.find_sub_dict_by_nested_value({}, 'anything') is None
+    result = utils.find_all_sub_dicts_by_nested_value({}, 'anything')
+    assert result == []
 
 
 
