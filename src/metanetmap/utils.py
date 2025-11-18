@@ -809,10 +809,46 @@ def fix_arrows_in_parentheses(text):
     return re.sub(r"\(([^()]+)\)", lambda m: f"({m.group(1).replace('?', '->')})", text)
 
 
-def find_sub_dict_by_nested_value(data: dict, search_value: str):
+# def find_sub_dict_by_nested_value(data: dict, search_value: str):
+#     """
+#     Searches inside a nested dictionary (dictionary of dictionaries)
+#     for a sub-dictionary that contains a list with a string equal to
+#     `search_value` (case-insensitive match).
+
+#     Args:
+#         data (dict): The main dictionary to search through.
+#         search_value (str): The string value to search for
+#         (case-insensitive).
+
+#     Returns:
+#         dict or None: The first matching sub-dictionary, or None if not
+#         found.
+#     """
+#     return next(
+#         (
+#             v
+#             for v in data.values()  # Iterate over all sub-dictionaries
+#             if isinstance(v, dict)
+#             and any(
+#                 # Ensure each sub-value is a dictionary
+#                 isinstance(val, list)
+#                 and any(
+#                     # Look for list values
+#                     isinstance(el, str) and el.lower() == search_value.lower()
+#                     # Compare each string element in the list (case-insensitive)
+#                     for el in val
+#                     # Iterate over list elements
+#                 )
+#                 for val in v.values()  # Iterate over all values in the sub-dictionary
+#             )
+#         ),
+#         None,  # If no match is found, return None
+#     )
+
+def find_all_sub_dicts_by_nested_value(data: dict, search_value: str):
     """
     Searches inside a nested dictionary (dictionary of dictionaries)
-    for a sub-dictionary that contains a list with a string equal to
+    for all sub-dictionaries that contain a list with a string equal to
     `search_value` (case-insensitive match).
 
     Args:
@@ -821,29 +857,22 @@ def find_sub_dict_by_nested_value(data: dict, search_value: str):
         (case-insensitive).
 
     Returns:
-        dict or None: The first matching sub-dictionary, or None if not
-        found.
+        list: A list of all matching sub-dictionaries. Empty list if none found.
     """
-    return next(
-        (
-            v
-            for v in data.values()  # Iterate over all sub-dictionaries
-            if isinstance(v, dict)
+    return [
+        v
+        for v in data.values()  # Iterate over all sub-dictionaries
+        if isinstance(v, dict)
+        and any(
+            isinstance(val, list)
             and any(
-                # Ensure each sub-value is a dictionary
-                isinstance(val, list)
-                and any(
-                    # Look for list values
-                    isinstance(el, str) and el.lower() == search_value.lower()
-                    # Compare each string element in the list (case-insensitive)
-                    for el in val
-                    # Iterate over list elements
-                )
-                for val in v.values()  # Iterate over all values in the sub-dictionary
+                isinstance(el, str) and el.lower() == search_value.lower()
+                for el in val  # Compare each string element in the list
             )
-        ),
-        None,  # If no match is found, return None
-    )
+            for val in v.values()  # Iterate over all values in the sub-dictionary
+        )
+    ]
+
 
 
 def find_dict_by_metabolite(dic_tsv_results: list, met: str):
