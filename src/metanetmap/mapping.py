@@ -266,7 +266,11 @@ def extract_metadata_sbml(model, meta_data_sbml):
         annotations = m.annotation
         # Existing entry: update ID and formula
         if m.name in meta_data_sbml.keys():
-            meta_data_sbml[m.name]["ID"].append(m.id)
+            if m.id.endswith(']'):
+                clean_id=m.id.rsplit("[", 1)[0]
+            else:
+                clean_id=m.id.rsplit("_", 1)[0]
+            meta_data_sbml[m.name]["ID"].append(clean_id)
             if m.formula:
                 meta_data_sbml[m.name]["formula"].append(m.formula)
             else:
@@ -1184,6 +1188,7 @@ def match_met_sbml(
     temp_list = []
 
     # Find sub-dictionary that contains the metabolite
+    # print(met)
     sub_dict = utils.find_sub_dict_by_nested_value(meta_data_sbml, met)
     # print(met)
     # print(sub_dict)
