@@ -289,6 +289,7 @@ def extract_metadata_sbml(model, meta_data_sbml):
             # New entry
             tmp_data = {k: [] for k in annotations.keys()}
             tmp_data["ID"] = []
+            tmp_data["NAME"]=[m.name]
             if m.id.endswith(']'):
                 tmp_data["ID"].append(m.id.rsplit("[", 1)[0])
             else:
@@ -1188,15 +1189,19 @@ def match_met_sbml(
     temp_list = []
 
     # Find sub-dictionary that contains the metabolite
-    sub_dict = utils.find_sub_dict_by_nested_value(meta_data_sbml, met)
+    sub_dict = utils.find_all_sub_dicts_by_nested_value(meta_data_sbml, met)
+    
 
     if not sub_dict:
         return dic_tsv_results, Match_id, doublons, database_info
     
-    # sub_results_dic = utils.find_matching_dict_all_key(dic_tsv_results, met)
-    id_unique_sbml = sub_dict["ID"]  
-    id_unique_sbml_list = " _AND_ ".join(id_unique_sbml) 
+
+    # Extract all values from the ‘ID’ key
+    id_unique_sbml = [ id_val for sub_sub_dict in sub_dict if "ID" in sub_sub_dict for id_val in sub_sub_dict["ID"]]
     
+    # Merge with ‘_AND_’
+    id_unique_sbml_list = " _AND_ ".join(id_unique_sbml)
+
     # COMMUNITY MODE — associate match with SBML filename
     if choice == "community":
         for id_unique in id_unique_sbml:
@@ -1206,7 +1211,6 @@ def match_met_sbml(
                 f'--"{met}" is present directly in "{sbml_name}" metabolic network '
                 f'with the ID "{id_unique}" via "{column_name}"'
             )
-        
         dic_temp["Match in metabolic networks"] = list(set(temp_list))
     else:
         # CLASSIC MODE — only store ID
@@ -1221,6 +1225,7 @@ def match_met_sbml(
             f'--"{met}" is present directly in metabolic network with the ID '
             f'"{id_unique_sbml}" via "{column_name}"'
         )
+
     # Add to dic_temp regardless the MODE
     if choice == "community" :
         dic_temp["Metabolites"] = f"{met}"
@@ -1230,13 +1235,16 @@ def match_met_sbml(
     dic_temp["Match in database"] = ""
     Match_id[met] = "NO UNIQUE-ID"
     doublons.append(met)
-    # If we find a match by formula instead of proper ID — log it as partial
-    if utils.check_formula_in_dict(sub_dict, met):
-        dic_temp["Partial match"] = met
-        logger.info(
-            f'--""{met}"" has a partial match. We have a formula '
-            f'as identifier for this metabolite: "{met}"'
-        )
+
+    # # If we find a match by formula instead of proper ID — log it as partial
+    for subform in sub_dict:
+        if utils.check_formula_in_dict(subform, met):
+            dic_temp["Partial match"] = met
+            logger.info(
+                f'--""{met}"" has a partial match. We have a formula '
+                f'as identifier for this metabolite: "{met}"'
+            )
+
     # Add to result if new entry was created
     if dic_temp:
         dic_tsv_results.append(dic_temp)
@@ -1283,13 +1291,15 @@ def match_db_sbml(
     Returns:
         dic_tsv_results (list of dict): List of dictionaries storing matching results.
     """
-    sub_dict = utils.find_sub_dict_by_nested_value(meta_data_sbml, met) #to update
+    sub_dict = utils.find_all_sub_dicts_by_nested_value(meta_data_sbml, met) 
+
 
     if not sub_dict:
         return dic_tsv_results
-    
-    id_unique_sbml = sub_dict["ID"]
-    # id_unique_sbml_list = " _AND_ ".join(id_unique_sbml) 
+ 
+
+    # Extract all values from the ‘ID’ key
+    id_unique_sbml = [ id_val for sub_sub_dict in sub_dict if "ID" in sub_sub_dict for id_val in sub_sub_dict["ID"]]
 
     sub_results_dic = utils.find_matching_dict_all_key(dic_tsv_results, set_list)
     sbml_names = utils.find_keys_with_value_in_dict(dic_couple_sbml, met)
@@ -1333,6 +1343,10 @@ def match_db_sbml(
                 # CLASSIC MODE — only store ID
                 if sub_results_dic.get("Match in metabolic networks"):
                     sub_results_dic["Match in metabolic networks"].append(id_unique)
+                    logger.info(
+                    f'--""{met}"" has a partial match. We have match for '
+                    f'more than one id in metabolic network: "{sub_results_dic["Match in metabolic networks"]}"'
+                    )
                 else:
                     sub_results_dic["Match in metabolic networks"] = [id_unique]
                 if sub_results_dic["Metabolites"]:
@@ -1347,12 +1361,13 @@ def match_db_sbml(
                     f'"{id_unique}" via the match ID "{met}"'
                 )
             # Check for formula-based partial match
-            if utils.check_formula_in_dict(sub_dict, met):
-                sub_results_dic["Partial match"] = met
-                logger.info(
-                    f'--""{met}"" has a partial match. We have a '
-                f'formula as identifier for this metabolite: "{met}"'
-            )
+            for subform in sub_dict:
+                if utils.check_formula_in_dict(subform, met):
+                    sub_results_dic["Partial match"] = met
+                    logger.info(
+                        f'--""{met}"" has a partial match. We have a '
+                    f'formula as identifier for this metabolite: "{met}"'
+                )
     
     return dic_tsv_results
 
@@ -1462,16 +1477,14 @@ def partial_match_met_sbml(
         tuple: Updated (dic_tsv_results, Match_id, doublons,
         database_info, dic_temp, temp_list).
     """
-    sub_dict = utils.find_sub_dict_by_nested_value(meta_data_sbml, met)
+    sub_dict = utils.find_all_sub_dicts_by_nested_value(meta_data_sbml, met)
 
 
     if not sub_dict:
         return dic_tsv_results, Match_id, doublons, database_info, dic_temp, temp_list
 
     # Extract base unique SBML ID
-    id_unique_sbml = sub_dict["ID"]  
-    # id_unique_sbml_list = " _AND_ ".join(id_unique_sbml)
-    
+    id_unique_sbml = [ id_val for sub_sub_dict in sub_dict if "ID" in sub_sub_dict for id_val in sub_sub_dict["ID"]]
 
     if choice == "community":
         for id_unique in id_unique_sbml:
