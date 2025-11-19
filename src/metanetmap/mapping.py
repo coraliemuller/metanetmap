@@ -289,6 +289,7 @@ def extract_metadata_sbml(model, meta_data_sbml):
             # New entry
             tmp_data = {k: [] for k in annotations.keys()}
             tmp_data["ID"] = []
+            tmp_data["NAME"]=[m.name]
             if m.id.endswith(']'):
                 tmp_data["ID"].append(m.id.rsplit("[", 1)[0])
             else:
