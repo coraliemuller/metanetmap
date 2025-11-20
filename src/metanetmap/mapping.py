@@ -1338,7 +1338,10 @@ def match_db_sbml(
                             )
                         )
                     )
-                    sub_results_dic["Match in metabolic networks"] = flat_list 
+                    if sub_results_dic.get("Match in metabolic networks"):
+                        sub_results_dic["Match in metabolic networks"] = list(dict.fromkeys(sub_results_dic["Match in metabolic networks"] + flat_list))
+                    else:
+                        sub_results_dic["Match in metabolic networks"] =  flat_list 
             else:
                 # CLASSIC MODE — only store ID
                 if sub_results_dic.get("Match in metabolic networks"):
@@ -1403,7 +1406,6 @@ def setup_match_db_sbml(
     """
     # Loop through each set of identifiers for one metabolite
     for db_list in database_info:
-
         temp_list = set()  # To store matched SBML networks temporarily
         set_list = db_list[-1]  # Usually the last item is the 'UNIQUE-ID'
         
