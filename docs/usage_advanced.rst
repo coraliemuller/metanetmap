@@ -76,7 +76,12 @@ Handling Ambiguities
 
 Using a large amount of cross-referenced data increases the probability that inconsistent mappings will occur and, consequently, the risk of ambiguity. The same metabolite may match multiple times in the conversion datatable, in the metabolomic data, or in the metabolic networks.
 
-The tool checks for potentially conflicting matches using only the unique identifier (e.g., the MetaCyc or MetaNetX ``UNIQUE-ID`` ) to determine whether a metabolite from the input data corresponds to one or more metabolites in the reference database. 
+Two main types of ambiguities can be mentioned:
+
+- One metabolite of the metabolomic annotation profile maps to two distinct metabolites of the GSMN.
+ 
+- One metabolites of the metabolomic profiles map on two identifiers in the conversion datatable.
+  
 
 When multiple input metabolites correspond to the same unique identifier or vice versa this situation is flagged as an ambiguity and is automatically added to the *"Partial match"* column in the output.
 
@@ -100,6 +105,6 @@ Similarly, in metabolomic data, certain columns may combine or concatenate sever
 
 
 .. note::
-    A new version with enhanced ambiguity management will be released soon. It will improve the handling of identifiers that are particularly prone to duplication, such as COMMON-NAME and InChI.
+    A new version with the addition of UNIQUE-ID in metabolomics data will be implemented soon to facilitate parsing.
     
     
