@@ -296,6 +296,16 @@ Details on output files for mapping mode
       The remaining columns correspond to identifiers or metadata from the metabolomics data.  
       Each cell contains ``YES`` to indicate that a match was found on the ID of that column in the metabolomics data.
 
+    .. note:: 
+      The output table contains both matched and unmatched records in the column **Metabolite matches** .
+
+      Unmatched records are included in the table to allow for complete data tracking.
+
+      **Metabolite matches** require parsing to separate and possibly filter metabolite IDs in order to be fully usable.
+
+      INFO: A parsing script may be added later to facilitate the extraction or transformation of this data if needed.
+
+
 
    - Exemple of classic mode output: some column name are missing (non-exhaustive)
     +-----------------------------------------------+------------------------------+------------------------------+------------------------+---------------------+-----------------+
