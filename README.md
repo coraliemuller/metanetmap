@@ -134,4 +134,4 @@ GNU Lesser General Public License v3 (LGPLv3)
 
 ## Authors
 
-Coralie Muller, [Sylvain Prigent](https://bfp.bordeaux-aquitaine.hub.inrae.fr/personnel/pages-web-personnelles/prigent-sylvain) and  [Clémence Frioux](https://cfrioux.github.io) 
+[Coralie Muller](https://team.inria.fr/pleiade/coralie-muller/), [Sylvain Prigent](https://bfp.bordeaux-aquitaine.hub.inrae.fr/personnel/pages-web-personnelles/prigent-sylvain) and  [Clémence Frioux](https://cfrioux.github.io) 
