@@ -459,7 +459,7 @@ def main():
                 f"metabolic networks user path: {sbml_input}\n"
             )
 
-            if Path(sbml_input).is_dir() and Path(maf_input).is_dir():
+            if Path(sbml_input).is_dir() and (Path(maf_input).is_file() or Path(maf_input).is_dir()):
                 List_MAF_paths = mapping.set_list_paths(
                     maf_input, List_MAF_paths, ext1=None, ext2=None
                 )
