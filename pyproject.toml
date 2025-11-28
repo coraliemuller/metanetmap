@@ -7,7 +7,7 @@ metanetmap = "metanetmap.cli:main"
 
 [project]
 name = "metanetmap"
-dynamic = ["version"]
+version = "1.0.1"
 description = "A Python package for mapping metabolites between metabolic models and  metabolomics data."
 readme = "README.rst"
 authors = [
