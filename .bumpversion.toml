@@ -16,6 +16,6 @@ message = "Bump version: {current_version} → {new_version}"
 commit_args = ""
 
 [[tool.bumpversion.files]]
-filename = "src/metanetmap/__init__.py"
+filename = "src/__init__.py"
 search = "__version__ = \"{current_version}\""
 replace = "__version__ = \"{new_version}\""
