@@ -7,11 +7,13 @@ metanetmap = "metanetmap.cli:main"
 
 [project]
 name = "metanetmap"
-version = "0.1.0"
+dynamic = ["version"]
 description = "A Python package for mapping metabolites between metabolic models and  metabolomics data."
 readme = "README.rst"
 authors = [
-  {name = "Coralie Muller", email = "coralie.muller@inria.fr"}
+  {name = "Coralie Muller", email = "coralie.muller@inria.fr"},
+  {name = "Clémence Frioux", email = "clemence.frioux@inria.fr"},
+  {name = "Sylvain Prigent", email = "sylvain.prigent@inrae.fr"}
 ]
 maintainers = [
   {name = "Coralie Muller", email = "coralie.muller@inria.fr"}
@@ -21,7 +23,12 @@ classifiers = [
 ]
 license = {text = "GNU General Public License v3"}
 dependencies = [
-  
+  'setuptools',
+  'cobra',
+  'numpy',
+  'pandas',
+  'aiohttp',
+  'tqdm',
 ]
 
 [project.optional-dependencies]
@@ -34,7 +41,7 @@ dev = [
 
 [project.urls]
 
-homepage = "https://gitlab.inria.fr/mistic/metanetmap"
+homepage = "https://gitlab.inria.fr/mistic/mnm"
 
 
 [tool.setuptools]
