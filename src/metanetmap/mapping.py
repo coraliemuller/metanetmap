@@ -21,6 +21,7 @@ import itertools
 import re
 import sys
 import time
+import os
 from pathlib import Path
 
 import cobra
@@ -360,7 +361,7 @@ def setup_merge_list_sbml_metabolites(List_SBML_paths):
 
 
 # Metabolomic files
-def setup_merged_list_maf_metabolites(List_MAF_paths):
+def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
     """
     Parses a list of MAF (Metabolite Annotation File) files to extract
     and clean metadata, and merges them into a single dictionary and
@@ -499,11 +500,25 @@ def setup_merged_list_maf_metabolites(List_MAF_paths):
 
     # Merge all DataFrames and remove duplicates
     merged_df = pd.concat(df_list, ignore_index=True, sort=False)
+    merged_df.insert(0, "MNM_ID", ["MNM" + str(i) for i in range(1, len(merged_df)+1)])
+    # print(output_folder)
+    # path_maf_name = os.path.basename(path_maf)
+    utils.write_tsv(merged_df,
+                output_folder,
+                f"MNM_metabolomic_data.tsv",
+                keys_reorder=False,
+                quiet= True
+            )  # Write the update maf
+    print(merged_df)
 
     # Remove duplicates
     maf_merged_df = merged_df.drop_duplicates()
-    maf_merged_df.columns = maf_merged_df.columns.str.upper()
-    maf_merged_filtered_df = maf_merged_df[maf_dictionnary_clean.keys()]
+    maf_merged_df.columns = maf_merged_df.columns.str.upper() 
+
+    # ADD the column for the identifiers MNM
+    col_news = list(maf_dictionnary_clean.keys())
+    col_news.insert(0, "MNM_ID")
+    maf_merged_filtered_df = maf_merged_df[col_news]
     return maf_dictionnary_clean, keys, maf_merged_filtered_df
 
 

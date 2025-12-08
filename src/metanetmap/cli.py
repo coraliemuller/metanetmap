@@ -384,7 +384,7 @@ def main():
 
             maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(
                 List_MAF_paths
-            )
+            ,output_folder_community)
             dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(
                 List_SBML_paths
             )
@@ -424,7 +424,7 @@ def main():
 
             maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(
                 List_MAF_paths
-            )
+            ,output_folder_classic)
             dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(
                 List_SBML_paths
             )
@@ -473,7 +473,7 @@ def main():
                     f"List metabolic networks paths: {List_SBML_paths}"
                 )
                 maf_dictionnary, keys, maf_df = (
-                    mapping.setup_merged_list_maf_metabolites(List_MAF_paths)
+                    mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
                 )
                 dic_couple_sbml, meta_data_sbml = (
                     mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)
@@ -540,7 +540,7 @@ def main():
                 )
 
                 maf_dictionnary, keys, maf_df = (
-                    mapping.setup_merged_list_maf_metabolites(List_MAF_paths)
+                    mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
                 )
                 dic_couple_sbml, meta_data_sbml = (
                     mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)
