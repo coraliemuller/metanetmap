@@ -501,7 +501,7 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
     # Merge all DataFrames and remove duplicates
     merged_df = pd.concat(df_list, ignore_index=True, sort=False)
     merged_df.insert(0, "MNM_ID", ["MNM" + str(i) for i in range(1, len(merged_df)+1)])
-    # print(output_folder)
+
     # path_maf_name = os.path.basename(path_maf)
     utils.write_tsv(merged_df,
                 output_folder,
@@ -509,7 +509,6 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
                 keys_reorder=False,
                 quiet= True
             )  # Write the update maf
-    print(merged_df)
 
     # Remove duplicates
     maf_merged_df = merged_df.drop_duplicates()
@@ -1962,9 +1961,12 @@ def mapping_run(
         dic_tsv_results, keys_starter, unmatch_metabolites_merged, keys
     )
 
-    #      #-----------------------------#
-    # #    #   Results User Interface    #
-    # #    #-----------------------------#
+    dic_tsv_results= utils.assign_mnm_ids(dic_tsv_results,maf_df)
+    keys_reorder.insert(0, 'MNM_ID')
+    
+         #-----------------------------#
+    #    #   Results User Interface    #
+    #    #-----------------------------#
 
     stats = utils.analyze_column_matches(
         dict_list=dic_tsv_results,
@@ -1997,6 +1999,7 @@ def mapping_run(
 
     logger.info("\n--------------------------------------------------------\n")
 
+    
     # Write output file in funtion of the "choice"
     if partial_match:
         if choice == "community":

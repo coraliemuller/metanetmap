@@ -781,6 +781,128 @@ def analyze_column_matches(dict_list, col_db, col_net, col_partial=None):
     return stats
 
 
+# This one keep the match in the metabolic networks
+# def assign_mnm_ids(tsv_results, maf_df):
+#     """
+#     Assign MNM_IDs to tsv_results based on a lookup DataFrame maf_df.
+
+#     For each row in tsv_results (a list of dictionaries):
+#         1. Splits the 'Metabolites' field by '_AND_' into individual metabolites.
+#         2. Searches each metabolite in all columns of maf_df.
+#         3. Collects all corresponding MNM_ID values from maf_df.
+#         4. Updates the 'MNM_ID' key with all IDs (existing + new).
+#         5. Updates the 'Partial match' key if there are multiple IDs in MNM_ID.
+#         6. Ensures 'MNM_ID' is always the first key in the dictionary.
+
+#     Args:
+#         tsv_results (list): List of dictionaries representing rows of metabolites.
+#         maf_df (pd.DataFrame): DataFrame containing MNM_IDs and other columns to match.
+
+#     Returns:
+#         list: Updated list of dictionaries with MNM_ID and Partial match columns.
+#     """
+#     MNM_ID_col = "MNM_ID"
+#     results_with_ids = []
+
+#     for row in tsv_results:
+#         if "MNM_ID" not in row:
+#             row["MNM_ID"] = ""
+
+#         metabolites = str(row.get("Metabolites", "")).split("_AND_")
+#         metabolites = [m.strip() for m in metabolites]
+
+#         ids_to_add = []
+
+#         for metab in metabolites:
+#             matches = maf_df.apply(lambda r: metab in r.values, axis=1)
+#             for idx in maf_df[matches].index:
+#                 mnm_id_val = str(maf_df.at[idx, MNM_ID_col])
+#                 if mnm_id_val not in ids_to_add:
+#                     ids_to_add.append(mnm_id_val)
+
+#         current_val = row.get("MNM_ID", "").strip()
+
+#         if current_val == "" or current_val.lower() == "nan":
+#             row["MNM_ID"] = "_AND_".join(ids_to_add)
+#         else:
+#             current_list = [x.strip() for x in current_val.split("_AND_")]
+#             for new_id in ids_to_add:
+#                 if new_id not in current_list:
+#                     current_list.append(new_id)
+#             row["MNM_ID"] = "_AND_".join(current_list)
+
+#         # Update Partial match if MNM_ID has multiple IDs (i.e., contains '_AND_')
+#         mnm_ids = row["MNM_ID"].split("_AND_")
+#         if len(mnm_ids) > 1:
+#             row["Partial match"] = "_AND_".join(mnm_ids)
+
+#         # Ensure MNM_ID is the first key
+#         new_row = {"MNM_ID": row["MNM_ID"]}
+#         for k, v in row.items():
+#             if k != "MNM_ID":
+#                 new_row[k] = v
+
+#         results_with_ids.append(new_row)
+#     return results_with_ids
+
+def assign_mnm_ids(tsv_results, maf_df):
+    MNM_ID_col = "MNM_ID"
+    results_with_ids = []
+
+    for row in tsv_results:
+        if "MNM_ID" not in row:
+            row["MNM_ID"] = ""
+
+        # Split and strip metabolites
+        metabolites = str(row.get("Metabolites", "")).split("_AND_")
+        metabolites = [m.strip() for m in metabolites]
+
+        # Filter metabolites that exist in maf_df
+        filtered_metabolites = []
+        for metab in metabolites:
+            # Check if metabolite exists in any column of maf_df
+            matches = maf_df.apply(lambda r: metab in r.values, axis=1)
+            if matches.any():
+                filtered_metabolites.append(metab)
+        # Update the Metabolites column
+        row["Metabolites"] = "_AND_".join(filtered_metabolites)
+
+        # Collect MNM_IDs for filtered metabolites
+        ids_to_add = []
+        for metab in filtered_metabolites:
+            matches = maf_df.apply(lambda r: metab in r.values, axis=1)
+            for idx in maf_df[matches].index:
+                mnm_id_val = str(maf_df.at[idx, MNM_ID_col])
+                if mnm_id_val not in ids_to_add:
+                    ids_to_add.append(mnm_id_val)
+
+        # Update MNM_ID
+        current_val = row.get("MNM_ID", "").strip()
+        if current_val == "" or current_val.lower() == "nan":
+            row["MNM_ID"] = "_AND_".join(ids_to_add)
+        else:
+            current_list = [x.strip() for x in current_val.split("_AND_")]
+            for new_id in ids_to_add:
+                if new_id not in current_list:
+                    current_list.append(new_id)
+            row["MNM_ID"] = "_AND_".join(current_list)
+
+        # Update Partial match if multiple IDs
+        mnm_ids = row["MNM_ID"].split("_AND_")
+        if len(mnm_ids) > 1:
+            row["Partial match"] = "_AND_".join(mnm_ids)
+
+        # Ensure MNM_ID is first key
+        new_row = {"MNM_ID": row["MNM_ID"]}
+        for k, v in row.items():
+            if k != "MNM_ID":
+                new_row[k] = v
+
+        results_with_ids.append(new_row)
+
+    return results_with_ids
+
+
 # ----------------------------------------------------#
 #             UTILS -> Search management             #
 # ----------------------------------------------------#
