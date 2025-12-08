@@ -415,6 +415,7 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
     for k in keys:
         maf_dictionnary[k] = []
 
+    mnm_counter = 1  # global counter
     # Loop over MAF file paths
     for path_maf in List_MAF_paths:
         try:
@@ -422,8 +423,40 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
         except Exception as e:
             logger.critical(f"/!\\ Failed to read MAF file {path_maf}: {e}")
             sys.exit(1)
+
         # Read and concatenate all files
         df.columns = df.columns.str.upper()
+
+        # Generate MNM_IDs continuously across files
+        num_rows = len(df)
+        mnm_ids = ["MNM" + str(i) for i in range(mnm_counter, mnm_counter + num_rows)]
+        df.insert(0, "MNM_ID", mnm_ids)
+
+        # Update counter for the next file
+        mnm_counter += num_rows
+
+        #Copy to not impact the run with int conversion
+        df_copy = df.copy()
+        # Fix floats formatted as strings with trailing '.0' (e.g., '123456.0' → '123456')
+        for col in ["CHEBI", "PUBCHEM"]:
+            if col in df_copy.columns:
+                # Convert entire column to string
+                df_copy[col] = df_copy[col].astype(str)
+                # Remove trailing '.0' if present
+                df_copy[col] = df_copy[col].str.replace(r'\.0$', '', regex=True)
+                 # replace NaN with empty string
+                df_copy[col] = df_copy[col].replace("nan", "", regex=False) # replace NaN with empty string
+
+        path_maf_name = os.path.basename(path_maf)
+        full_path = os.path.join(output_folder, "MNM_mafs")
+        os.makedirs(full_path, exist_ok=True)
+        utils.write_tsv(
+            df_copy,
+            full_path,
+            f"MNM_{path_maf_name}.tsv",
+            keys_reorder=False,
+            quiet=True
+        )
         df_list.append(df)
         
         ##### Check if at least on column name fit with maf file
@@ -500,16 +533,7 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
 
     # Merge all DataFrames and remove duplicates
     merged_df = pd.concat(df_list, ignore_index=True, sort=False)
-    merged_df.insert(0, "MNM_ID", ["MNM" + str(i) for i in range(1, len(merged_df)+1)])
-
-    # path_maf_name = os.path.basename(path_maf)
-    utils.write_tsv(merged_df,
-                output_folder,
-                f"MNM_metabolomic_data.tsv",
-                keys_reorder=False,
-                quiet= True
-            )  # Write the update maf
-
+    
     # Remove duplicates
     maf_merged_df = merged_df.drop_duplicates()
     maf_merged_df.columns = maf_merged_df.columns.str.upper() 
@@ -1226,6 +1250,7 @@ def match_met_sbml(
                 f'with the ID "{id_unique}" via "{column_name}"'
             )
         dic_temp["Match in metabolic networks"] = list(set(temp_list))
+        # dic_temp["Match IDS in metabolic networks"] = id_unique_sbml
     else:
         # CLASSIC MODE — only store ID
         if len(id_unique_sbml) > 1:
@@ -1355,7 +1380,9 @@ def match_db_sbml(
                     if sub_results_dic.get("Match in metabolic networks"):
                         sub_results_dic["Match in metabolic networks"] = list(dict.fromkeys(sub_results_dic["Match in metabolic networks"] + flat_list))
                     else:
-                        sub_results_dic["Match in metabolic networks"] =  flat_list 
+                        sub_results_dic["Match in metabolic networks"] =  flat_list
+                    # if sub_results_dic.get("Match IDS in metabolic networks"):
+                    #     sub_results_dic["Match in metabolic networks"].append(id_unique)
             else:
                 # CLASSIC MODE — only store ID
                 if sub_results_dic.get("Match in metabolic networks"):
@@ -1963,7 +1990,7 @@ def mapping_run(
 
     dic_tsv_results= utils.assign_mnm_ids(dic_tsv_results,maf_df)
     keys_reorder.insert(0, 'MNM_ID')
-    
+
          #-----------------------------#
     #    #   Results User Interface    #
     #    #-----------------------------#
