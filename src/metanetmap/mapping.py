@@ -1250,7 +1250,7 @@ def match_met_sbml(
                 f'with the ID "{id_unique}" via "{column_name}"'
             )
         dic_temp["Match in metabolic networks"] = list(set(temp_list))
-        # dic_temp["Match IDS in metabolic networks"] = id_unique_sbml
+        dic_temp["Match IDS in metabolic networks"] = id_unique_sbml
     else:
         # CLASSIC MODE — only store ID
         if len(id_unique_sbml) > 1:
@@ -1381,8 +1381,10 @@ def match_db_sbml(
                         sub_results_dic["Match in metabolic networks"] = list(dict.fromkeys(sub_results_dic["Match in metabolic networks"] + flat_list))
                     else:
                         sub_results_dic["Match in metabolic networks"] =  flat_list
-                    # if sub_results_dic.get("Match IDS in metabolic networks"):
-                    #     sub_results_dic["Match in metabolic networks"].append(id_unique)
+                    if sub_results_dic.get("Match IDS in metabolic networks"):
+                        sub_results_dic["Match IDS in metabolic networks"].append(id_unique)
+                    else:
+                        sub_results_dic["Match IDS in metabolic networks"]= [id_unique]
             else:
                 # CLASSIC MODE — only store ID
                 if sub_results_dic.get("Match in metabolic networks"):
@@ -1534,6 +1536,9 @@ def partial_match_met_sbml(
             sbml_name = utils.find_key_by_list_value(dic_couple_sbml, id_unique)
             temp_list.append(sbml_name)
         dic_temp["Match in metabolic networks"] = list(set(temp_list))
+        print(sbml_name)
+        if temp_list:
+            dic_temp["Match IDS in metabolic networks"] = id_unique_sbml
     else:
         dic_temp["Match in metabolic networks"] = id_unique_sbml
         dic_temp[f"Match via {column_name}"] = "YES"
@@ -1715,6 +1720,8 @@ def mapping_run(
     # Groups similar dictionaries based on shared values in key fields, then merges
     # them.
     dic_tsv_results = utils.smart_merge(dic_tsv_results)
+
+    # Partial subhandling 
     if choice != "community":
         for dic in dic_tsv_results:
             if dic.get("Match in metabolic networks"):
@@ -1736,6 +1743,33 @@ def mapping_run(
                     f'--Partial match. We have match for '
                     f'more than one id in metabolic network: "{dic["Match in metabolic networks"]}"'
         )
+    else:
+        for dic in dic_tsv_results:
+            if dic.get("Match in metabolic networks") and len(dic["Match in metabolic networks"]) == 1:
+                match_ids = dic.get("Match IDS in metabolic networks", "")
+                # Only process if multiple IDs are present
+                if " _AND_ " in match_ids:
+                    if dic.get("Partial match"):
+                        # Use sets to avoid duplicates
+                        existing = set(x.strip() for x in dic["Partial match"].split(" _AND_ "))
+                        incoming = set(x.strip() for x in match_ids.split(" _AND_ "))
+                        updated = existing | incoming   # union = merge without duplicates
+                        dic["Partial match"] = " _AND_ ".join(sorted(updated))
+                        logger.info(
+                            f'--Partial match updated with multiple IDs from "Match IDS in metabolic networks": "{dic["Partial match"]}"'
+                        )
+                        print(dic["Partial match"])
+
+                    else:
+                        # No existing Partial match → initialize it
+                        dic["Partial match"] = match_ids
+                        print(dic["Partial match"])
+
+                        logger.info(
+                            f'--Partial match set to IDs from "Match IDS in metabolic networks": "{match_ids}"'
+                        )
+
+                    
 
     if partial_match:
         logger.info("\n\n------------------------------------------------")
@@ -1977,13 +2011,21 @@ def mapping_run(
     unmatch_metabolites_merged = utils.extract_metabolite_combinations(
         unmatch_metabolites_total, maf_df
     )
-
-    keys_starter = [
-        "Metabolites",
-        "Match in database",
-        "Match in metabolic networks",
-        "Partial match",
-    ]
+    if choice == "community":
+        keys_starter = [
+            "Metabolites",
+            "Match in database",
+            "Match in metabolic networks",
+            "Match IDS in metabolic networks",
+            "Partial match",
+        ]
+    else:
+                keys_starter = [
+            "Metabolites",
+            "Match in database",
+            "Match in metabolic networks",
+            "Partial match",
+        ]
     dic_tsv_results, keys_reorder = setup_harmonisation_output(
         dic_tsv_results, keys_starter, unmatch_metabolites_merged, keys
     )

@@ -100,7 +100,8 @@ Details on input files for mapping mode
          </listOfCompartments>
   
          <listOfSpecies>
-           <species id="glucose_c" name="Glucose" compartment="cytosol" initialAmount="1.0" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
+           <species id="glucose_c" name="Glucose" compartment="cytosol" initialAmount="1.0" 
+           hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false">
              <annotation>
                <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
                  <rdf:Description rdf:about="#glucose_c">
