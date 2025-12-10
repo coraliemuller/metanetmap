@@ -808,7 +808,7 @@ def analyze_column_matches(dict_list, col_db, col_net, col_partial=None):
 #         if "MNM_ID" not in row:
 #             row["MNM_ID"] = ""
 
-#         metabolites = str(row.get("Metabolites", "")).split("_AND_")
+#         metabolites = str(row.get("Metabolites in mafs", "")).split("_AND_")
 #         metabolites = [m.strip() for m in metabolites]
 
 #         ids_to_add = []
@@ -854,7 +854,7 @@ def assign_mnm_ids(tsv_results, maf_df):
             row["MNM_ID"] = ""
 
         # Split and strip metabolites
-        metabolites = str(row.get("Metabolites", "")).split(" _AND_ ")
+        metabolites = str(row.get("Metabolites in mafs", "")).split(" _AND_ ")
         metabolites = [m.strip() for m in metabolites]
 
         # Filter metabolites that exist in maf_df
@@ -865,7 +865,7 @@ def assign_mnm_ids(tsv_results, maf_df):
             if matches.any():
                 filtered_metabolites.append(metab)
         # Update the Metabolites column
-        row["Metabolites"] = " _AND_ ".join(filtered_metabolites)
+        row["Metabolites in mafs"] = " _AND_ ".join(filtered_metabolites)
 
         # Collect MNM_IDs for filtered metabolites
         ids_to_add = []
@@ -983,7 +983,7 @@ def find_dict_by_metabolite(dic_tsv_results: list, met: str):
     """
     for dic in dic_tsv_results:
         # Check if 'Metabolites' key exists and equals met
-        if "Metabolites" in dic and dic["Metabolites"] == met:
+        if "Metabolites in mafs" in dic and dic["Metabolites in mafs"] == met:
             return dic
     return None
 
@@ -1046,7 +1046,7 @@ def find_matching_dict(dic_tsv_results: list, target: str):
 
     for entry in dic_tsv_results:
         # Get the 'Metabolites' value and handle missing or non-string cases
-        raw_value = entry.get("Metabolites")
+        raw_value = entry.get("Metabolites in mafs")
         if not isinstance(raw_value, str):
             continue
 
@@ -1080,7 +1080,7 @@ def find_matching_dict_all_key(dic_tsv_results: list, target: str):
         is found.
     """
     target = target.strip().lower()
-    keys_to_check = ["Metabolites", "Match in database", "Partial match"]
+    keys_to_check = ["Metabolites in mafs", "Match in database", "Partial match"]
 
     for entry in dic_tsv_results:
         for key in keys_to_check:
@@ -1460,12 +1460,12 @@ def merge_dict_group(dicts):
     all_metabolites = set()
 
     for d in dicts:
-        metab = d.get("Metabolites")
+        metab = d.get("Metabolites in mafs")
         if metab:
             all_metabolites.update(split_and_clean(metab))
 
         for key in keys:
-            if key == "Metabolites":
+            if key == "Metabolites in mafs":
                 continue
             val = d.get(key)
             if isinstance(val, list):
@@ -1474,7 +1474,7 @@ def merge_dict_group(dicts):
                 all_values_by_key[key].update(split_and_clean(val))
 
     if all_metabolites:
-        merged["Metabolites"] = " _AND_ ".join(sorted(all_metabolites))
+        merged["Metabolites in mafs"] = " _AND_ ".join(sorted(all_metabolites))
 
     for key, values in all_values_by_key.items():
         if key == "Match in metabolic networks":
@@ -1499,7 +1499,7 @@ def smart_merge(dict_list):
         merged_results (list of dict): Merged dictionaries, where
         similar entries are combined into one.
     """
-    keys_to_compare = ["Metabolites", "Match in database", "Partial match"]
+    keys_to_compare = ["Metabolites in mafs", "Match in database", "Partial match"]
     graph = build_similarity_graph(dict_list, keys_to_compare)
     components = get_connected_components(graph, len(dict_list))
 
@@ -1561,7 +1561,7 @@ def merge_metabolites(data):
     # Step 1: Parse and prepare sets for IDs, metabolites, and partial matches for each row
     for row in data:
         row["_ids"] = set(split_ids(row.get("Match IDS in metabolic networks", "")))
-        row["_metabs"] = split_ids(row.get("Metabolites", ""))
+        row["_metabs"] = split_ids(row.get("Metabolites in mafs", ""))
         row["_partial"] = set(split_ids(row.get("Partial match", "")))
 
     clusters = []
@@ -1613,11 +1613,11 @@ def merge_metabolites(data):
 
         # Step 4: Copy all columns except the ones merged from the first row in the cluster
         for k, v in first_row.items():
-            if k not in ["Metabolites", "Match IDS in metabolic networks", "Partial match", "_ids", "_metabs", "_partial"]:
+            if k not in ["Metabolites in mafs", "Match IDS in metabolic networks", "Partial match", "_ids", "_metabs", "_partial"]:
                 merged_row[k] = v
 
         # Step 5: Create merged columns by joining unique values with '_AND_'
-        merged_row["Metabolites"] = " _AND_ ".join(sorted(set(merged_metabs)))
+        merged_row["Metabolites in mafs"] = " _AND_ ".join(sorted(set(merged_metabs)))
         merged_row["Match IDS in metabolic networks"] = " _AND_ ".join(sorted(set(merged_ids)))
         merged_row["Partial match"] = " _AND_ ".join(sorted(merged_partial))
 
