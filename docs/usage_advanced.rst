@@ -81,6 +81,8 @@ Two main types of ambiguities can be mentioned:
 - One metabolite of the metabolomic annotation profile maps to two distinct metabolites of the GSMN.
  
 - One metabolites of the metabolomic profiles map on two identifiers in the conversion datatable.
+
+- Two distinct metabolites of the metabolomic profiles map to the same metabolite of the GSMN.
   
 
 When multiple input metabolites correspond to the same unique identifier or vice versa this situation is flagged as an ambiguity and is automatically added to the *"Partial match"* column in the output.
