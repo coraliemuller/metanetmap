@@ -890,7 +890,11 @@ def assign_mnm_ids(tsv_results, maf_df):
         # Update Partial match if multiple IDs
         mnm_ids = row["MNM_ID"].split(" _AND_ ")
         if len(mnm_ids) > 1:
-            row["Partial match"] = " _AND_ ".join(mnm_ids)
+            partial_test = row["Partial match"].split(" _AND_ ")
+            if partial_test[0] == '':
+                row["Partial match"] = " _AND_ ".join(mnm_ids)
+            else:
+                row["Partial match"] = row["Partial match"] +" _AND_ " + " _AND_ ".join(mnm_ids)
 
         # Ensure MNM_ID is first key
         new_row = {"MNM_ID": row["MNM_ID"]}
@@ -901,6 +905,7 @@ def assign_mnm_ids(tsv_results, maf_df):
         results_with_ids.append(new_row)
 
     return results_with_ids
+
 
 
 # ----------------------------------------------------#
@@ -1512,3 +1517,122 @@ def smart_merge(dict_list):
             merged_results.append(dict_list[i])
 
     return merged_results
+
+
+
+
+# Community merge metabolites frome metabolic networks
+def split_ids(v):
+    """
+    Splits a string containing IDs separated by '_AND_' into a list of trimmed individual IDs.
+    
+    Parameters:
+        v (str or None): A string containing IDs separated by '_AND_' or None.
+    
+    Returns:
+        list: A list of individual ID strings with whitespace stripped.
+              Returns an empty list if input is None or empty.
+    """
+    if not v or v is None:
+        return []
+    return [x.strip() for x in v.split("_AND_")]
+
+def merge_metabolites(data):
+    """
+    Merges entries in a list of dictionaries representing metabolite data based on overlapping 'Match IDS in metabolic networks'.
+    The function combines rows that share any common metabolic network IDs, merging specific columns, and preserving others.
+    
+    Key Behaviors:
+    - 'Match IDS in metabolic networks' are split by '_AND_' and used to identify overlapping entries.
+    - Rows sharing at least one common ID are merged into one.
+    - 'Metabolites', 'Match IDS in metabolic networks', and 'Partial match' columns are merged by concatenating unique values joined with '_AND_'.
+    - Other columns are retained from the first row in each merged group.
+    - Rows without any 'Match IDS in metabolic networks' are left unchanged.
+    - Internal helper fields (_ids, _metabs, _partial) are used temporarily and removed from output.
+    
+    Parameters:
+        data (list of dict): Input data where each dict contains columns including 'Metabolites',
+                             'Match IDS in metabolic networks', and 'Partial match'.
+    
+    Returns:
+        list of dict: The merged list of dictionaries with combined rows as described.
+    """
+    
+    # Step 1: Parse and prepare sets for IDs, metabolites, and partial matches for each row
+    for row in data:
+        row["_ids"] = set(split_ids(row.get("Match IDS in metabolic networks", "")))
+        row["_metabs"] = split_ids(row.get("Metabolites", ""))
+        row["_partial"] = set(split_ids(row.get("Partial match", "")))
+
+    clusters = []
+
+    # Step 2: Build clusters of IDs that need to be merged
+    # Each cluster is a set of IDs that overlap with at least one other in the same cluster
+    for row in data:
+        ids = row["_ids"]
+        if not ids:
+            # Skip rows with empty IDs (they won't be merged)
+            continue
+
+        merged = False
+        # Check if current IDs intersect with any existing cluster
+        for group in clusters:
+            if ids & group:  # Non-empty intersection indicates overlap
+                group |= ids  # Merge sets by union
+                merged = True
+                break
+
+        # If no existing cluster matches, create a new cluster with these IDs
+        if not merged:
+            clusters.append(set(ids))
+
+    used = set()  # Keep track of indices of rows that were merged
+    out = []      # Output list of merged dictionaries
+
+    # Step 3: Merge rows for each cluster of overlapping IDs
+    for group in clusters:
+
+        merged_row = {}
+        merged_metabs = []
+        merged_ids = []
+        merged_partial = set()
+
+        first_row = None  # Keep track of the first row in the cluster to copy other columns
+
+        for i, row in enumerate(data):
+            # If row IDs overlap with cluster IDs, it belongs to this group
+            if row["_ids"] & group:
+                used.add(i)
+                if first_row is None:
+                    first_row = row.copy()  # Copy first matching row to preserve other columns
+                
+                # Collect metabolites, IDs, and partial matches for merging
+                merged_metabs.extend(row["_metabs"])
+                merged_ids.extend(row["_ids"])
+                merged_partial |= row["_partial"]
+
+        # Step 4: Copy all columns except the ones merged from the first row in the cluster
+        for k, v in first_row.items():
+            if k not in ["Metabolites", "Match IDS in metabolic networks", "Partial match", "_ids", "_metabs", "_partial"]:
+                merged_row[k] = v
+
+        # Step 5: Create merged columns by joining unique values with '_AND_'
+        merged_row["Metabolites"] = " _AND_ ".join(sorted(set(merged_metabs)))
+        merged_row["Match IDS in metabolic networks"] = " _AND_ ".join(sorted(set(merged_ids)))
+        merged_row["Partial match"] = " _AND_ ".join(sorted(merged_partial))
+
+        out.append(merged_row)
+
+    # Step 6: Add rows that had no overlapping IDs (not merged) unchanged, 
+    # after cleaning up the temporary helper fields
+    for i, row in enumerate(data):
+        if i not in used:
+            clean = row.copy()
+            clean["Partial match"] = clean.get("Partial match", "")
+            # Remove internal helper fields before output
+            del clean["_ids"]
+            del clean["_metabs"]
+            del clean["_partial"]
+            out.append(clean)
+
+    return out

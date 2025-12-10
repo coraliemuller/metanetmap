@@ -1536,7 +1536,6 @@ def partial_match_met_sbml(
             sbml_name = utils.find_key_by_list_value(dic_couple_sbml, id_unique)
             temp_list.append(sbml_name)
         dic_temp["Match in metabolic networks"] = list(set(temp_list))
-        print(sbml_name)
         if temp_list:
             dic_temp["Match IDS in metabolic networks"] = id_unique_sbml
     else:
@@ -1758,12 +1757,10 @@ def mapping_run(
                         logger.info(
                             f'--Partial match updated with multiple IDs from "Match IDS in metabolic networks": "{dic["Partial match"]}"'
                         )
-                        print(dic["Partial match"])
 
                     else:
                         # No existing Partial match → initialize it
                         dic["Partial match"] = match_ids
-                        print(dic["Partial match"])
 
                         logger.info(
                             f'--Partial match set to IDs from "Match IDS in metabolic networks": "{match_ids}"'
@@ -2030,8 +2027,13 @@ def mapping_run(
         dic_tsv_results, keys_starter, unmatch_metabolites_merged, keys
     )
 
+    if choice == 'community':
+        dic_tsv_results=utils.merge_metabolites(dic_tsv_results)
+
     dic_tsv_results= utils.assign_mnm_ids(dic_tsv_results,maf_df)
     keys_reorder.insert(0, 'MNM_ID')
+
+
 
          #-----------------------------#
     #    #   Results User Interface    #

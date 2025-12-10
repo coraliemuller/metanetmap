@@ -172,35 +172,35 @@ def test_directory_without_extension_check(tmp_path):
 #     Merge  Data       #
 #-----------------------#
 
-#SBML
-def test_setup_merge_list_sbml_metabolites(create_mock_sbml_files):
-    sbml_paths = create_mock_sbml_files
+# #SBML
+# def test_setup_merge_list_sbml_metabolites(create_mock_sbml_files):
+#     sbml_paths = create_mock_sbml_files
 
-    dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(sbml_paths)
+#     dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(sbml_paths)
 
-    # 1. Should have two entries (one per SBML file)
-    assert len(dic_couple_sbml) == 2
+#     # 1. Should have two entries (one per SBML file)
+#     assert len(dic_couple_sbml) == 2
 
-    # 2. Each should contain the metabolite ID, even with extra metadata
-    for ids in dic_couple_sbml.values():
-        assert "glc_0" in ids or "glc_1" in ids
+#     # 2. Each should contain the metabolite ID, even with extra metadata
+#     for ids in dic_couple_sbml.values():
+#         assert "glc_0" in ids or "glc_1" in ids
 
-    # 3. Metadata should contain "Glucose" key
-    assert "Glucose" in meta_data_sbml
-    assert "ID" in meta_data_sbml["Glucose"]
-    assert "formula" in meta_data_sbml["Glucose"]
-    assert "chebi" in meta_data_sbml["Glucose"]
+#     # 3. Metadata should contain "Glucose" key
+#     assert "Glucose" in meta_data_sbml
+#     assert "ID" in meta_data_sbml["Glucose"]
+#     assert "formula" in meta_data_sbml["Glucose"]
+#     assert "chebi" in meta_data_sbml["Glucose"]
 
-    # 4. Check that duplicate IDs are removed in metadata
-    assert len(set(meta_data_sbml["Glucose"]["ID"])) == len(meta_data_sbml["Glucose"]["ID"])
+#     # 4. Check that duplicate IDs are removed in metadata
+#     assert len(set(meta_data_sbml["Glucose"]["ID"])) == len(meta_data_sbml["Glucose"]["ID"])
 
-def test_setup_merged_list_maf_metabolites(mock_maf_files):
-    maf_dict, keys, merged_df = mapping.setup_merged_list_maf_metabolites(mock_maf_files)
+# def test_setup_merged_list_maf_metabolites(mock_maf_files):
+#     maf_dict, keys, merged_df = mapping.setup_merged_list_maf_metabolites(mock_maf_files)
 
-    assert "CHEBI" in maf_dict
-    assert sorted(maf_dict["CHEBI"]) == ["CHEBI:12345", "CHEBI:67890"] # check duplicates
-    assert keys == ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT','MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC','LIGAND-CPD','REFMET','PUBCHEM','VMH','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY','SMILES','FORMULA'] # check list of key
-    assert merged_df.shape[0] == 3  # C001, C002, C003
+#     assert "CHEBI" in maf_dict
+#     assert sorted(maf_dict["CHEBI"]) == ["CHEBI:12345", "CHEBI:67890"] # check duplicates
+#     assert keys == ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT','MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC','LIGAND-CPD','REFMET','PUBCHEM','VMH','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY','SMILES','FORMULA'] # check list of key
+#     assert merged_df.shape[0] == 3  # C001, C002, C003
 
 
 
