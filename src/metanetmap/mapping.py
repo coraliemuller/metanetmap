@@ -453,7 +453,7 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
         utils.write_tsv(
             df_copy,
             full_path,
-            f"MNM_{path_maf_name}.tsv",
+            f"MNM_{path_maf_name}",
             keys_reorder=False,
             quiet=True
         )

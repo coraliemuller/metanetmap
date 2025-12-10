@@ -709,3 +709,106 @@ def test_smart_merge_no_overlap_returns_same():
     ]
     merged = utils.smart_merge(dicts)
     assert merged == dicts
+
+
+############################
+#     Assign MNM_ID        #
+############################
+
+
+@pytest.fixture
+def mock_maf_df():
+    """Create a mock maf_df DataFrame with MNM_IDs for testing."""
+    return pd.DataFrame({
+        "MNM_ID": ["MNM1", "MNM2", "MNM3"],
+        "CHEBI": ["CHEBI:12345", "CHEBI:67890", "CHEBI:11111"],
+        "UNIQUE-ID": ["C001", "C002", "C003"],
+        "COMMON-NAME": ["Glucose", "Methionine", "Adenine"]
+    })
+
+@pytest.fixture
+def mock_tsv_results():
+    """Create a mock list of dictionaries as input for assign_mnm_ids."""
+    return [
+        {"Metabolites": "CHEBI:12345 _AND_ Glucose", "Partial match": ""},
+        {"Metabolites": "Methionine", "Partial match": "MNM2"},
+        {"Metabolites": "CHEBI:11111", "Partial match": ""}
+    ]
+
+def test_assign_mnm_ids(mock_tsv_results, mock_maf_df):
+    """Test assign_mnm_ids correctly updates MNM_ID and Partial match."""
+
+    results = utils.assign_mnm_ids(mock_tsv_results, mock_maf_df)
+
+    # Check MNM_ID column exists in all rows
+    for row in results:
+        assert "MNM_ID" in row
+        assert row["MNM_ID"] != "", f"MNM_ID is empty for row {row}"
+
+    # Check first row MNM_ID and Partial match
+    row1 = results[0]
+    assert row1["MNM_ID"] == "MNM1", f"Unexpected MNM_ID: {row1['MNM_ID']}"
+    assert row1["Partial match"] == "", "Partial match should remain empty if only one MNM_ID"
+
+    # Check second row merges Partial match
+    row2 = results[1]
+    # Original partial was "MNM2" and metabolite matches MNM2 -> should merge
+    assert row2["MNM_ID"] == "MNM2", f"Unexpected MNM_ID: {row2['MNM_ID']}"
+    assert "MNM2" in row2["Partial match"], f"Partial match missing MNM2: {row2['Partial match']}"
+
+    # Check third row MNM_ID
+    row3 = results[2]
+    assert row3["MNM_ID"] == "MNM3"
+    assert row3["Partial match"] == "", "Partial match should remain empty for single MNM_ID"
+
+
+
+#############################################
+#    Merge community ID from network        #
+#############################################
+
+def test_merge_metabolites_detailed():
+    # Input mock data
+    data = [
+        {
+            "Metabolites": "A _AND_ B",
+            "Match IDS in metabolic networks": "id1",
+            "Partial match": ""
+        },
+        {
+            "Metabolites": "B _AND_ C",
+            "Match IDS in metabolic networks": "id1 _AND_ id2",
+            "Partial match": "partial1"
+        },
+        {
+            "Metabolites": "D",
+            "Match IDS in metabolic networks": "",
+            "Partial match": ""
+        }
+    ]
+
+    # Run merge function
+    merged = utils.merge_metabolites(data)
+
+    # Expect 2 rows: one merged, one unchanged
+    assert len(merged) == 2
+
+    # Find merged row
+    merged_row = next(r for r in merged if r["Match IDS in metabolic networks"])
+    # Check that IDs are merged correctly
+    ids_set = set(merged_row["Match IDS in metabolic networks"].split(" _AND_ "))
+    assert ids_set == {"id1", "id2"}
+
+    # Check that metabolites are merged and unique
+    metab_set = set(merged_row["Metabolites"].split(" _AND_ "))
+    assert metab_set == {"A", "B", "C"}
+
+    # Check that Partial match merges old and new
+    partial_set = set(merged_row["Partial match"].split(" _AND_ "))
+    # Should include original partial1 plus id1/id2
+    assert partial_set == {"partial1"}
+
+    # Check that the row without IDs remains unchanged
+    row_no_ids = next(r for r in merged if r["Match IDS in metabolic networks"] == "")
+    assert row_no_ids["Metabolites"] == "D"
+    assert row_no_ids["Partial match"] == ""
