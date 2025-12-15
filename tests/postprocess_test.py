@@ -29,10 +29,10 @@ DATATABLE_CONVERSION = path.join(TEST_TOYS_DIR,'src/metanetmap/toys_tests_data/c
 def test_setup_harmonisation_output_basic():
     # Input data
     dic_tsv_results = [
-        {'Metabolites': 'glucose', 'UNIQUE-ID': "GLUCOSE"},
-        {'Metabolites': 'fructose', 'UNIQUE-ID': "FRUCTOSE"}
+        {"Metabolites in mafs": 'glucose', 'UNIQUE-ID': "GLUCOSE"},
+        {"Metabolites in mafs": 'fructose', 'UNIQUE-ID': "FRUCTOSE"}
     ]
-    keys_starter = ['Metabolites', 'UNIQUE-ID']
+    keys_starter = ["Metabolites in mafs", 'UNIQUE-ID']
     unmatch_metabolites_total = ['sucrose', 'maltose']
     keys = ['COMMON-NAME', 'SMILE']
 
@@ -41,17 +41,17 @@ def test_setup_harmonisation_output_basic():
         dic_tsv_results.copy(), keys_starter, unmatch_metabolites_total, keys
     )
 
-    # Expected unmatched entries added with empty fields except 'Metabolites'
+    # Expected unmatched entries added with empty fields except "Metabolites in mafs"
     expected_unmatched_entries = [
-        {'Metabolites': 'sucrose', 'UNIQUE-ID': '', 'Match via COMMON-NAME': '','Match via SMILE': ''},
-        {'Metabolites': 'maltose', 'UNIQUE-ID': '',  'Match via COMMON-NAME': '','Match via SMILE': ''}
+        {"Metabolites in mafs": 'sucrose', 'UNIQUE-ID': '', 'Match via COMMON-NAME': '','Match via SMILE': ''},
+        {"Metabolites in mafs": 'maltose', 'UNIQUE-ID': '',  'Match via COMMON-NAME': '','Match via SMILE': ''}
     ]
 
     expected_comlpleted_entries = [
-        {'Metabolites': 'glucose', 'UNIQUE-ID': "GLUCOSE",'Match via COMMON-NAME': '','Match via SMILE': ''},
-        {'Metabolites': 'fructose', 'UNIQUE-ID': "FRUCTOSE",'Match via COMMON-NAME': '','Match via SMILE': ''},
-        {'Metabolites': 'sucrose', 'UNIQUE-ID': '', 'Match via COMMON-NAME': '','Match via SMILE': ''},
-        {'Metabolites': 'maltose', 'UNIQUE-ID': '',  'Match via COMMON-NAME': '','Match via SMILE': ''}
+        {"Metabolites in mafs": 'glucose', 'UNIQUE-ID': "GLUCOSE",'Match via COMMON-NAME': '','Match via SMILE': ''},
+        {"Metabolites in mafs": 'fructose', 'UNIQUE-ID': "FRUCTOSE",'Match via COMMON-NAME': '','Match via SMILE': ''},
+        {"Metabolites in mafs": 'sucrose', 'UNIQUE-ID': '', 'Match via COMMON-NAME': '','Match via SMILE': ''},
+        {"Metabolites in mafs": 'maltose', 'UNIQUE-ID': '',  'Match via COMMON-NAME': '','Match via SMILE': ''}
     ]
 
     # Check unmatched entries appended

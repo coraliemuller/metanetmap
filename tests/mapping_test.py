@@ -44,10 +44,10 @@ START_TIME = "XXXX-XX-XX_XX_XX_48"
 TIMESTAMP= "1694872984.472839"
 
 #Expected final files
-EXPECTED_FILE_COMMUNITY= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_2025-10-27_15_51_33.tsv") 
-EXPECTED_FILE_COMMUNITY_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_partial_match_2025-10-27_15_55_35.tsv") 
-EXPECTED_FILE_CLASSIC= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_2025-10-27_15_35_48.tsv") 
-EXPECTED_FILE_CLASSIC_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_partial_match_2025-10-27_15_36_16.tsv") 
+EXPECTED_FILE_COMMUNITY= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_2025-12-10_10_03_46.tsv") 
+EXPECTED_FILE_COMMUNITY_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/community_mapping_results_partial_match_2025-12-10_10_03_37.tsv") 
+EXPECTED_FILE_CLASSIC= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_2025-12-10_10_03_28.tsv") 
+EXPECTED_FILE_CLASSIC_PARTIAL= path.join(TEST_EXPECTED_DIR,"expected_results/t2mapping_results_partial_match_2025-12-10_10_03_32.tsv") 
 
 #Output:
 OUTPUT_FILENAME_CLASSIC = f"mapping_results_{START_TIME}.tsv"
@@ -93,9 +93,9 @@ def test_mapping_run_vs_expected_classic(tmp_path):
 
     # 2. Load input data
     dictionary_db = mapping.load_database(DATATABLE_CONVERSION)
-    List_MAF_paths = mapping.set_list_paths(MAF_DIR_INPUT, [], ext1=None, ext2=None)
+    List_MAF_paths = [MAF_DIR_TOYS1, MAF_DIR_TOYS2, MAF_DIR_TOYS3]
     List_SBML_paths = mapping.set_list_paths(SBML_FILE_INPUT, [], '.sbml', '.xml')
-    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths)
+    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
     dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)
 
     
@@ -136,9 +136,9 @@ def test_mapping_run_vs_expected_classic_partial(tmp_path):
 
     # 2. Load input data
     dictionary_db = mapping.load_database(DATATABLE_CONVERSION)
-    List_MAF_paths = mapping.set_list_paths(MAF_DIR_INPUT, [], ext1=None, ext2=None)
+    List_MAF_paths = [MAF_DIR_TOYS1, MAF_DIR_TOYS2, MAF_DIR_TOYS3]
     List_SBML_paths = mapping.set_list_paths(SBML_FILE_INPUT, [], '.sbml', '.xml')
-    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths)
+    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
     dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)
 
     # 3. Run the mapping
@@ -182,7 +182,7 @@ def test_mapping_run_vs_expected_community(tmp_path):
     # List_SBML_paths = mapping.set_list_paths(SBML_DIR_INPUT, [], '.sbml', '.xml')
     List_MAF_paths = [MAF_DIR_TOYS1, MAF_DIR_TOYS3, MAF_DIR_TOYS2]
     List_SBML_paths = [SBML_DIR_TOYS1, SBML_DIR_TOYS3, SBML_DIR_TOYS2]
-    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths)
+    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
     dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)
 
     # 3. Run the mapping
@@ -224,7 +224,7 @@ def test_mapping_run_vs_expected_community_partial(tmp_path):
     # List_SBML_paths = mapping.set_list_paths(SBML_DIR_INPUT, [], '.sbml', '.xml')
     List_MAF_paths = [MAF_DIR_TOYS1, MAF_DIR_TOYS3, MAF_DIR_TOYS2]
     List_SBML_paths = [SBML_DIR_TOYS1, SBML_DIR_TOYS3, SBML_DIR_TOYS2]
-    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths)
+    maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
     dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)
 
     # 3. Run the mapping

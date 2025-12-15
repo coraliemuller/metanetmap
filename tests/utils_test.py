@@ -249,27 +249,27 @@ def test_empty_data():
 
 def test_find_dict_by_metabolite():
     data = [
-        {'Metabolites': 'glucose', 'Match in database': 'GLC'},
-        {'Metabolites': 'fructose', 'Match in database': 'FRC'},
-        {'Metabolites': 'sucrose', 'Match in database': 'SRC'},
+        {"Metabolites in mafs": 'glucose', 'Match in database': 'GLC'},
+        {"Metabolites in mafs": 'fructose', 'Match in database': 'FRC'},
+        {"Metabolites in mafs": 'sucrose', 'Match in database': 'SRC'},
     ]
 
     # Test exact match
-    assert utils.find_dict_by_metabolite(data, 'fructose') == {'Metabolites': 'fructose', 'Match in database': 'FRC'}
+    assert utils.find_dict_by_metabolite(data, 'fructose') == {"Metabolites in mafs": 'fructose', 'Match in database': 'FRC'}
 
     # Test no match returns None
     assert utils.find_dict_by_metabolite(data, 'maltose') is None
 
     # Test it returns the first match only
-    data.append({'Metabolites': 'fructose', 'Match in database': 'FRC2'})
-    assert utils.find_dict_by_metabolite(data, 'fructose') == {'Metabolites': 'fructose', 'Match in database': 'FRC'}
+    data.append({"Metabolites in mafs": 'fructose', 'Match in database': 'FRC2'})
+    assert utils.find_dict_by_metabolite(data, 'fructose') == {"Metabolites in mafs": 'fructose', 'Match in database': 'FRC'}
 
-    # Test when 'Metabolites' key is missing in some dicts
+    # Test when "Metabolites in mafs" key is missing in some dicts
     data_with_missing = [
         {'Name': 'glucose'},
-        {'Metabolites': 'fructose', 'Match in database': 'FRC'}
+        {"Metabolites in mafs": 'fructose', 'Match in database': 'FRC'}
     ]
-    assert utils.find_dict_by_metabolite(data_with_missing, 'fructose') == {'Metabolites': 'fructose', 'Match in database': 'FRC'}
+    assert utils.find_dict_by_metabolite(data_with_missing, 'fructose') == {"Metabolites in mafs": 'fructose', 'Match in database': 'FRC'}
     assert utils.find_dict_by_metabolite(data_with_missing, 'glucose') is None
 
 
@@ -299,30 +299,30 @@ def test_find_keys_with_value_in_dict():
 
 def test_find_matching_dict():
     data = [
-        {'Metabolites': 'glucose'},
-        {'Metabolites': 'fructose _AND_ sucrose'},
-        {'Metabolites': 'ATP _AND_ NADH'},
-        {'Metabolites': None},  # non-string case
+        {"Metabolites in mafs": 'glucose'},
+        {"Metabolites in mafs": 'fructose _AND_ sucrose'},
+        {"Metabolites in mafs": 'ATP _AND_ NADH'},
+        {"Metabolites in mafs": None},  # non-string case
         {'noMetabolites': 'xyz'},  # missing key case
     ]
 
     # Exact single metabolite match, case-insensitive
-    assert utils.find_matching_dict(data, 'Glucose') == {'Metabolites': 'glucose'}
+    assert utils.find_matching_dict(data, 'Glucose') == {"Metabolites in mafs": 'glucose'}
 
     # Compound metabolites - find sucrose (second in list)
-    assert utils.find_matching_dict(data, 'Sucrose') == {'Metabolites': 'fructose _AND_ sucrose'}
+    assert utils.find_matching_dict(data, 'Sucrose') == {"Metabolites in mafs": 'fructose _AND_ sucrose'}
 
     # Compound metabolites - find ATP (first in list)
-    assert utils.find_matching_dict(data, 'atp') == {'Metabolites': 'ATP _AND_ NADH'}
+    assert utils.find_matching_dict(data, 'atp') == {"Metabolites in mafs": 'ATP _AND_ NADH'}
 
-    # Non-string 'Metabolites' value should be skipped
+    # Non-string "Metabolites in mafs" value should be skipped
     assert utils.find_matching_dict(data, 'xyz') is None
 
-    # Missing 'Metabolites' key should be skipped
+    # Missing "Metabolites in mafs" key should be skipped
     assert utils.find_matching_dict(data, 'anything') is None
 
     # Target with extra whitespace
-    assert utils.find_matching_dict(data, '  fructose  ') == {'Metabolites': 'fructose _AND_ sucrose'}
+    assert utils.find_matching_dict(data, '  fructose  ') == {"Metabolites in mafs": 'fructose _AND_ sucrose'}
 
 
 
@@ -332,10 +332,10 @@ def test_find_matching_dict():
 @pytest.fixture
 def sample_data():
     return [
-        {'Metabolites': 'ADENINE _AND_ Guanine', 'Match in database': 'YES', 'Partial match': ''},
-        {'Metabolites': 'Thymine', 'Match in database': 'NO', 'Partial match': ''},
-        {'Metabolites': 'Uracil', 'Match in database': '', 'Partial match': 'Cytosine _AND_ uracil'},
-        {'Match in database': 'YES'},  # No 'Metabolites' or 'Partial match'
+        {"Metabolites in mafs": 'ADENINE _AND_ Guanine', 'Match in database': 'YES', 'Partial match': ''},
+        {"Metabolites in mafs": 'Thymine', 'Match in database': 'NO', 'Partial match': ''},
+        {"Metabolites in mafs": 'Uracil', 'Match in database': '', 'Partial match': 'Cytosine _AND_ uracil'},
+        {'Match in database': 'YES'},  # No "Metabolites in mafs" or 'Partial match'
     ]
 
 def test_match_found_in_metabolites(sample_data):
@@ -404,22 +404,22 @@ def test_no_match(sample_data2):
 @pytest.fixture
 def sample_data3():
     return [
-        {'Metabolites': 'ADENINE _AND_ Guanine', 'Match in database': 'YES', 'Partial match': ''},
-        {'Metabolites': 'Thymine', 'Match in database': 'NO', 'Partial match': ''},
-        {'Metabolites': 'Uracil', 'Match in database': '', 'Partial match': 'Cytosine _AND_ uracil'},
-        {'Match in database': 'YES'},  # Missing 'Metabolites' and 'Partial match'
+        {"Metabolites in mafs": 'ADENINE _AND_ Guanine', 'Match in database': 'YES', 'Partial match': ''},
+        {"Metabolites in mafs": 'Thymine', 'Match in database': 'NO', 'Partial match': ''},
+        {"Metabolites in mafs": 'Uracil', 'Match in database': '', 'Partial match': 'Cytosine _AND_ uracil'},
+        {'Match in database': 'YES'},  # Missing "Metabolites in mafs" and 'Partial match'
     ]
 
 
 def test_match_in_metabolites_with_and(sample_data3):
     matches = utils.find_all_entries_with_value_tsv(sample_data3, "adenine")
     assert len(matches) == 1
-    assert "ADENINE _AND_ Guanine" in matches[0].get("Metabolites", "")
+    assert "ADENINE _AND_ Guanine" in matches[0].get("Metabolites in mafs", "")
 
 def test_case_insensitive_match(sample_data3):
     matches = utils.find_all_entries_with_value_tsv(sample_data3, "guAninE")
     assert len(matches) == 1
-    assert matches[0]["Metabolites"].lower().find("guanine".lower()) != -1
+    assert matches[0]["Metabolites in mafs"].lower().find("guanine".lower()) != -1
 
 def test_match_in_partial_match(sample_data3):
     matches = utils.find_all_entries_with_value_tsv(sample_data3, "cytosine")
@@ -637,11 +637,11 @@ def test_split_and_clean_basic():
 
 def test_build_similarity_graph_simple():
     dicts = [
-        {'Metabolites': 'A _AND_ B', 'Match in database': 'YES'},
-        {'Metabolites': 'B _AND_ C', 'Match in database': 'NO'},
-        {'Metabolites': 'X', 'Match in database': 'YES'},
+        {"Metabolites in mafs": 'A _AND_ B', 'Match in database': 'YES'},
+        {"Metabolites in mafs": 'B _AND_ C', 'Match in database': 'NO'},
+        {"Metabolites in mafs": 'X', 'Match in database': 'YES'},
     ]
-    keys = ['Metabolites', 'Match in database']
+    keys = ["Metabolites in mafs", 'Match in database']
     graph = utils.build_similarity_graph(dicts, keys)
     assert 0 in graph and 1 in graph[0]
     assert 1 in graph and 0 in graph[1]
@@ -661,11 +661,11 @@ def test_get_connected_components_basic():
 
 def test_merge_dict_group_combines_properly():
     group = [
-        {'Metabolites': 'A _AND_ B', 'Match in database': 'YES', 'Partial match': 'X'},
-        {'Metabolites': 'B _AND_ C', 'Match in database': 'NO', 'Partial match': 'Y'},
+        {"Metabolites in mafs": 'A _AND_ B', 'Match in database': 'YES', 'Partial match': 'X'},
+        {"Metabolites in mafs": 'B _AND_ C', 'Match in database': 'NO', 'Partial match': 'Y'},
     ]
     merged = utils.merge_dict_group(group)
-    assert set(merged['Metabolites'].split(' _AND_ ')) == {'A', 'B', 'C'}
+    assert set(merged["Metabolites in mafs"].split(' _AND_ ')) == {'A', 'B', 'C'}
     # 'Match in database' and 'Partial match' should combine their values
     assert 'YES' in merged['Match in database']
     assert 'NO' in merged['Match in database']
@@ -677,18 +677,18 @@ def test_merge_dict_group_combines_properly():
 
 def test_smart_merge_merges_similar_dicts():
     dicts = [
-        {'Metabolites': 'A _AND_ B', 'Match in database': 'YES'},
-        {'Metabolites': 'B _AND_ C', 'Match in database': 'YES'},
-        {'Metabolites': 'X _AND_ Y', 'Match in database': 'NO'},
+        {"Metabolites in mafs": 'A _AND_ B', 'Match in database': 'YES'},
+        {"Metabolites in mafs": 'B _AND_ C', 'Match in database': 'YES'},
+        {"Metabolites in mafs": 'X _AND_ Y', 'Match in database': 'NO'},
     ]
 
     merged_results = utils.smart_merge(dicts)
 
     # Find the merged dict containing 'A', 'B', 'C' metabolites
-    merged_dict = next(d for d in merged_results if 'A' in d.get('Metabolites', '') or 'C' in d.get('Metabolites', ''))
+    merged_dict = next(d for d in merged_results if 'A' in d.get("Metabolites in mafs", '') or 'C' in d.get("Metabolites in mafs", ''))
 
     # Split the merged string into individual metabolites
-    metabolites = [m.strip() for m in merged_dict['Metabolites'].split(' _AND_ ')]
+    metabolites = [m.strip() for m in merged_dict["Metabolites in mafs"].split(' _AND_ ')]
 
     # Assert that expected metabolites are present
     assert 'A' in metabolites
@@ -696,16 +696,119 @@ def test_smart_merge_merges_similar_dicts():
     assert 'C' in metabolites
 
     # Also check that 'X' and 'Y' are in a separate merged dict
-    other_merged = next(d for d in merged_results if 'X' in d.get('Metabolites', '') or 'Y' in d.get('Metabolites', ''))
-    other_metabolites = [m.strip() for m in other_merged['Metabolites'].split(' _AND_ ')]
+    other_merged = next(d for d in merged_results if 'X' in d.get("Metabolites in mafs", '') or 'Y' in d.get("Metabolites in mafs", ''))
+    other_metabolites = [m.strip() for m in other_merged["Metabolites in mafs"].split(' _AND_ ')]
 
     assert 'X' in other_metabolites
     assert 'Y' in other_metabolites
 
 def test_smart_merge_no_overlap_returns_same():
     dicts = [
-        {'Metabolites': 'A', 'Match in database': 'YES'},
-        {'Metabolites': 'B', 'Match in database': 'NO'},
+        {"Metabolites in mafs": 'A', 'Match in database': 'YES'},
+        {"Metabolites in mafs": 'B', 'Match in database': 'NO'},
     ]
     merged = utils.smart_merge(dicts)
     assert merged == dicts
+
+
+############################
+#     Assign MNM_ID        #
+############################
+
+
+@pytest.fixture
+def mock_maf_df():
+    """Create a mock maf_df DataFrame with MNM_IDs for testing."""
+    return pd.DataFrame({
+        "MNM_ID": ["MNM1", "MNM2", "MNM3"],
+        "CHEBI": ["CHEBI:12345", "CHEBI:67890", "CHEBI:11111"],
+        "UNIQUE-ID": ["C001", "C002", "C003"],
+        "COMMON-NAME": ["Glucose", "Methionine", "Adenine"]
+    })
+
+@pytest.fixture
+def mock_tsv_results():
+    """Create a mock list of dictionaries as input for assign_mnm_ids."""
+    return [
+        {"Metabolites in mafs": "CHEBI:12345 _AND_ Glucose", "Partial match": ""},
+        {"Metabolites in mafs": "Methionine", "Partial match": "MNM2"},
+        {"Metabolites in mafs": "CHEBI:11111", "Partial match": ""}
+    ]
+
+def test_assign_mnm_ids(mock_tsv_results, mock_maf_df):
+    """Test assign_mnm_ids correctly updates MNM_ID and Partial match."""
+
+    results = utils.assign_mnm_ids(mock_tsv_results, mock_maf_df)
+
+    # Check MNM_ID column exists in all rows
+    for row in results:
+        assert "MNM_ID" in row
+        assert row["MNM_ID"] != "", f"MNM_ID is empty for row {row}"
+
+    # Check first row MNM_ID and Partial match
+    row1 = results[0]
+    assert row1["MNM_ID"] == "MNM1", f"Unexpected MNM_ID: {row1['MNM_ID']}"
+    assert row1["Partial match"] == "", "Partial match should remain empty if only one MNM_ID"
+
+    # Check second row merges Partial match
+    row2 = results[1]
+    # Original partial was "MNM2" and metabolite matches MNM2 -> should merge
+    assert row2["MNM_ID"] == "MNM2", f"Unexpected MNM_ID: {row2['MNM_ID']}"
+    assert "MNM2" in row2["Partial match"], f"Partial match missing MNM2: {row2['Partial match']}"
+
+    # Check third row MNM_ID
+    row3 = results[2]
+    assert row3["MNM_ID"] == "MNM3"
+    assert row3["Partial match"] == "", "Partial match should remain empty for single MNM_ID"
+
+
+
+#############################################
+#    Merge community ID from network        #
+#############################################
+
+def test_merge_metabolites_detailed():
+    # Input mock data
+    data = [
+        {
+            "Metabolites in mafs": "A _AND_ B",
+            "Match IDS in metabolic networks": "id1",
+            "Partial match": ""
+        },
+        {
+            "Metabolites in mafs": "B _AND_ C",
+            "Match IDS in metabolic networks": "id1 _AND_ id2",
+            "Partial match": "partial1"
+        },
+        {
+            "Metabolites in mafs": "D",
+            "Match IDS in metabolic networks": "",
+            "Partial match": ""
+        }
+    ]
+
+    # Run merge function
+    merged = utils.merge_metabolites(data)
+
+    # Expect 2 rows: one merged, one unchanged
+    assert len(merged) == 2
+
+    # Find merged row
+    merged_row = next(r for r in merged if r["Match IDS in metabolic networks"])
+    # Check that IDs are merged correctly
+    ids_set = set(merged_row["Match IDS in metabolic networks"].split(" _AND_ "))
+    assert ids_set == {"id1", "id2"}
+
+    # Check that metabolites are merged and unique
+    metab_set = set(merged_row["Metabolites in mafs"].split(" _AND_ "))
+    assert metab_set == {"A", "B", "C"}
+
+    # Check that Partial match merges old and new
+    partial_set = set(merged_row["Partial match"].split(" _AND_ "))
+    # Should include original partial1 plus id1/id2
+    assert partial_set == {"partial1"}
+
+    # Check that the row without IDs remains unchanged
+    row_no_ids = next(r for r in merged if r["Match IDS in metabolic networks"] == "")
+    assert row_no_ids["Metabolites in mafs"] == "D"
+    assert row_no_ids["Partial match"] == ""

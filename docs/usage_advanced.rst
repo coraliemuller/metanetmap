@@ -3,7 +3,7 @@ Advanced usage
 ==============
 
 
-UNIQUE-ID
+UNIQUE-ID in conversion datatable
 ----------
 
 The **UNIQUE-ID** is defined as the primary identifier for a specific metabolite. It represents the **unique reference** assigned to each metabolite in the database used to generate the conversion datatable *(e.g., MetaCyc:Glucopyranose, MetaNetX:MNXM1364061, etc.)*. It also serves as the central reference point to which all other identifiers related to this metabolite, such as InChI, COMMON-NAME, ChEBI, ... are linked.
@@ -11,6 +11,20 @@ The **UNIQUE-ID** is defined as the primary identifier for a specific metabolite
 In both the conversion datatable and the complementary datatable, the  ``UNIQUE-ID `` must appear as the first column. This ensures consistency, as the identifier uniquely facilitates data validation and matching across different sources, with all complementary information related to a metabolite linked to it.
 
 Therefore, the  ``UNIQUE-ID`` serves as the **central reference point** for detecting potential ambiguities between datasets and for eliminating redundancies.
+
+
+MNM_ID: a unique-id for maf files
+--------------------------------
+
+The MNM_ID is a unique-id generate at the begining of the MetaNetMap run. MAF files provided by user are rewritten with a unique identifier assigned to each row corresponding to a metabolite. They will be rewritten in a This directory is generated in a output folder generate in the main outpu_folder. 
+This ensures fast and unambiguous tracking of all IDs associated with a given row, and prevents confusion in cases where metabolites from different rows map to the same metabolite in the metabolic network, an ambiguity that is then reported in the *Partial match* column.
+
+If multiple MAF files are provided, the IDs are assigned progressively, taking into account the IDs already generated from previously processed MAF files. 
+For example, if two MAFs contain 10 and 15 metabolites respectively, the first file will receive IDs **from 1 to 10**, and the second **from 11 to 26**.
+
+.. note:: 
+   The IDs are assigned according to the order in which the tool reads the files. 
+   The first file processed will receive the first IDs, and so on. This order may not correspond to the user’s intended ordering unless the files have been checked and sorted beforehand.
 
 
 
@@ -81,6 +95,8 @@ Two main types of ambiguities can be mentioned:
 - One metabolite of the metabolomic annotation profile maps to two distinct metabolites of the GSMN.
  
 - One metabolites of the metabolomic profiles map on two identifiers in the conversion datatable.
+
+- Two distinct metabolites of the metabolomic profiles map to the same metabolite of the GSMN.
   
 
 When multiple input metabolites correspond to the same unique identifier or vice versa this situation is flagged as an ambiguity and is automatically added to the *"Partial match"* column in the output.

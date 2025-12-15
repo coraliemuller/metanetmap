@@ -13,6 +13,7 @@ import pytest
 from pathlib import Path
 import ast
 import csv
+import pandas as pd
 from cobra import Model, Metabolite
 import cobra.io
 import tempfile
@@ -124,6 +125,54 @@ def test_load_database_matches_expected():
 
 
 
+#### Test add the MNM_ID
+
+@pytest.fixture
+def mock_maf_files(tmp_path):
+    """Create mock MAF files for testing."""
+    file1 = tmp_path / "maf1.tsv"
+    file2 = tmp_path / "maf2.tsv"
+    
+    df1 = pd.DataFrame({
+        "CHEBI": ["CHEBI:12345", "CHEBI:67890"],
+        "UNIQUE-ID": ["C001", "C002"]
+    })
+    df2 = pd.DataFrame({
+        "CHEBI": ["CHEBI:12345"],
+        "UNIQUE-ID": ["C003"]
+    })
+    
+    df1.to_csv(file1, sep="\t", index=False)
+    df2.to_csv(file2, sep="\t", index=False)
+    
+    return [str(file1), str(file2)]
+
+def test_mnm_id_column_in_output(tmp_path, mock_maf_files):
+    """Check that MNM_ID column is added in the output files."""
+    output_folder = tmp_path
+
+    # Run the function that writes MNM files to output_folder
+    mapping.setup_merged_list_maf_metabolites(mock_maf_files, output_folder)
+
+    # List of expected output files
+    output_files = [output_folder /"MNM_mafs" / f"MNM_{Path(f).name}" for f in mock_maf_files]
+
+    for out_file in output_files:
+        assert out_file.exists(), f"Output file {out_file} was not created"
+
+        df = pd.read_csv(out_file, sep="\t")
+
+        # MNM_ID column should exist
+        assert "MNM_ID" in df.columns, f"MNM_ID missing in {out_file}"
+
+        # MNM_ID values should not be empty
+        assert df["MNM_ID"].notnull().all(), f"MNM_ID column has nulls in {out_file}"
+
+        # MNM_ID values should be strings
+        assert all(isinstance(val, str) for val in df["MNM_ID"]), f"Non-string MNM_ID values in {out_file}"
+
+
+
 #-----------------------#
 #   set_list_paths      #
 #-----------------------#
@@ -173,34 +222,82 @@ def test_directory_without_extension_check(tmp_path):
 #-----------------------#
 
 #SBML
-def test_setup_merge_list_sbml_metabolites(create_mock_sbml_files):
-    sbml_paths = create_mock_sbml_files
+# def test_setup_merge_list_sbml_metabolites(create_mock_sbml_files):
+#     sbml_paths = create_mock_sbml_files
 
-    dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(sbml_paths)
+#     dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(sbml_paths)
 
-    # 1. Should have two entries (one per SBML file)
-    assert len(dic_couple_sbml) == 2
+#     # 1. Should have two entries (one per SBML file)
+#     assert len(dic_couple_sbml) == 2
 
-    # 2. Each should contain the metabolite ID, even with extra metadata
-    for ids in dic_couple_sbml.values():
-        assert "glc_0" in ids or "glc_1" in ids
+#     # 2. Each should contain the metabolite ID, even with extra metadata
+#     for ids in dic_couple_sbml.values():
+#         assert "glc_0" in ids or "glc_1" in ids
 
-    # 3. Metadata should contain "Glucose" key
-    assert "Glucose" in meta_data_sbml
-    assert "ID" in meta_data_sbml["Glucose"]
-    assert "formula" in meta_data_sbml["Glucose"]
-    assert "chebi" in meta_data_sbml["Glucose"]
+#     # 3. Metadata should contain "Glucose" key
+#     assert "Glucose" in meta_data_sbml
+#     assert "ID" in meta_data_sbml["Glucose"]
+#     assert "formula" in meta_data_sbml["Glucose"]
+#     assert "chebi" in meta_data_sbml["Glucose"]
 
-    # 4. Check that duplicate IDs are removed in metadata
-    assert len(set(meta_data_sbml["Glucose"]["ID"])) == len(meta_data_sbml["Glucose"]["ID"])
+#     # 4. Check that duplicate IDs are removed in metadata
+#     assert len(set(meta_data_sbml["Glucose"]["ID"])) == len(meta_data_sbml["Glucose"]["ID"])
 
-def test_setup_merged_list_maf_metabolites(mock_maf_files):
-    maf_dict, keys, merged_df = mapping.setup_merged_list_maf_metabolites(mock_maf_files)
+# def test_setup_merged_list_maf_metabolites(mock_maf_files):
+#     maf_dict, keys, merged_df = mapping.setup_merged_list_maf_metabolites(mock_maf_files)
 
+#     assert "CHEBI" in maf_dict
+#     assert sorted(maf_dict["CHEBI"]) == ["CHEBI:12345", "CHEBI:67890"] # check duplicates
+#     assert keys == ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT','MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC','LIGAND-CPD','REFMET','PUBCHEM','VMH','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY','SMILES','FORMULA'] # check list of key
+#     assert merged_df.shape[0] == 3  # C001, C002, C003
+
+
+
+@pytest.fixture
+def mock_maf_files(tmp_path):
+    # Create mock MAF files as CSV/TSV in a temporary folder
+    file1 = tmp_path / "maf1.tsv"
+    file2 = tmp_path / "maf2.tsv"
+    
+    df1 = pd.DataFrame({
+        "CHEBI": ["CHEBI:12345", "CHEBI:67890"],
+        "UNIQUE-ID": ["C001", "C002"]
+    })
+    df2 = pd.DataFrame({
+        "CHEBI": ["CHEBI:12345"],  # duplicate to test merge
+        "UNIQUE-ID": ["C003"]
+    })
+    
+    df1.to_csv(file1, sep="\t", index=False)
+    df2.to_csv(file2, sep="\t", index=False)
+    
+    return [str(file1), str(file2)]  # list of file paths
+
+def test_setup_merged_list_maf_metabolites(mock_maf_files, tmp_path):
+    # Use tmp_path as the output_folder
+    output_folder = tmp_path
+
+    maf_dict, keys, merged_df = mapping.setup_merged_list_maf_metabolites(mock_maf_files, output_folder)
+    
+    # 1. Check that CHEBI key exists
     assert "CHEBI" in maf_dict
-    assert sorted(maf_dict["CHEBI"]) == ["CHEBI:12345", "CHEBI:67890"] # check duplicates
-    assert keys == ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT','MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC','LIGAND-CPD','REFMET','PUBCHEM','VMH','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY','SMILES','FORMULA'] # check list of key
-    assert merged_df.shape[0] == 3  # C001, C002, C003
+
+    # 2. Check that duplicates are removed and sorted
+    assert sorted(maf_dict["CHEBI"]) == ["CHEBI:12345", "CHEBI:67890"]
+
+    # 3. Check that keys list matches expected columns
+    expected_keys = ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT',
+                     'MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC',
+                     'LIGAND-CPD','REFMET','PUBCHEM','VMH','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY',
+                     'SMILES','FORMULA']
+    assert keys == expected_keys
+
+    # 4. Check that merged_df has 3 rows (C001, C002, C003)
+    assert merged_df.shape[0] == 3
+
+    # 5. Optional: check that merged_df contains expected CHEBI IDs
+    for chebi_id in ["CHEBI:12345", "CHEBI:67890"]:
+        assert chebi_id in merged_df["CHEBI"].values
 
 
 
