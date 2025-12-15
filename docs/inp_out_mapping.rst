@@ -314,11 +314,6 @@ Details on output files for mapping mode
 
       Unmatched records are included in the table to allow for complete data tracking.
 
-      **Metabolite matches** require parsing to separate and possibly filter metabolite IDs in order to be fully usable.
-
-      INFO: A parsing script may be added later to facilitate the extraction or transformation of this data if needed.
-
-
 
    - Exemple of classic mode output: some column name are missing (non-exhaustive)
     +----------------+--------------------------------------+---------------------+-----------------------------+---------------------+---------------------+-----------------+
@@ -534,8 +529,6 @@ Logs provide more information about each step and the corresponding results.
 This directory is generated in the output folder, and the MAF files are then rewritten with a unique identifier assigned to each row corresponding to a metabolite. 
 This ensures fast and unambiguous tracking of all IDs associated with a given row, and prevents confusion in cases where metabolites from different rows map to the same metabolite in the metabolic network—an ambiguity that is then reported in the *Partial match* column.
 
-Voici une reformulation claire, naturelle et rigoureuse en anglais :
-
 If multiple MAF files are provided, the IDs are assigned progressively, taking into account the IDs already generated from previously processed MAF files. 
 For example, if two MAFs contain 10 and 15 metabolites respectively, the first file will receive IDs **from 1 to 10**, and the second **from 11 to 26**.
 
@@ -562,3 +555,5 @@ For example, if two MAFs contain 10 and 15 metabolites respectively, the first f
 +---------+-----------+-------------+---------------------------------------------------------------+-----------+-------------------------------------------+
 | MNM7    |           |             | Beta-D-galactosyl-(1?3)-N-acetyl-beta-D-glucosaminyl-R        |           |                                           |
 +---------+-----------+-------------+---------------------------------------------------------------+-----------+-------------------------------------------+
+
+For more details about MNM_ID generation, see :doc:`usage_advanced`
