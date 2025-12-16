@@ -2,7 +2,7 @@
 ## MISTIC Project INRIA/INRAE
 ## Author Muller Coralie
 ## Date: 2025/08/20
-## Update: 2025/10/31
+## Update: 2025/12/15
 
 """
 Description:
@@ -21,31 +21,34 @@ import tempfile
 
 from metanetmap import mapping
 
-# /!\ INFO: 
+# /!\ INFO:
 
-#------------------------------------#
+# ------------------------------------#
 #        DIRECTORIES AND FILES       #
-#------------------------------------#
+# ------------------------------------#
 TEST_TOYS_DIR = Path(__file__).parent.parent
-DATATABLE_CONVERSION = path.join(TEST_TOYS_DIR,'src/metanetmap/toys_tests_data/conversion_datatable_toys.tsv')
+DATATABLE_CONVERSION = path.join(
+    TEST_TOYS_DIR, "src/metanetmap/toys_tests_data/conversion_datatable_toys.tsv"
+)
 
 
-#---------------------------------#
+# ---------------------------------#
 #        EXPECTED SOLUTIONS       #
-#---------------------------------#
+# ---------------------------------#
+
 
 ### Datatable conversion
 def read_expected_table(path: Path):
     expected = []
-    with path.open(encoding='utf-8') as f:
-        reader = csv.DictReader(f, delimiter='\t')
+    with path.open(encoding="utf-8") as f:
+        reader = csv.DictReader(f, delimiter="\t")
         for row in reader:
             # Convertir la chaîne SYNONYMS en vraie liste
-            if 'SYNONYMS' in row and row['SYNONYMS']:
+            if "SYNONYMS" in row and row["SYNONYMS"]:
                 try:
-                    row['SYNONYMS'] = ast.literal_eval(row['SYNONYMS'])
+                    row["SYNONYMS"] = ast.literal_eval(row["SYNONYMS"])
                 except Exception:
-                    row['SYNONYMS'] = []
+                    row["SYNONYMS"] = []
             # Format CHEBI
             chebi = row.get("CHEBI")
             if chebi:
@@ -58,12 +61,9 @@ def read_expected_table(path: Path):
     return expected
 
 
-
-
-
 # ----------------------------------------------------------
-#Create mock maf files for test
-@pytest.fixture  
+# Create mock maf files for test
+@pytest.fixture
 def mock_maf_files():
     """Creates two temporary MAF (TSV) files for testing."""
     maf_content_1 = "UNIQUE-ID\tCHEBI\tSMILES\nC001\tCHEBI:12345\tC(CO)O\nC002\tCHEBI:67890\tCC(=O)O"
@@ -83,7 +83,7 @@ def mock_maf_files():
         Path(f).unlink(missing_ok=True)
 
 
-#Create mock sbml files for test
+# Create mock sbml files for test
 @pytest.fixture
 def create_mock_sbml_files():
     """Creates two temporary SBML files with simple metabolite content."""
@@ -92,15 +92,9 @@ def create_mock_sbml_files():
     for idx in range(2):
         model = Model(f"model_{idx}")
         m = Metabolite(
-            id=f"glc_{idx}_c",
-            name="Glucose",
-            formula="C6H12O6",
-            compartment="c"
+            id=f"glc_{idx}_c", name="Glucose", formula="C6H12O6", compartment="c"
         )
-        m.annotation = {
-            "chebi": [f"CHEBI:000{idx+1}"],
-            'hmdb': [f'HMDB0000123{idx+1}']
-        }
+        m.annotation = {"chebi": [f"CHEBI:000{idx+1}"], "hmdb": [f"HMDB0000123{idx+1}"]}
 
         model.add_metabolites([m])
 
@@ -124,28 +118,25 @@ def test_load_database_matches_expected():
     assert actual == expected
 
 
-
 #### Test add the MNM_ID
+
 
 @pytest.fixture
 def mock_maf_files(tmp_path):
     """Create mock MAF files for testing."""
     file1 = tmp_path / "maf1.tsv"
     file2 = tmp_path / "maf2.tsv"
-    
-    df1 = pd.DataFrame({
-        "CHEBI": ["CHEBI:12345", "CHEBI:67890"],
-        "UNIQUE-ID": ["C001", "C002"]
-    })
-    df2 = pd.DataFrame({
-        "CHEBI": ["CHEBI:12345"],
-        "UNIQUE-ID": ["C003"]
-    })
-    
+
+    df1 = pd.DataFrame(
+        {"CHEBI": ["CHEBI:12345", "CHEBI:67890"], "UNIQUE-ID": ["C001", "C002"]}
+    )
+    df2 = pd.DataFrame({"CHEBI": ["CHEBI:12345"], "UNIQUE-ID": ["C003"]})
+
     df1.to_csv(file1, sep="\t", index=False)
     df2.to_csv(file2, sep="\t", index=False)
-    
+
     return [str(file1), str(file2)]
+
 
 def test_mnm_id_column_in_output(tmp_path, mock_maf_files):
     """Check that MNM_ID column is added in the output files."""
@@ -155,7 +146,9 @@ def test_mnm_id_column_in_output(tmp_path, mock_maf_files):
     mapping.setup_merged_list_maf_metabolites(mock_maf_files, output_folder)
 
     # List of expected output files
-    output_files = [output_folder /"MNM_mafs" / f"MNM_{Path(f).name}" for f in mock_maf_files]
+    output_files = [
+        output_folder / "MNM_mafs" / f"MNM_{Path(f).name}" for f in mock_maf_files
+    ]
 
     for out_file in output_files:
         assert out_file.exists(), f"Output file {out_file} was not created"
@@ -169,13 +162,14 @@ def test_mnm_id_column_in_output(tmp_path, mock_maf_files):
         assert df["MNM_ID"].notnull().all(), f"MNM_ID column has nulls in {out_file}"
 
         # MNM_ID values should be strings
-        assert all(isinstance(val, str) for val in df["MNM_ID"]), f"Non-string MNM_ID values in {out_file}"
+        assert all(
+            isinstance(val, str) for val in df["MNM_ID"]
+        ), f"Non-string MNM_ID values in {out_file}"
 
 
-
-#-----------------------#
+# -----------------------#
 #   set_list_paths      #
-#-----------------------#
+# -----------------------#
 def test_directory_with_valid_extensions(tmp_path):
     # Creates files with valid extensions
     file1 = tmp_path / "pathway1.sbml"
@@ -217,11 +211,11 @@ def test_directory_without_extension_check(tmp_path):
     assert sorted(result) == sorted([str(file1), str(file2)])
 
 
-#-----------------------#
+# -----------------------#
 #     Merge  Data       #
-#-----------------------#
+# -----------------------#
 
-#SBML
+# SBML
 # def test_setup_merge_list_sbml_metabolites(create_mock_sbml_files):
 #     sbml_paths = create_mock_sbml_files
 
@@ -252,33 +246,33 @@ def test_directory_without_extension_check(tmp_path):
 #     assert merged_df.shape[0] == 3  # C001, C002, C003
 
 
-
 @pytest.fixture
 def mock_maf_files(tmp_path):
     # Create mock MAF files as CSV/TSV in a temporary folder
     file1 = tmp_path / "maf1.tsv"
     file2 = tmp_path / "maf2.tsv"
-    
-    df1 = pd.DataFrame({
-        "CHEBI": ["CHEBI:12345", "CHEBI:67890"],
-        "UNIQUE-ID": ["C001", "C002"]
-    })
-    df2 = pd.DataFrame({
-        "CHEBI": ["CHEBI:12345"],  # duplicate to test merge
-        "UNIQUE-ID": ["C003"]
-    })
-    
+
+    df1 = pd.DataFrame(
+        {"CHEBI": ["CHEBI:12345", "CHEBI:67890"], "UNIQUE-ID": ["C001", "C002"]}
+    )
+    df2 = pd.DataFrame(
+        {"CHEBI": ["CHEBI:12345"], "UNIQUE-ID": ["C003"]}  # duplicate to test merge
+    )
+
     df1.to_csv(file1, sep="\t", index=False)
     df2.to_csv(file2, sep="\t", index=False)
-    
+
     return [str(file1), str(file2)]  # list of file paths
+
 
 def test_setup_merged_list_maf_metabolites(mock_maf_files, tmp_path):
     # Use tmp_path as the output_folder
     output_folder = tmp_path
 
-    maf_dict, keys, merged_df = mapping.setup_merged_list_maf_metabolites(mock_maf_files, output_folder)
-    
+    maf_dict, keys, merged_df = mapping.setup_merged_list_maf_metabolites(
+        mock_maf_files, output_folder
+    )
+
     # 1. Check that CHEBI key exists
     assert "CHEBI" in maf_dict
 
@@ -286,10 +280,31 @@ def test_setup_merged_list_maf_metabolites(mock_maf_files, tmp_path):
     assert sorted(maf_dict["CHEBI"]) == ["CHEBI:12345", "CHEBI:67890"]
 
     # 3. Check that keys list matches expected columns
-    expected_keys = ['UNIQUE-ID','CHEBI','COMMON-NAME','ABBREV-NAME','SYNONYMS','ADD-COMPLEMENT',
-                     'MOLECULAR-WEIGHT','MONOISOTOPIC-MW','SEED','BIGG','HMDB','METANETX','METACYC',
-                     'LIGAND-CPD','REFMET','PUBCHEM','VMH','CAS','INCHI','NON-STANDARD-INCHI','INCHI-KEY',
-                     'SMILES','FORMULA']
+    expected_keys = [
+        "UNIQUE-ID",
+        "CHEBI",
+        "COMMON-NAME",
+        "ABBREV-NAME",
+        "SYNONYMS",
+        "ADD-COMPLEMENT",
+        "MOLECULAR-WEIGHT",
+        "MONOISOTOPIC-MW",
+        "SEED",
+        "BIGG",
+        "HMDB",
+        "METANETX",
+        "METACYC",
+        "LIGAND-CPD",
+        "REFMET",
+        "PUBCHEM",
+        "VMH",
+        "CAS",
+        "INCHI",
+        "NON-STANDARD-INCHI",
+        "INCHI-KEY",
+        "SMILES",
+        "FORMULA",
+    ]
     assert keys == expected_keys
 
     # 4. Check that merged_df has 3 rows (C001, C002, C003)
@@ -300,112 +315,81 @@ def test_setup_merged_list_maf_metabolites(mock_maf_files, tmp_path):
         assert chebi_id in merged_df["CHEBI"].values
 
 
-
-#-----------------------#
+# -----------------------#
 #   metadata_sbml       #
-#-----------------------#
-#manage_id
+# -----------------------#
+# manage_id
 @pytest.mark.parametrize(
     "annotations, expected",
     [
         # Case 1: values in list form with prefixes META
-        ({   "chebi": ["CHEBI:12345", "CHEBI:67890"],
-                "meta": ["META:00001", "META:00002"]
-            },
+        (
             {
                 "chebi": ["CHEBI:12345", "CHEBI:67890"],
-                "meta": ["00001", "00002"]
-            }
+                "meta": ["META:00001", "META:00002"],
+            },
+            {"chebi": ["CHEBI:12345", "CHEBI:67890"], "meta": ["00001", "00002"]},
         ),
         # Case 2: Values in the form of unique strings with prefixes
         (
-            {
-                "chebi": "CHEBI:54321",
-                "meta": "META:11111"
-            },
-            {
-                "chebi": ["CHEBI:54321"],
-                "meta": ["11111"]
-            }
+            {"chebi": "CHEBI:54321", "meta": "META:11111"},
+            {"chebi": ["CHEBI:54321"], "meta": ["11111"]},
         ),
         # Case 3: Mixing lists and strings
         (
-            {
-                "chebi": ["CHEBI:123", "CHEBI:456"],
-                "meta": "META:789"
-            },
-            {
-                "chebi": ["CHEBI:123", "CHEBI:456"],
-                "meta": ["789"]
-            }
+            {"chebi": ["CHEBI:123", "CHEBI:456"], "meta": "META:789"},
+            {"chebi": ["CHEBI:123", "CHEBI:456"], "meta": ["789"]},
         ),
         # Case 4: no prefixes to remove META and add for CHEBI
         (
-            {   
-                'sbo': ['SBO:0000247'], 
-                'reactome': ['R-ALL-158417', 'R-ALL-216667'],
+            {
+                "sbo": ["SBO:0000247"],
+                "reactome": ["R-ALL-158417", "R-ALL-216667"],
                 "chebi": ["CHEBI:123", "CHEBI:456"],
-                "meta": "789"
+                "meta": "789",
             },
-            {   'sbo': ['SBO:0000247'], 
-                'reactome': ['R-ALL-158417', 'R-ALL-216667'],
+            {
+                "sbo": ["SBO:0000247"],
+                "reactome": ["R-ALL-158417", "R-ALL-216667"],
                 "chebi": ["CHEBI:123", "CHEBI:456"],
-                "meta": ["789"]
-            }
+                "meta": ["789"],
+            },
         ),
-    ]
+    ],
 )
-
 def test_manage_id_in_metadata_sbml(annotations, expected):
     tmp_data = {}
     result = mapping.manage_id_in_metadata_sbml(annotations, tmp_data)
     assert result == expected
 
 
-
 # merge_doublons
 def test_update_meta_data_sbml_adds_unique_entries():
-    tmp_data = {
-        "chebi": ["123", "456"],
-        "kegg": ["A", "B"]
-    }
+    tmp_data = {"chebi": ["123", "456"], "kegg": ["A", "B"]}
 
-    meta_data_sbml = {
-        "glucose": {
-            "chebi": ["123"],  # "123" already prsent
-            "kegg": []
-        }
-    }
+    meta_data_sbml = {"glucose": {"chebi": ["123"], "kegg": []}}  # "123" already prsent
 
     expected = {
         "glucose": {
-        "chebi": ["123", "456"],  # "456" zdded, "123" igignored  
-        "kegg": ["A", "B"]
+            "chebi": ["123", "456"],  # "456" zdded, "123" igignored
+            "kegg": ["A", "B"],
         }
     }
 
-    result = mapping.merge_doublons_metadata_sbml(meta_data_sbml,"glucose",tmp_data)
+    result = mapping.merge_doublons_metadata_sbml(meta_data_sbml, "glucose", tmp_data)
     assert result == expected
 
 
 def test_update_meta_data_sbml_avoids_duplicates():
     tmp_data = {
-        "chebi": ["123", "123", "789"], #remove duplicates even in the same data
+        "chebi": ["123", "123", "789"],  # remove duplicates even in the same data
     }
 
-    meta_data_sbml = {
-        "met1": {
-            "chebi": ["123", "456"]
-        }
-    }
+    meta_data_sbml = {"met1": {"chebi": ["123", "456"]}}
 
-    expected = {
-        "met1": {
-            "chebi": ["123", "456", "789"]
-        }
-    }
+    expected = {"met1": {"chebi": ["123", "456", "789"]}}
 
-    result = mapping.merge_doublons_metadata_sbml(meta_data_sbml,"met1",tmp_data)
+    result = mapping.merge_doublons_metadata_sbml(meta_data_sbml, "met1", tmp_data)
     assert result == expected
 
 
@@ -428,5 +412,3 @@ def test_extract_metadata_sbml(create_mock_sbml_files):
     assert updated_meta["Glucose"]["formula"] == ["C6H12O6"]
     assert updated_meta["Glucose"]["chebi"] == ["CHEBI:0001"]
     assert updated_meta["Glucose"]["hmdb"] == ["HMDB00001231"]
-
-

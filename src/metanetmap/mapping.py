@@ -2,7 +2,7 @@
 # MISTIC Project INRIA/INRAE
 # Author Muller Coralie
 # Date: 2024/11/27
-# Update: 2025/08/-
+# Update: 2025/12/-
 
 ####################################
 #            MAPPING               #
@@ -81,7 +81,7 @@ def load_database(database_conversion):
                     except Exception:
                         logger.warning(f"Failed to parse SYNONYMS: {row['SYNONYMS']}")
                         row["SYNONYMS"] = []
-                    
+
                 # Format CHEBI
                 chebi = row.get("CHEBI")
                 if chebi:
@@ -197,9 +197,7 @@ def manage_id_in_metadata_sbml(annotations, tmp_data):
 
         tmp_data[key] = []
         if isinstance(value, list):
-            tmp_data[key] = [
-                str(i).replace("META:", "") for i in value
-            ]
+            tmp_data[key] = [str(i).replace("META:", "") for i in value]
         else:
             value_clean = str(value).replace("META:", "")
             tmp_data[key].append(value_clean)
@@ -233,12 +231,13 @@ def merge_doublons_metadata_sbml(meta_data_sbml, met_name, tmp_data):
         for i in v:
             # Flatten all values in meta_data_sbml[met_name] and check
             # if `i` already exists.
-            if i not in itertools.chain.from_iterable(meta_data_sbml[met_name].values()):
+            if i not in itertools.chain.from_iterable(
+                meta_data_sbml[met_name].values()
+            ):
                 meta_data_sbml[met_name][k].append(i)
         # Remove duplicates after the loop (more efficient)
         meta_data_sbml[met_name][k] = list(dict.fromkeys(meta_data_sbml[met_name][k]))
     return meta_data_sbml
-
 
 
 def extract_metadata_sbml(model, meta_data_sbml):
@@ -267,10 +266,10 @@ def extract_metadata_sbml(model, meta_data_sbml):
         annotations = m.annotation
         # Existing entry: update ID and formula
         if m.name in meta_data_sbml.keys():
-            if m.id.endswith(']'):
-                clean_id=m.id.rsplit("[", 1)[0]
+            if m.id.endswith("]"):
+                clean_id = m.id.rsplit("[", 1)[0]
             else:
-                clean_id=m.id.rsplit("_", 1)[0]
+                clean_id = m.id.rsplit("_", 1)[0]
             meta_data_sbml[m.name]["ID"].append(clean_id)
             if m.formula:
                 meta_data_sbml[m.name]["formula"].append(m.formula)
@@ -290,8 +289,8 @@ def extract_metadata_sbml(model, meta_data_sbml):
             # New entry
             tmp_data = {k: [] for k in annotations.keys()}
             tmp_data["ID"] = []
-            tmp_data["NAME"]=[m.name]
-            if m.id.endswith(']'):
+            tmp_data["NAME"] = [m.name]
+            if m.id.endswith("]"):
                 tmp_data["ID"].append(m.id.rsplit("[", 1)[0])
             else:
                 tmp_data["ID"].append(m.id.rsplit("_", 1)[0])
@@ -335,23 +334,28 @@ def setup_merge_list_sbml_metabolites(List_SBML_paths):
 
         # Extract and merge metadata from ONE UNQUE model
         meta_data_sbml = extract_metadata_sbml(model, {})
-        flat_list = [ value for compound in meta_data_sbml.values() for v in compound.values()  for value in v]
+        flat_list = [
+            value
+            for compound in meta_data_sbml.values()
+            for v in compound.values()
+            for value in v
+        ]
 
         # Remove compartment suffix (e.g., "_c", "_e") from metabolite IDs
-        list_metabolites_id=[]
+        list_metabolites_id = []
 
         for m in model.metabolites:
-            if m.id.endswith(']'):
-                clean_id=m.id.rsplit("[", 1)[0]
+            if m.id.endswith("]"):
+                clean_id = m.id.rsplit("[", 1)[0]
             else:
-                clean_id=m.id.rsplit("_", 1)[0]
+                clean_id = m.id.rsplit("_", 1)[0]
             list_metabolites_id.append(clean_id)
 
         # Add to global merged list
         list_metabolites_id_merge.append(list_metabolites_id)
 
         # Store metabolite list for this specific SBML file
-        dic_couple_sbml[Path(path_sbml).stem] = list_metabolites_id+flat_list
+        dic_couple_sbml[Path(path_sbml).stem] = list_metabolites_id + flat_list
 
     # Flatten and deduplicate global list
     list_metabolites_id_merge = list(
@@ -361,7 +365,7 @@ def setup_merge_list_sbml_metabolites(List_SBML_paths):
 
 
 # Metabolomic files
-def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
+def setup_merged_list_maf_metabolites(List_MAF_paths, output_folder):
     """
     Parses a list of MAF (Metabolite Annotation File) files to extract
     and clean metadata, and merges them into a single dictionary and
@@ -409,7 +413,7 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
         "INCHI-KEY",
         "SMILES",
         "FORMULA",
-    ] 
+    ]
 
     # Initialize dictionary with empty lists for each key
     for k in keys:
@@ -435,7 +439,7 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
         # Update counter for the next file
         mnm_counter += num_rows
 
-        #Copy to not impact the run with int conversion
+        # Copy to not impact the run with int conversion
         df_copy = df.copy()
         # Fix floats formatted as strings with trailing '.0' (e.g., '123456.0' → '123456')
         for col in ["CHEBI", "PUBCHEM"]:
@@ -443,22 +447,20 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
                 # Convert entire column to string
                 df_copy[col] = df_copy[col].astype(str)
                 # Remove trailing '.0' if present
-                df_copy[col] = df_copy[col].str.replace(r'\.0$', '', regex=True)
-                 # replace NaN with empty string
-                df_copy[col] = df_copy[col].replace("nan", "", regex=False) # replace NaN with empty string
+                df_copy[col] = df_copy[col].str.replace(r"\.0$", "", regex=True)
+                # replace NaN with empty string
+                df_copy[col] = df_copy[col].replace(
+                    "nan", "", regex=False
+                )  # replace NaN with empty string
 
         path_maf_name = os.path.basename(path_maf)
         full_path = os.path.join(output_folder, "MNM_mafs")
         os.makedirs(full_path, exist_ok=True)
         utils.write_tsv(
-            df_copy,
-            full_path,
-            f"MNM_{path_maf_name}",
-            keys_reorder=False,
-            quiet=True
+            df_copy, full_path, f"MNM_{path_maf_name}", keys_reorder=False, quiet=True
         )
         df_list.append(df)
-        
+
         ##### Check if at least on column name fit with maf file
         # Convert the column index (which is a pandas.Index object) into a standard Python list
         column_names_check = list(df.columns)
@@ -467,10 +469,11 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
 
         # If there are no matches, raise an error
         if not matches:
-            logger.critical( f"None of the expected names match the column names in the file. "
-                            f"Check the following allowed column names: {keys}")
+            logger.critical(
+                f"None of the expected names match the column names in the file. "
+                f"Check the following allowed column names: {keys}"
+            )
             sys.exit(1)
-
 
         # Check for tab separation issue (often due to CSV or Excel
         # file saved as wrong format).
@@ -489,41 +492,54 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
                 # Fix floats formatted as strings with trailing '.0' (e.g., '123456.0' → '123456')
                 if col_upper in ["CHEBI", "PUBCHEM"]:
                     df[col] = df[col].apply(
-                        lambda x: x[:-2] if isinstance(x, str) and x.endswith(".0") else x
+                        lambda x: (
+                            x[:-2] if isinstance(x, str) and x.endswith(".0") else x
+                        )
                     )
-
 
                 # Normalize identifiers for CHEBI column
                 if col_upper == "CHEBI":
-                    df[col] = df[col].apply(lambda x: (
-                        f"CHEBI:{x.split(':', 1)[1].strip()}" if x.lower().startswith("chebi:") else (
-                            f"CHEBI:{x}" if x.isdigit() else x
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            f"CHEBI:{x.split(':', 1)[1].strip()}"
+                            if x.lower().startswith("chebi:")
+                            else (f"CHEBI:{x}" if x.isdigit() else x)
                         )
-                    ))
+                    )
 
                 # Normalize identifiers for PUBCHEM column
                 elif col_upper == "PUBCHEM":
-                    df[col] = df[col].apply(lambda x: (
-                        f"PUBCHEM:{x.split(':', 1)[1].strip()}" if x.lower().startswith("pubchem:") else (
-                            f"PUBCHEM:{x}" if x.isdigit() else x
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            f"PUBCHEM:{x.split(':', 1)[1].strip()}"
+                            if x.lower().startswith("pubchem:")
+                            else (f"PUBCHEM:{x}" if x.isdigit() else x)
                         )
-                    ))
-                
+                    )
+
                 # Normalize identifiers for INCHI-KEY column
                 elif col_upper == "INCHI-KEY":
-                    df[col] = df[col].apply(lambda x: (
-                        f"INCHIKEY={x.split('=', 1)[1].strip()}" if isinstance(x, str) and x.lower().startswith("inchikey=")
-                        else f"INCHIKEY={x.strip()}" if isinstance(x, str) and x.strip().lower() not in ["", "nan"]
-                        else x
-                    ))
+                    df[col] = df[col].apply(
+                        lambda x: (
+                            f"INCHIKEY={x.split('=', 1)[1].strip()}"
+                            if isinstance(x, str) and x.lower().startswith("inchikey=")
+                            else (
+                                f"INCHIKEY={x.strip()}"
+                                if isinstance(x, str)
+                                and x.strip().lower() not in ["", "nan"]
+                                else x
+                            )
+                        )
+                    )
 
                 # Common cleaning for all columns
-                df[col] = df[col].apply(utils.fix_arrows_in_parentheses) 
+                df[col] = df[col].apply(utils.fix_arrows_in_parentheses)
                 # Add to dictionary
-                maf_dictionnary[col_upper].extend(df[col].tolist())  
+                maf_dictionnary[col_upper].extend(df[col].tolist())
                 # Remove duplicates while preserving order
-                maf_dictionnary[col_upper] = list(dict.fromkeys(maf_dictionnary[col_upper]))
-
+                maf_dictionnary[col_upper] = list(
+                    dict.fromkeys(maf_dictionnary[col_upper])
+                )
 
     # Remove keys with only empty values (e.g., "", nan)
     maf_dictionnary_clean = utils.remove_empty_keys(maf_dictionnary)
@@ -533,10 +549,10 @@ def setup_merged_list_maf_metabolites(List_MAF_paths,output_folder):
 
     # Merge all DataFrames and remove duplicates
     merged_df = pd.concat(df_list, ignore_index=True, sort=False)
-    
+
     # Remove duplicates
     maf_merged_df = merged_df.drop_duplicates()
-    maf_merged_df.columns = maf_merged_df.columns.str.upper() 
+    maf_merged_df.columns = maf_merged_df.columns.str.upper()
 
     # ADD the column for the identifiers MNM
     col_news = list(maf_dictionnary_clean.keys())
@@ -687,7 +703,6 @@ def remove_enantiomer_and_Inchey_metadata(metadata):
     return metadata
 
 
-
 # ------------------------------------------------------------#
 #            Harmonisation output preparation                #
 # ------------------------------------------------------------#
@@ -718,7 +733,9 @@ def setup_harmonisation_output(
     # metaboloc network to the dic_tsv_results and add their
     # specificities (key_reorder).
     for met in unmatch_metabolites_total:
-        temps = {key: (met if key == "Metabolites in mafs" else "") for key in keys_starter}
+        temps = {
+            key: (met if key == "Metabolites in mafs" else "") for key in keys_starter
+        }
         dic_tsv_results.append(temps)
 
     # For each metabolite in the dic_tsv_results if a column is not in
@@ -780,7 +797,7 @@ def check_add_unique_id_to_sbml_match(
     if met in Match_id:
         sub_results_dic = utils.find_dict_by_metabolite(dic_tsv_results, met)
         if sub_results_dic:
-            
+
             # Check if UNIQUE-ID is already present in any dic_tsv_results entry
             unique_id_exists = any(
                 d.get("Match in database") == sub_dict["UNIQUE-ID"]
@@ -788,10 +805,11 @@ def check_add_unique_id_to_sbml_match(
             )
 
             if not unique_id_exists:
-                
+
                 # Get the dict where metabolite matches and update 'Match in database'
                 test = next(
-                    (d for d in dic_tsv_results if d.get("Metabolites in mafs") == met), None
+                    (d for d in dic_tsv_results if d.get("Metabolites in mafs") == met),
+                    None,
                 )
 
                 if test and test.get("Match in database", "") == "":
@@ -835,7 +853,9 @@ def check_add_unique_id_to_sbml_match(
                 # Merge metabolite names avoiding redundant concatenations
                 met_names = set(sub_results_dic["Metabolites in mafs"].split(" _AND_ "))
                 met_names.add(test["Metabolites in mafs"])
-                sub_results_dic["Metabolites in mafs"] = " _AND_ ".join(sorted(met_names))
+                sub_results_dic["Metabolites in mafs"] = " _AND_ ".join(
+                    sorted(met_names)
+                )
 
                 sub_results_dic["Match in database"] = sub_dict["UNIQUE-ID"]
                 Match_id[met] = sub_dict["UNIQUE-ID"]
@@ -909,7 +929,7 @@ def identification_sbml_match_into_db(
         database_info (list): List to store detailed match info for
           logging or output.
     """
-   # Find all database entries that contain the metabolite or partial string
+    # Find all database entries that contain the metabolite or partial string
     sub_dict = utils.find_all_entries_with_value(dictionary_db, met)
 
     # Use different matching keys based on partial flag ---> Partial
@@ -996,13 +1016,17 @@ def match_metab_main(
         )
         for sub_sub_results_dic in sub_results_dic:
             # Match each metabolite listed in the result dictionary
-            metabolites_list = [m.strip() for m in sub_sub_results_dic["Metabolites in mafs"].split(" _AND_ ")]
+            metabolites_list = [
+                m.strip()
+                for m in sub_sub_results_dic["Metabolites in mafs"].split(" _AND_ ")
+            ]
             if met not in metabolites_list:
                 logger.info(
-                    '--"%s" is a metabolite duplicate of '
-                    '"%s" and matches via "%s" ',
+                    '--"%s" is a metabolite duplicate of ' '"%s" and matches via "%s" ',
                     met,
-                    sub_sub_results_dic["Metabolites in mafs"].split("_AND_", 2)[0].strip(),
+                    sub_sub_results_dic["Metabolites in mafs"]
+                    .split("_AND_", 2)[0]
+                    .strip(),
                     column_name,
                 )
                 sub_sub_results_dic["Metabolites in mafs"] += f" _AND_ {met}"
@@ -1015,10 +1039,9 @@ def match_metab_main(
     # --- Case 2: New match or partial duplicate
     else:
 
-
         # Subcase 2.1: Already matched but multiple UNIQUE-IDs (partial)
         if met in Match_id.keys() and Match_id[met] != "NO UNIQUE-ID":
-            
+
             if dic_temp:  # For metabolites with partial match AND not match in
                 # STEP1 for sbml matching.
                 sub_results_dic = utils.find_matching_dict(dic_tsv_results, met)
@@ -1148,7 +1171,6 @@ def match_metabo(
                 partial=True,
             )
 
-
         return dic_tsv_results, Match_id, database_info, dic_temp_db
 
     else:
@@ -1228,15 +1250,18 @@ def match_met_sbml(
 
     # Find sub-dictionary that contains the metabolite
     sub_dict = utils.find_all_sub_dicts_by_nested_value(meta_data_sbml, met)
-    
 
     if not sub_dict:
         return dic_tsv_results, Match_id, doublons, database_info
-    
 
     # Extract all values from the ‘ID’ key
-    id_unique_sbml = [ id_val for sub_sub_dict in sub_dict if "ID" in sub_sub_dict for id_val in sub_sub_dict["ID"]]
-    
+    id_unique_sbml = [
+        id_val
+        for sub_sub_dict in sub_dict
+        if "ID" in sub_sub_dict
+        for id_val in sub_sub_dict["ID"]
+    ]
+
     # Merge with ‘_AND_’
     id_unique_sbml_list = " _AND_ ".join(id_unique_sbml)
 
@@ -1256,9 +1281,9 @@ def match_met_sbml(
         if len(id_unique_sbml) > 1:
             dic_temp["Partial match"] = id_unique_sbml_list
             logger.info(
-            f'--""{met}"" has a partial match. We have match for '
-            f'more than one id in metabolic network: "{id_unique_sbml}"'
-        )
+                f'--""{met}"" has a partial match. We have match for '
+                f'more than one id in metabolic network: "{id_unique_sbml}"'
+            )
         dic_temp["Match in metabolic networks"] = id_unique_sbml
         logger.info(
             f'--"{met}" is present directly in metabolic network with the ID '
@@ -1266,7 +1291,7 @@ def match_met_sbml(
         )
 
     # Add to dic_temp regardless the MODE
-    if choice == "community" :
+    if choice == "community":
         dic_temp["Metabolites in mafs"] = f"{met}"
     else:
         dic_temp["Metabolites in mafs"] = f"{met} _AND_ {id_unique_sbml_list}"
@@ -1330,26 +1355,30 @@ def match_db_sbml(
     Returns:
         dic_tsv_results (list of dict): List of dictionaries storing matching results.
     """
-    sub_dict = utils.find_all_sub_dicts_by_nested_value(meta_data_sbml, met) 
-
+    sub_dict = utils.find_all_sub_dicts_by_nested_value(meta_data_sbml, met)
 
     if not sub_dict:
         return dic_tsv_results
- 
 
     # Extract all values from the ‘ID’ key
-    id_unique_sbml = [ id_val for sub_sub_dict in sub_dict if "ID" in sub_sub_dict for id_val in sub_sub_dict["ID"]]
+    id_unique_sbml = [
+        id_val
+        for sub_sub_dict in sub_dict
+        if "ID" in sub_sub_dict
+        for id_val in sub_sub_dict["ID"]
+    ]
 
     sub_results_dic = utils.find_matching_dict_all_key(dic_tsv_results, set_list)
     sbml_names = utils.find_keys_with_value_in_dict(dic_couple_sbml, met)
 
     temp_list.add(tuple(sbml_names))  # Add SBML names as a tuple for hashability
 
-
     if not sub_results_dic or "Metabolites in mafs" not in sub_results_dic:
         return dic_tsv_results
     # Match each metabolite listed in the result dictionary
-    metabolites = [m.strip() for m in sub_results_dic["Metabolites in mafs"].split(" _AND_ ")]
+    metabolites = [
+        m.strip() for m in sub_results_dic["Metabolites in mafs"].split(" _AND_ ")
+    ]
 
     for id_unique in id_unique_sbml:
         if id_unique not in metabolites:
@@ -1362,11 +1391,11 @@ def match_db_sbml(
                         f'"{id_unique}" via the match ID "{met}"'
                     )
                     if sub_results_dic["Metabolites in mafs"]:
-                        sub_results_dic["Metabolites in mafs"]= (
-                                f'{sub_results_dic["Metabolites in mafs"]} _AND_ {id_unique}'
-                            )
+                        sub_results_dic["Metabolites in mafs"] = (
+                            f'{sub_results_dic["Metabolites in mafs"]} _AND_ {id_unique}'
+                        )
                     else:
-                        sub_results_dic["Metabolites in mafs"]= id_unique
+                        sub_results_dic["Metabolites in mafs"] = id_unique
                     # Flatten and deduplicate SBML name list
                     flat_list = sorted(
                         set(
@@ -1378,29 +1407,36 @@ def match_db_sbml(
                         )
                     )
                     if sub_results_dic.get("Match in metabolic networks"):
-                        sub_results_dic["Match in metabolic networks"] = list(dict.fromkeys(sub_results_dic["Match in metabolic networks"] + flat_list))
+                        sub_results_dic["Match in metabolic networks"] = list(
+                            dict.fromkeys(
+                                sub_results_dic["Match in metabolic networks"]
+                                + flat_list
+                            )
+                        )
                     else:
-                        sub_results_dic["Match in metabolic networks"] =  flat_list
+                        sub_results_dic["Match in metabolic networks"] = flat_list
                     if sub_results_dic.get("Match IDS in metabolic networks"):
-                        sub_results_dic["Match IDS in metabolic networks"].append(id_unique)
+                        sub_results_dic["Match IDS in metabolic networks"].append(
+                            id_unique
+                        )
                     else:
-                        sub_results_dic["Match IDS in metabolic networks"]= [id_unique]
+                        sub_results_dic["Match IDS in metabolic networks"] = [id_unique]
             else:
                 # CLASSIC MODE — only store ID
                 if sub_results_dic.get("Match in metabolic networks"):
                     sub_results_dic["Match in metabolic networks"].append(id_unique)
                     logger.info(
-                    f'--""{met}"" has a partial match. We have match for '
-                    f'more than one id in metabolic network: "{sub_results_dic["Match in metabolic networks"]}"'
+                        f'--""{met}"" has a partial match. We have match for '
+                        f'more than one id in metabolic network: "{sub_results_dic["Match in metabolic networks"]}"'
                     )
                 else:
                     sub_results_dic["Match in metabolic networks"] = [id_unique]
                 if sub_results_dic["Metabolites in mafs"]:
-                    sub_results_dic["Metabolites in mafs"]= (
-                            f'{sub_results_dic["Metabolites in mafs"]} _AND_ {id_unique}'
-                        )
-                else: 
-                    sub_results_dic["Metabolites in mafs"]=id_unique
+                    sub_results_dic["Metabolites in mafs"] = (
+                        f'{sub_results_dic["Metabolites in mafs"]} _AND_ {id_unique}'
+                    )
+                else:
+                    sub_results_dic["Metabolites in mafs"] = id_unique
                 logger.info(
                     f'--"{db_list[-1]}" is present directly in '
                     f"metabolic network with the corresponding ID "
@@ -1412,12 +1448,10 @@ def match_db_sbml(
                     sub_results_dic["Partial match"] = met
                     logger.info(
                         f'--""{met}"" has a partial match. We have a '
-                    f'formula as identifier for this metabolite: "{met}"'
-                )
-    
+                        f'formula as identifier for this metabolite: "{met}"'
+                    )
+
     return dic_tsv_results
-
-
 
 
 def setup_match_db_sbml(
@@ -1451,7 +1485,7 @@ def setup_match_db_sbml(
     for db_list in database_info:
         temp_list = set()  # To store matched SBML networks temporarily
         set_list = db_list[-1]  # Usually the last item is the 'UNIQUE-ID'
-        
+
         # Skip if this metabolite was already matched
         if set_list not in doublons:
             # Loop through all possible names/IDs for this metabolite
@@ -1524,12 +1558,16 @@ def partial_match_met_sbml(
     """
     sub_dict = utils.find_all_sub_dicts_by_nested_value(meta_data_sbml, met)
 
-
     if not sub_dict:
         return dic_tsv_results, Match_id, doublons, database_info, dic_temp, temp_list
 
     # Extract base unique SBML ID
-    id_unique_sbml = [ id_val for sub_sub_dict in sub_dict if "ID" in sub_sub_dict for id_val in sub_sub_dict["ID"]]
+    id_unique_sbml = [
+        id_val
+        for sub_sub_dict in sub_dict
+        if "ID" in sub_sub_dict
+        for id_val in sub_sub_dict["ID"]
+    ]
 
     if choice == "community":
         for id_unique in id_unique_sbml:
@@ -1573,9 +1611,6 @@ def partial_match_met_sbml(
         "partial",
     )
     return dic_tsv_results, Match_id, doublons, database_info, dic_temp, temp_list
-
-
-
 
 
 # ---------------------------------------#
@@ -1720,39 +1755,50 @@ def mapping_run(
     # them.
     dic_tsv_results = utils.smart_merge(dic_tsv_results)
 
-    # Partial subhandling 
+    # Partial subhandling
     if choice != "community":
         for dic in dic_tsv_results:
             if dic.get("Match in metabolic networks"):
-                if len(dic["Match in metabolic networks"]) > 1 :
+                if len(dic["Match in metabolic networks"]) > 1:
                     if dic.get("Partial match"):
-                        id_unique_sbml_list = " _AND_ ".join(dic["Match in metabolic networks"])
+                        id_unique_sbml_list = " _AND_ ".join(
+                            dic["Match in metabolic networks"]
+                        )
                         merge = " _AND_ ".join(
                             dict.fromkeys([dic["Partial match"], id_unique_sbml_list])
-                            )
-                        dic["Partial match"]=  merge
+                        )
+                        dic["Partial match"] = merge
                         logger.info(
-                            f'--Partial match. We have match for '
+                            f"--Partial match. We have match for "
                             f'more than one id in metabolic network: "{merge}"'
-                            )
+                        )
                     else:
-                        id_unique_sbml_list = " _AND_ ".join(dic["Match in metabolic networks"])
-                        dic["Partial match"]=  id_unique_sbml_list
+                        id_unique_sbml_list = " _AND_ ".join(
+                            dic["Match in metabolic networks"]
+                        )
+                        dic["Partial match"] = id_unique_sbml_list
                     logger.info(
-                    f'--Partial match. We have match for '
-                    f'more than one id in metabolic network: "{dic["Match in metabolic networks"]}"'
-        )
+                        f"--Partial match. We have match for "
+                        f'more than one id in metabolic network: "{dic["Match in metabolic networks"]}"'
+                    )
     else:
         for dic in dic_tsv_results:
-            if dic.get("Match in metabolic networks") and len(dic["Match in metabolic networks"]) == 1:
+            if (
+                dic.get("Match in metabolic networks")
+                and len(dic["Match in metabolic networks"]) == 1
+            ):
                 match_ids = dic.get("Match IDS in metabolic networks", "")
                 # Only process if multiple IDs are present
                 if " _AND_ " in match_ids:
                     if dic.get("Partial match"):
                         # Use sets to avoid duplicates
-                        existing = set(x.strip() for x in dic["Partial match"].split(" _AND_ "))
+                        existing = set(
+                            x.strip() for x in dic["Partial match"].split(" _AND_ ")
+                        )
                         incoming = set(x.strip() for x in match_ids.split(" _AND_ "))
-                        updated = existing | incoming   # union = merge without duplicates
+                        updated = (
+                            existing | incoming
+                        )  # union = merge without duplicates
                         dic["Partial match"] = " _AND_ ".join(sorted(updated))
                         logger.info(
                             f'--Partial match updated with multiple IDs from "Match IDS in metabolic networks": "{dic["Partial match"]}"'
@@ -1765,8 +1811,6 @@ def mapping_run(
                         logger.info(
                             f'--Partial match set to IDs from "Match IDS in metabolic networks": "{match_ids}"'
                         )
-
-                    
 
     if partial_match:
         logger.info("\n\n------------------------------------------------")
@@ -1795,9 +1839,10 @@ def mapping_run(
             # Extract the chebi from the maf datatable merge
             dic_chebi_match = utils.find_targets_with_chebi(maf_df, unmatch_metabolites)
 
-            list_unmatch_to_reload = asyncio.run(utils.chebi_ontology_main_process(dic_chebi_match))
+            list_unmatch_to_reload = asyncio.run(
+                utils.chebi_ontology_main_process(dic_chebi_match)
+            )
             dic_unmatch_to_reload["CHEBI"] = list_unmatch_to_reload
-
 
         logger.info("\n-----> inchikey <-----")
         dic_Inchey_match = {
@@ -1994,7 +2039,6 @@ def mapping_run(
         # Groups similar dictionaries based on shared values in key
         # fields, then merges them.
         dic_tsv_results = utils.smart_merge(dic_tsv_results)
-        
 
     # #    #----------------------------#
     # #    #  Umatch set up the output  #
@@ -2017,7 +2061,7 @@ def mapping_run(
             "Partial match",
         ]
     else:
-            keys_starter = [
+        keys_starter = [
             "Metabolites in mafs",
             "Match in database",
             "Match in metabolic networks",
@@ -2027,15 +2071,13 @@ def mapping_run(
         dic_tsv_results, keys_starter, unmatch_metabolites_merged, keys
     )
 
-    if choice == 'community':
-        dic_tsv_results=utils.merge_metabolites(dic_tsv_results)
+    if choice == "community":
+        dic_tsv_results = utils.merge_metabolites(dic_tsv_results)
 
-    dic_tsv_results= utils.assign_mnm_ids(dic_tsv_results,maf_df)
-    keys_reorder.insert(0, 'MNM_ID')
+    dic_tsv_results = utils.assign_mnm_ids(dic_tsv_results, maf_df)
+    keys_reorder.insert(0, "MNM_ID")
 
-
-
-         #-----------------------------#
+    # -----------------------------#
     #    #   Results User Interface    #
     #    #-----------------------------#
 
@@ -2070,7 +2112,6 @@ def mapping_run(
 
     logger.info("\n--------------------------------------------------------\n")
 
-    
     # Write output file in funtion of the "choice"
     if partial_match:
         if choice == "community":

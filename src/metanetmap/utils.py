@@ -2,7 +2,7 @@
 # MISTIC Project INRIA/INRAE
 # Author Muller Coralie
 # Date: 2025/06/30
-# Update: 2025/08/-
+# Update: 2025/12/-
 
 import aiohttp
 import ast
@@ -28,7 +28,7 @@ logger = logging.getLogger("Mapping")
 # ----------------------------------------------------#
 
 
-def get_files_from_package_dir(package_dir: str):
+def get_files_from_package_dir(package_dir):
     """
     Given a package directory (dot-separated), return a list of
     pathlib.Path objects representing all files inside that directory.
@@ -364,6 +364,7 @@ def log_package_versions(packages):
 MAX_CONCURRENT_REQUESTS = 20
 sem = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
 
+
 async def fetch_chebi_entity(session, chebi_id):
     """
     Asynchronously fetch a ChEBI entity from the ChEBI 2.0 REST API.
@@ -425,8 +426,7 @@ async def fetch_chebi_entity(session, chebi_id):
         return None
 
 
-
-def get_chebi_links(entity_json) :
+def get_chebi_links(entity_json):
     """
     Extracts parent/child ("outgoing"/"incoming") relationships
     from a ChEBI 2.0 JSON API response.
@@ -441,30 +441,26 @@ def get_chebi_links(entity_json) :
     outgoing_relations = ontology.get("outgoing_relations", []) or []
     incoming_relations = ontology.get("incoming_relations", []) or []
 
-     # --- Outgoing relations (PARENTS) ---
+    # --- Outgoing relations (PARENTS) ---
     for rel in outgoing_relations:
         # Keep only "is a" relationships, as they represent ontology hierarchy
         if rel and rel.get("relation_type") == "is a":
             chebi_id = rel.get("final_id")
-            clean_text_outgoing = re.sub(r'<.*?>', '', rel.get("final_name"))
-            relation_chebi_dic["outgoings"].append({
-                "chebi_id": str(chebi_id),
-                "name": clean_text_outgoing
-            })
+            clean_text_outgoing = re.sub(r"<.*?>", "", rel.get("final_name"))
+            relation_chebi_dic["outgoings"].append(
+                {"chebi_id": str(chebi_id), "name": clean_text_outgoing}
+            )
 
     # --- Incoming relations (CHILDREN) ---
     for rel in incoming_relations:
         # Keep only "is a" relationships, as they represent ontology hierarchy
         if rel and rel.get("relation_type") == "is a":
             chebi_id = rel.get("init_id")
-            clean_text_incoming = re.sub(r'<.*?>', '', rel.get("init_name"))
-            relation_chebi_dic["incomings"].append({
-                "chebi_id": str(chebi_id),
-                "name": clean_text_incoming
-                })
+            clean_text_incoming = re.sub(r"<.*?>", "", rel.get("init_name"))
+            relation_chebi_dic["incomings"].append(
+                {"chebi_id": str(chebi_id), "name": clean_text_incoming}
+            )
     return relation_chebi_dic
-
-
 
 
 def chebi_parents_childrens(list_unmatch_to_reload, list_relation_chebi, key):
@@ -525,8 +521,6 @@ def chebi_parents_childrens(list_unmatch_to_reload, list_relation_chebi, key):
     return list_unmatch_to_reload
 
 
-
-
 async def process_chebi(session, key, value, list_unmatch_to_reload):
     """
     Process a single ChEBI identifier (compound).
@@ -573,7 +567,6 @@ async def process_chebi(session, key, value, list_unmatch_to_reload):
     # Initialize this key with the main entity name
     list_unmatch_to_reload[key] = [entity_name]
     list_unmatch_to_reload[key].append(entity.get("name"))
-
 
     # Vérifie l'existence et récupère la valeur
     manual_xrefs = entity.get("database_accessions", {}).get("MANUAL_X_REF", [])
@@ -649,7 +642,6 @@ async def chebi_ontology_main_process(dic_chebi_match):
 
     # Return the final structured result containing all ChEBI data
     return list_unmatch_to_reload
-
 
 
 def find_targets_with_chebi(df, targets):
@@ -781,70 +773,6 @@ def analyze_column_matches(dict_list, col_db, col_net, col_partial=None):
     return stats
 
 
-# This one keep the match in the metabolic networks
-# def assign_mnm_ids(tsv_results, maf_df):
-#     """
-#     Assign MNM_IDs to tsv_results based on a lookup DataFrame maf_df.
-
-#     For each row in tsv_results (a list of dictionaries):
-#         1. Splits the 'Metabolites' field by '_AND_' into individual metabolites.
-#         2. Searches each metabolite in all columns of maf_df.
-#         3. Collects all corresponding MNM_ID values from maf_df.
-#         4. Updates the 'MNM_ID' key with all IDs (existing + new).
-#         5. Updates the 'Partial match' key if there are multiple IDs in MNM_ID.
-#         6. Ensures 'MNM_ID' is always the first key in the dictionary.
-
-#     Args:
-#         tsv_results (list): List of dictionaries representing rows of metabolites.
-#         maf_df (pd.DataFrame): DataFrame containing MNM_IDs and other columns to match.
-
-#     Returns:
-#         list: Updated list of dictionaries with MNM_ID and Partial match columns.
-#     """
-#     MNM_ID_col = "MNM_ID"
-#     results_with_ids = []
-
-#     for row in tsv_results:
-#         if "MNM_ID" not in row:
-#             row["MNM_ID"] = ""
-
-#         metabolites = str(row.get("Metabolites in mafs", "")).split("_AND_")
-#         metabolites = [m.strip() for m in metabolites]
-
-#         ids_to_add = []
-
-#         for metab in metabolites:
-#             matches = maf_df.apply(lambda r: metab in r.values, axis=1)
-#             for idx in maf_df[matches].index:
-#                 mnm_id_val = str(maf_df.at[idx, MNM_ID_col])
-#                 if mnm_id_val not in ids_to_add:
-#                     ids_to_add.append(mnm_id_val)
-
-#         current_val = row.get("MNM_ID", "").strip()
-
-#         if current_val == "" or current_val.lower() == "nan":
-#             row["MNM_ID"] = "_AND_".join(ids_to_add)
-#         else:
-#             current_list = [x.strip() for x in current_val.split("_AND_")]
-#             for new_id in ids_to_add:
-#                 if new_id not in current_list:
-#                     current_list.append(new_id)
-#             row["MNM_ID"] = "_AND_".join(current_list)
-
-#         # Update Partial match if MNM_ID has multiple IDs (i.e., contains '_AND_')
-#         mnm_ids = row["MNM_ID"].split("_AND_")
-#         if len(mnm_ids) > 1:
-#             row["Partial match"] = "_AND_".join(mnm_ids)
-
-#         # Ensure MNM_ID is the first key
-#         new_row = {"MNM_ID": row["MNM_ID"]}
-#         for k, v in row.items():
-#             if k != "MNM_ID":
-#                 new_row[k] = v
-
-#         results_with_ids.append(new_row)
-#     return results_with_ids
-
 def assign_mnm_ids(tsv_results, maf_df):
     MNM_ID_col = "MNM_ID"
     results_with_ids = []
@@ -891,10 +819,12 @@ def assign_mnm_ids(tsv_results, maf_df):
         mnm_ids = row["MNM_ID"].split(" _AND_ ")
         if len(mnm_ids) > 1:
             partial_test = row["Partial match"].split(" _AND_ ")
-            if partial_test[0] == '':
+            if partial_test[0] == "":
                 row["Partial match"] = " _AND_ ".join(mnm_ids)
             else:
-                row["Partial match"] = row["Partial match"] +" _AND_ " + " _AND_ ".join(mnm_ids)
+                row["Partial match"] = (
+                    row["Partial match"] + " _AND_ " + " _AND_ ".join(mnm_ids)
+                )
 
         # Ensure MNM_ID is first key
         new_row = {"MNM_ID": row["MNM_ID"]}
@@ -907,9 +837,8 @@ def assign_mnm_ids(tsv_results, maf_df):
     return results_with_ids
 
 
-
 # ----------------------------------------------------#
-#             UTILS -> Search management             #
+#             UTILS -> Search management              #
 # ----------------------------------------------------#
 
 
@@ -936,8 +865,7 @@ def fix_arrows_in_parentheses(text):
     return re.sub(r"\(([^()]+)\)", lambda m: f"({m.group(1).replace('?', '->')})", text)
 
 
-
-def find_all_sub_dicts_by_nested_value(data: dict, search_value: str):
+def find_all_sub_dicts_by_nested_value(data, search_value):
     """
     Searches inside a nested dictionary (dictionary of dictionaries)
     for all sub-dictionaries that contain a list with a string equal to
@@ -966,8 +894,7 @@ def find_all_sub_dicts_by_nested_value(data: dict, search_value: str):
     ]
 
 
-
-def find_dict_by_metabolite(dic_tsv_results: list, met: str):
+def find_dict_by_metabolite(dic_tsv_results, met):
     """
     Search through a list of dictionaries to find the first dictionary
     where the value associated with the key 'Metabolites' equals the
@@ -1025,8 +952,7 @@ def find_keys_with_value_in_dict(data_dict, search_value):
     return keys_found
 
 
-
-def find_matching_dict(dic_tsv_results: list, target: str):
+def find_matching_dict(dic_tsv_results, target):
     """
     Returns the first dictionary from dic_tsv_results where the
     'Metabolites' field contains the target string, either directly or
@@ -1059,9 +985,7 @@ def find_matching_dict(dic_tsv_results: list, target: str):
     return None
 
 
-
-
-def find_matching_dict_all_key(dic_tsv_results: list, target: str):
+def find_matching_dict_all_key(dic_tsv_results, target):
     """
     Search for the first dictionary in dic_tsv_results where any
     relevant field contains the target string (case-insensitive),
@@ -1104,7 +1028,7 @@ def find_matching_dict_all_key(dic_tsv_results: list, target: str):
     return None
 
 
-def find_all_entries_with_value(data: list, target_value: str):
+def find_all_entries_with_value(data, target_value):
     """
     Search through a list of dictionaries and return a list of all
     dictionaries where any value matches the target_value
@@ -1139,7 +1063,7 @@ def find_all_entries_with_value(data: list, target_value: str):
     return matched_entries
 
 
-def find_all_entries_with_value_tsv(data: list, target_value: str):
+def find_all_entries_with_value_tsv(data, target_value):
     """
     Search through a list of dictionaries and return a list of all
     dictionaries where any key or value matches the target_value
@@ -1184,7 +1108,7 @@ def find_all_entries_with_value_tsv(data: list, target_value: str):
     return matched_entries
 
 
-def find_key_by_list_value(data: dict, search_value: str):
+def find_key_by_list_value(data, search_value):
     """
     Searches for a value inside the lists of a dictionary.
     Returns the key whose list contains the value (case-insensitive).
@@ -1209,7 +1133,7 @@ def find_key_by_list_value(data: dict, search_value: str):
     )
 
 
-def check_formula_in_dict(data: dict, target_formula: str) -> bool:
+def check_formula_in_dict(data, target_formula):
     """
     Check if the 'formula' key exists in the dictionary and if any of
     its values matches the target_formula (case-insensitive).
@@ -1519,16 +1443,14 @@ def smart_merge(dict_list):
     return merged_results
 
 
-
-
 # Community merge metabolites frome metabolic networks
 def split_ids(v):
     """
     Splits a string containing IDs separated by '_AND_' into a list of trimmed individual IDs.
-    
+
     Parameters:
         v (str or None): A string containing IDs separated by '_AND_' or None.
-    
+
     Returns:
         list: A list of individual ID strings with whitespace stripped.
               Returns an empty list if input is None or empty.
@@ -1537,11 +1459,12 @@ def split_ids(v):
         return []
     return [x.strip() for x in v.split("_AND_")]
 
+
 def merge_metabolites(data):
     """
     Merges entries in a list of dictionaries representing metabolite data based on overlapping 'Match IDS in metabolic networks'.
     The function combines rows that share any common metabolic network IDs, merging specific columns, and preserving others.
-    
+
     Key Behaviors:
     - 'Match IDS in metabolic networks' are split by '_AND_' and used to identify overlapping entries.
     - Rows sharing at least one common ID are merged into one.
@@ -1549,15 +1472,15 @@ def merge_metabolites(data):
     - Other columns are retained from the first row in each merged group.
     - Rows without any 'Match IDS in metabolic networks' are left unchanged.
     - Internal helper fields (_ids, _metabs, _partial) are used temporarily and removed from output.
-    
+
     Parameters:
         data (list of dict): Input data where each dict contains columns including 'Metabolites',
                              'Match IDS in metabolic networks', and 'Partial match'.
-    
+
     Returns:
         list of dict: The merged list of dictionaries with combined rows as described.
     """
-    
+
     # Step 1: Parse and prepare sets for IDs, metabolites, and partial matches for each row
     for row in data:
         row["_ids"] = set(split_ids(row.get("Match IDS in metabolic networks", "")))
@@ -1587,7 +1510,7 @@ def merge_metabolites(data):
             clusters.append(set(ids))
 
     used = set()  # Keep track of indices of rows that were merged
-    out = []      # Output list of merged dictionaries
+    out = []  # Output list of merged dictionaries
 
     # Step 3: Merge rows for each cluster of overlapping IDs
     for group in clusters:
@@ -1597,15 +1520,19 @@ def merge_metabolites(data):
         merged_ids = []
         merged_partial = set()
 
-        first_row = None  # Keep track of the first row in the cluster to copy other columns
+        first_row = (
+            None  # Keep track of the first row in the cluster to copy other columns
+        )
 
         for i, row in enumerate(data):
             # If row IDs overlap with cluster IDs, it belongs to this group
             if row["_ids"] & group:
                 used.add(i)
                 if first_row is None:
-                    first_row = row.copy()  # Copy first matching row to preserve other columns
-                
+                    first_row = (
+                        row.copy()
+                    )  # Copy first matching row to preserve other columns
+
                 # Collect metabolites, IDs, and partial matches for merging
                 merged_metabs.extend(row["_metabs"])
                 merged_ids.extend(row["_ids"])
@@ -1613,17 +1540,26 @@ def merge_metabolites(data):
 
         # Step 4: Copy all columns except the ones merged from the first row in the cluster
         for k, v in first_row.items():
-            if k not in ["Metabolites in mafs", "Match IDS in metabolic networks", "Partial match", "_ids", "_metabs", "_partial"]:
+            if k not in [
+                "Metabolites in mafs",
+                "Match IDS in metabolic networks",
+                "Partial match",
+                "_ids",
+                "_metabs",
+                "_partial",
+            ]:
                 merged_row[k] = v
 
         # Step 5: Create merged columns by joining unique values with '_AND_'
         merged_row["Metabolites in mafs"] = " _AND_ ".join(sorted(set(merged_metabs)))
-        merged_row["Match IDS in metabolic networks"] = " _AND_ ".join(sorted(set(merged_ids)))
+        merged_row["Match IDS in metabolic networks"] = " _AND_ ".join(
+            sorted(set(merged_ids))
+        )
         merged_row["Partial match"] = " _AND_ ".join(sorted(merged_partial))
 
         out.append(merged_row)
 
-    # Step 6: Add rows that had no overlapping IDs (not merged) unchanged, 
+    # Step 6: Add rows that had no overlapping IDs (not merged) unchanged,
     # after cleaning up the temporary helper fields
     for i, row in enumerate(data):
         if i not in used:

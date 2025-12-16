@@ -2,7 +2,7 @@
 # MISTIC Project INRIA/INRAE
 # Author Muller Coralie
 # Date: 2025/08/16
-# Update: 2025/08/-
+# Update: 2025/12/-
 
 
 import argparse
@@ -97,8 +97,7 @@ def main():
     )
 
     # Multiple complement files for build_db mode
-    parent_parser_files_for_build_db = argparse.ArgumentParser(
-        add_help=False)
+    parent_parser_files_for_build_db = argparse.ArgumentParser(add_help=False)
     parent_parser_files_for_build_db.add_argument(
         "-f",
         "--files_for_build_db",
@@ -119,9 +118,7 @@ def main():
     )
 
     # Output path for
-    parent_parser_out_db = argparse.ArgumentParser(
-        add_help=False
-    )
+    parent_parser_out_db = argparse.ArgumentParser(add_help=False)
     parent_parser_out_db.add_argument(
         "--out_db",
         help="Path for the creation of the  to complement files for database conversion (build_db mode)\n"
@@ -134,7 +131,7 @@ def main():
     parent_parser_db.add_argument(
         "--db",
         help="Choose 'metacyc' or 'metanetx' methods to build the conversion datatable"
-        "--db metacyc or --db metanetx"
+        "--db metacyc or --db metanetx",
     )
 
     # Community mode for test:
@@ -180,12 +177,13 @@ def main():
     subparsers.add_parser(
         "build_db",
         help="Run in building mode",
-        parents=[parent_parser_db,
-        parent_parser_files_for_build_db,
-        parent_parser_complement_files_for_build_db,
-        parent_parser_out_db,
-        parent_parser_quiet,
-                ],
+        parents=[
+            parent_parser_db,
+            parent_parser_files_for_build_db,
+            parent_parser_complement_files_for_build_db,
+            parent_parser_out_db,
+            parent_parser_quiet,
+        ],
         description="Run database building mode to generate the "
         "database conversion file",
     )
@@ -324,7 +322,7 @@ def main():
                 load_args(args)
         elif args.db == "metanetx":
             if not args.files_for_build_db:
-                files_for_build_db = [ "",""]
+                files_for_build_db = ["", ""]
             else:
                 files_for_build_db = args.files_for_build_db
             args = Namespace(
@@ -338,10 +336,10 @@ def main():
             load_args(args)
         else:
             logger.critical(
-            "Error: the '--db' argument must be either 'metacyc' or 'metanetx'. "
-            "You must choose one of these database methods."
+                "Error: the '--db' argument must be either 'metacyc' or 'metanetx'. "
+                "You must choose one of these database methods."
             )
-            sys.exit()    
+            sys.exit()
 
     elif args.cmd == "test":
         #     ## Test toys
@@ -383,8 +381,8 @@ def main():
             List_SBML_paths = [path_sbml_toys1, path_sbml_toys3, path_sbml_toys2]
 
             maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(
-                List_MAF_paths
-            ,output_folder_community)
+                List_MAF_paths, output_folder_community
+            )
             dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(
                 List_SBML_paths
             )
@@ -423,8 +421,8 @@ def main():
             List_MAF_paths = [path_maf_toys1, path_maf_toys2, path_maf_toys3]
 
             maf_dictionnary, keys, maf_df = mapping.setup_merged_list_maf_metabolites(
-                List_MAF_paths
-            ,output_folder_classic)
+                List_MAF_paths, output_folder_classic
+            )
             dic_couple_sbml, meta_data_sbml = mapping.setup_merge_list_sbml_metabolites(
                 List_SBML_paths
             )
@@ -459,7 +457,9 @@ def main():
                 f"metabolic networks user path: {sbml_input}\n"
             )
 
-            if Path(sbml_input).is_dir() and (Path(maf_input).is_file() or Path(maf_input).is_dir()):
+            if Path(sbml_input).is_dir() and (
+                Path(maf_input).is_file() or Path(maf_input).is_dir()
+            ):
                 List_MAF_paths = mapping.set_list_paths(
                     maf_input, List_MAF_paths, ext1=None, ext2=None
                 )
@@ -473,7 +473,9 @@ def main():
                     f"List metabolic networks paths: {List_SBML_paths}"
                 )
                 maf_dictionnary, keys, maf_df = (
-                    mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
+                    mapping.setup_merged_list_maf_metabolites(
+                        List_MAF_paths, output_folder
+                    )
                 )
                 dic_couple_sbml, meta_data_sbml = (
                     mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)
@@ -519,11 +521,9 @@ def main():
                 f"Load metabolomics data user path: {maf_input} and "
                 f"metabolic networks user path: {sbml_input}\n"
             )
-            if (
-                (Path(maf_input).is_file()
-                or Path(maf_input).is_dir())
-                and Path(sbml_input).is_file()
-            ):
+            if (Path(maf_input).is_file() or Path(maf_input).is_dir()) and Path(
+                sbml_input
+            ).is_file():
                 List_MAF_paths = mapping.set_list_paths(
                     maf_input, List_MAF_paths, ext1=None, ext2=None
                 )
@@ -540,7 +540,9 @@ def main():
                 )
 
                 maf_dictionnary, keys, maf_df = (
-                    mapping.setup_merged_list_maf_metabolites(List_MAF_paths,output_folder)
+                    mapping.setup_merged_list_maf_metabolites(
+                        List_MAF_paths, output_folder
+                    )
                 )
                 dic_couple_sbml, meta_data_sbml = (
                     mapping.setup_merge_list_sbml_metabolites(List_SBML_paths)

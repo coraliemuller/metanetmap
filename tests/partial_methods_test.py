@@ -18,45 +18,39 @@ from metanetmap import mapping
 from metanetmap import utils
 
 
-#-----------------------#
+# -----------------------#
 #      enantiomers      #
-#-----------------------#
+# -----------------------#
 
 
 def test_remove_enantiomer_and_inchey_metadata():
     input_metadata = {
         "glucose": {
             "ID": ["D-glucose", "glucose", "alpha-D-glucose"],
-            "biocyc": ["D-glucose", "beta-L-glucose"]
+            "biocyc": ["D-glucose", "beta-L-glucose"],
         },
-        "fructose": {
-            "ID": ["L-fructose", "fructose"],
-            "biocyc": []
-        }
+        "fructose": {"ID": ["L-fructose", "fructose"], "biocyc": []},
     }
 
     expected_output = {
         "glucose": {
             "ID": ["glucose", "glucose", "glucose"],
-            "biocyc": ["glucose", "glucose"]
+            "biocyc": ["glucose", "glucose"],
         },
-        "fructose": {
-            "ID": ["fructose", "fructose"],
-            "biocyc": []
-        }
+        "fructose": {"ID": ["fructose", "fructose"], "biocyc": []},
     }
 
     result = mapping.remove_enantiomer_and_Inchey_metadata(input_metadata)
     assert result == expected_output
 
 
-#----------------------------------------------------#
+# ----------------------------------------------------#
 #             Chebi unmatch test                     #
-#----------------------------------------------------#
-
+# ----------------------------------------------------#
 
 
 # Fetch CHEBI step
+
 
 @pytest.mark.asyncio
 async def test_fetch_chebi_entity_success():
@@ -70,7 +64,7 @@ async def test_fetch_chebi_entity_success():
             "An octadecenoic acid having a double bond at position 11; "
             "and which can occur in <i>cis</i>- or <i>trans</i>- configurations."
         ),
-        "ascii_name": "vaccenic acid"
+        "ascii_name": "vaccenic acid",
     }
 
     # Mock réponse HTTP
@@ -101,8 +95,6 @@ async def test_fetch_chebi_entity_success():
     assert result["ascii_name"] == "vaccenic acid"
 
 
-
-
 @pytest.mark.asyncio
 async def test_fetch_chebi_entity_failure_status():
     """Test fetch_chebi_entity returns None for non-200 status."""
@@ -124,7 +116,6 @@ async def test_fetch_chebi_entity_failure_status():
     result = await utils.fetch_chebi_entity(mock_session, "1234")
 
     assert result is None
-
 
 
 def test_get_chebi_links_missing_relations():
@@ -167,13 +158,17 @@ def test_chebi_parents_childrens_with_names():
         "incomings": [{"chebi_id": "15379", "name": "hydron"}],
     }
 
-    result = utils.chebi_parents_childrens(list_unmatch_to_reload, list_relation_chebi, "water")
+    result = utils.chebi_parents_childrens(
+        list_unmatch_to_reload, list_relation_chebi, "water"
+    )
 
     expected = {
         "water": [
             "CHEBI:15377",
-            "CHEBI:15378", "hydroxide ion",
-            "CHEBI:15379", "hydron",
+            "CHEBI:15378",
+            "hydroxide ion",
+            "CHEBI:15379",
+            "hydron",
         ]
     }
 
@@ -188,7 +183,9 @@ def test_chebi_parents_childrens_without_name():
         "incomings": [{"chebi_id": "12345"}],
     }
 
-    result = utils.chebi_parents_childrens(list_unmatch_to_reload, list_relation_chebi, "acetate")
+    result = utils.chebi_parents_childrens(
+        list_unmatch_to_reload, list_relation_chebi, "acetate"
+    )
 
     expected = {
         "acetate": [
@@ -206,7 +203,9 @@ def test_chebi_parents_childrens_empty_relations():
     list_unmatch_to_reload = {"hydron": ["CHEBI:15379"]}
     list_relation_chebi = {"outgoings": [], "incomings": []}
 
-    result = utils.chebi_parents_childrens(list_unmatch_to_reload, list_relation_chebi, "hydron")
+    result = utils.chebi_parents_childrens(
+        list_unmatch_to_reload, list_relation_chebi, "hydron"
+    )
 
     # The structure should remain unchanged
     assert result == {"hydron": ["CHEBI:15379"]}
@@ -226,11 +225,11 @@ def test_chebi_parents_childrens_multiple_entries():
         ],
     }
 
-    result = utils.chebi_parents_childrens(list_unmatch_to_reload, list_relation_chebi, "ammonia")
+    result = utils.chebi_parents_childrens(
+        list_unmatch_to_reload, list_relation_chebi, "ammonia"
+    )
 
     assert "CHEBI:15377" in result["ammonia"]
     assert "base" in result["ammonia"]
     assert "ammonium" in result["ammonia"]
     assert result["ammonia"][0] == "CHEBI:16134"
-
-
