@@ -266,7 +266,7 @@ Details on output files for mapping mode
    
    The output is a tabular file containing several columns with mapping results and metadata:
 
-  1. **MNM_ID** 
+   1. **MNM_ID** 
        
       A unique identifier assigned to each metabolite entry in MAF files, used to clearly track and distinguish individual rows after the mapping process.
    
@@ -347,6 +347,7 @@ Details on output files for mapping mode
    
    
    - Exemple of community mode output: some column name are missing (non-exhaustive)
+  
     +------------------------+----------------------------------------+------------------------+-------------------------------+-----------------------------------------------+-----------------------------------------------+
     | MNM_ID                 | Metabolite in maf                      | Match in database      | Match in metabolic networks   | Match IDS in metabolic networks               | Partial match                                 |
     +========================+========================================+========================+===============================+===============================================+===============================================+
@@ -381,6 +382,7 @@ Details on output files for mapping mode
    
      
    - Output file content and column structure
+
     +-------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
     | **Column Name**                     | **Description**                                                                                                                                                                                                                                |
     +=====================================+================================================================================================================================================================================================================================================+
