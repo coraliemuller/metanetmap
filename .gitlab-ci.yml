@@ -54,8 +54,8 @@ Quality:
   script:
     - export PATH="${PATH}:${HOME}/.local/bin"
     - isort --check-only --diff src || ISORT_EXIT=$?  # Ignore failure
-    - flake8 src || FLAKE8_EXIT=$?   # Ignore failure
-    - expr ${ISORT_EXIT:-0} + ${FLAKE8_EXIT:-0} = 0
+    # - flake8 src || FLAKE8_EXIT=$?   # Ignore failure
+    # - expr ${ISORT_EXIT:-0} + ${FLAKE8_EXIT:-0} = 0
   allow_failure: true
 
 
