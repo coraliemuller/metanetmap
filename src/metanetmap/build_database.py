@@ -109,7 +109,6 @@ def replace_line(line):
     return line.strip()
 
 
-
 ###########################################
 #          Main Script Metacyc            #
 ###########################################
@@ -291,7 +290,6 @@ def manage_synonyms(dictionary_db):
     return dictionary_db
 
 
-
 ##############################################
 #          Add complement                    #
 ##############################################
@@ -334,6 +332,7 @@ def load_database_metanetx(database_conversion):
         logger.critical(f"Error reading file: {e}")
         sys.exit(1)
     return datatable
+
 
 def load_complementary_datatable(datatable_conversion):
     """
@@ -447,14 +446,12 @@ def add_complement_from_complementary(dictionary_db, complementary_dicts):
     return dictionary_db
 
 
-
 ###########################################
 #          Main Script MetaNetX           #
 ###########################################
 
 
-
-def download_metanetx_file(filename, url, root) :
+def download_metanetx_file(filename, url, root):
     """
     Download a MetaNetX file into a choosen directory and return its full path.
 
@@ -492,9 +489,7 @@ def download_metanetx_file(filename, url, root) :
         return None
 
 
-
-
-###  File reading functions 
+###  File reading functions
 def read_chem_prop(path):
     """
     Read the MetaNetX chemical properties file (chem_prop.tsv).
@@ -515,19 +510,20 @@ def read_chem_prop(path):
             if not line or line.startswith("#"):
                 continue
             parts = line.split("\t")
-            rows.append({
-                "MNX_ID": parts[0] if len(parts) > 0 else "",
-                "COMMON_NAME": parts[1] if len(parts) > 1 else "",
-                "REFERENCE": parts[2] if len(parts) > 2 else "",
-                "FORMULA": parts[3] if len(parts) > 3 else "",
-                "CHARGE": parts[4] if len(parts) > 4 else "",
-                "MOLECULAR_WEIGHT": parts[5] if len(parts) > 5 else "",
-                "INCHI": parts[6] if len(parts) > 6 else "",
-                "INCHI_KEY": parts[7] if len(parts) > 7 else "",
-                "SMILES": parts[8] if len(parts) > 8 else ""
-            })
+            rows.append(
+                {
+                    "MNX_ID": parts[0] if len(parts) > 0 else "",
+                    "COMMON_NAME": parts[1] if len(parts) > 1 else "",
+                    "REFERENCE": parts[2] if len(parts) > 2 else "",
+                    "FORMULA": parts[3] if len(parts) > 3 else "",
+                    "CHARGE": parts[4] if len(parts) > 4 else "",
+                    "MOLECULAR_WEIGHT": parts[5] if len(parts) > 5 else "",
+                    "INCHI": parts[6] if len(parts) > 6 else "",
+                    "INCHI_KEY": parts[7] if len(parts) > 7 else "",
+                    "SMILES": parts[8] if len(parts) > 8 else "",
+                }
+            )
     return pd.DataFrame(rows)
-
 
 
 def read_chem_xref(path):
@@ -550,13 +546,14 @@ def read_chem_xref(path):
             if not line or line.startswith("#"):
                 continue
             parts = line.split("\t")
-            rows.append({
-                "source": parts[0] if len(parts) > 0 else "",
-                "MNX_ID": parts[1] if len(parts) > 1 else "",
-                "description": parts[2] if len(parts) > 2 else ""
-            })
+            rows.append(
+                {
+                    "source": parts[0] if len(parts) > 0 else "",
+                    "MNX_ID": parts[1] if len(parts) > 1 else "",
+                    "description": parts[2] if len(parts) > 2 else "",
+                }
+            )
     return pd.DataFrame(rows)
-
 
 
 # --- Extract database-specific IDs ---
@@ -577,8 +574,12 @@ def extract_ids(df, db_prefix):
         A dataframe containing MNX_ID and the concatenated list of unique database-specific identifiers.
     """
     subset = df[df["source"].str.startswith(db_prefix)]
-    return subset.groupby("MNX_ID")["source"].apply(lambda x: "|".join(sorted(set(x)))).reset_index().rename(columns={"source": db_prefix.upper()})
-
+    return (
+        subset.groupby("MNX_ID")["source"]
+        .apply(lambda x: "|".join(sorted(set(x))))
+        .reset_index()
+        .rename(columns={"source": db_prefix.upper()})
+    )
 
 
 def explode_ids(df, col):
@@ -612,11 +613,13 @@ def simplify_bigg(val):
 
     Removes known prefixes like 'bigg.metabolite:', 'biggM:', or 'M_'.
     """
-    if pd.isna(val): return ""
+    if pd.isna(val):
+        return ""
     vals = set()
     for v in val.split("|"):
         v = re.sub(r"^(bigg\.metabolite:|biggM:M_|biggM:|M_)", "", v.strip())
-        if v: vals.add(v)
+        if v:
+            vals.add(v)
     return "|".join(sorted(vals))
 
 
@@ -626,12 +629,15 @@ def simplify_seed(val):
 
     Removes prefixes such as 'seed.compound:', 'seedM:', and 'M_'.
     """
-    if pd.isna(val): return ""
+    if pd.isna(val):
+        return ""
     vals = set()
     for v in val.split("|"):
         v = re.sub(r"^(seed\.compound:|seedM:|M_)", "", v.strip())
-        if v: vals.add(v)
+        if v:
+            vals.add(v)
     return "|".join(sorted(vals))
+
 
 def simplify_vmh(val):
     """
@@ -640,13 +646,16 @@ def simplify_vmh(val):
     Removes prefixes such as 'vmhM:', 'vmhM:M_', 'vmhmetabolite:', and 'M_'.
     Ensures that the final identifier is clean (e.g. 'vmhM:M_oh1|vmhM:oh1|vmhmetabolite:oh1' -> 'oh1').
     """
-    if pd.isna(val): return ""
+    if pd.isna(val):
+        return ""
     vals = set()
     for v in val.split("|"):
         # Remove all known VMH prefixes
         v = re.sub(r"^(vmhM:M_|vmhM:|vmhmetabolite:|M_)", "", v.strip())
-        if v: vals.add(v)
+        if v:
+            vals.add(v)
     return "|".join(sorted(vals))
+
 
 def simplify_hmdb(val):
     """
@@ -674,8 +683,10 @@ def simplify_metacyc(val):
     vals = set()
     for v in val.split("|"):
         v = re.sub(r"^(metacyc\.compound:|metacycM:)", "", v.strip())
-        if v: vals.add(v)
+        if v:
+            vals.add(v)
     return "|".join(sorted(vals))
+
 
 # --- Final cleanup: remove any remaining 'M_' prefix in SEED and BIGG columns ---
 def remove_prefix_M(val):
@@ -690,7 +701,6 @@ def remove_prefix_M(val):
     return "|".join(vals)
 
 
-
 ######################
 #       Run          #
 ######################
@@ -701,7 +711,7 @@ def parse_args():
     Parses command-line arguments for the MetaCyc/MetaNetX data conversion script.
 
     Returns:
-        argparse.Namespace: Parsed arguments 
+        argparse.Namespace: Parsed arguments
     """
     parser = argparse.ArgumentParser()
 
@@ -760,7 +770,6 @@ def load_args(args=None):
         print("---->    Build database run in quiet mode    <----\n")
     logger.addHandler(console_handler)
 
-
     if not args.output:
         output = ""
     else:
@@ -784,15 +793,13 @@ def load_args(args=None):
             output = os.path.join(root, "metanetx_conversion_datatable.tsv")
         else:
             logger.critical(
-            "Error: the '--db' argument must be either 'metacyc' or 'metanetx'. "
-            "You must choose one of these database methods."
+                "Error: the '--db' argument must be either 'metacyc' or 'metanetx'. "
+                "You must choose one of these database methods."
             )
             sys.exit()
     else:
         stripped = os.path.dirname(output)
         utils.is_valid_dir(stripped)
-
-    
 
     directory = os.path.dirname(output)
     if directory != "":
@@ -841,7 +848,9 @@ def load_args(args=None):
 
             logger.info("---> Complementary file added :")
             column_dicts = load_complementary_datatable(args.complement_file)
-            dictionary_db = add_complement_from_complementary(dictionary_db, column_dicts)
+            dictionary_db = add_complement_from_complementary(
+                dictionary_db, column_dicts
+            )
             utils.write_csv(dictionary_db, output, keys)
         else:
             logger.info("\n---> Run construction of the datatable for Metacyc")
@@ -850,21 +859,29 @@ def load_args(args=None):
             dictionary_db, keys = build_main_dictionary(args.metacyc_file)
             dictionary_db = manage_synonyms(dictionary_db)
             utils.write_csv(dictionary_db, output, keys)
-    
+
     if args.db == "metanetx":
         if args.chem_prop_file == "":
-            chem_prop_file=download_metanetx_file("chem_prop.tsv","https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_prop.tsv",root)
+            chem_prop_file = download_metanetx_file(
+                "chem_prop.tsv",
+                "https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_prop.tsv",
+                root,
+            )
         else:
-            chem_prop_file=args.chem_prop_file
-        if args.chem_ref_file =="":   
-            chem_ref_file=download_metanetx_file("chem_xref.tsv","https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_xref.tsv",root)
+            chem_prop_file = args.chem_prop_file
+        if args.chem_ref_file == "":
+            chem_ref_file = download_metanetx_file(
+                "chem_xref.tsv",
+                "https://www.metanetx.org/cgi-bin/mnxget/mnxref/chem_xref.tsv",
+                root,
+            )
         else:
-            chem_ref_file=args.chem_ref_file
+            chem_ref_file = args.chem_ref_file
         if complementary_file:  # iF complementrary file is add
             utils.is_valid_file(complementary_file)
-    
+
             logger.info("\n---> Run construction of the datatable for MetaNetX\n")
-                        # --- Load data ---
+            # --- Load data ---
             df_prop = read_chem_prop(chem_prop_file)
             df_xref = read_chem_xref(chem_ref_file)
             # Extract references for each database
@@ -874,10 +891,12 @@ def load_args(args=None):
             hmdb_df = extract_ids(df_xref, "hmdb")
             refmet_df = extract_ids(df_xref, "refmet")
             seed_df = extract_ids(df_xref, "seed")
-            vmh_df = extract_ids(df_xref, "vmh")  
+            vmh_df = extract_ids(df_xref, "vmh")
 
             # --- Extract MetaCyc references ---
-            metacyc_df = df_xref[df_xref["source"].str.startswith("metacyc")][["MNX_ID", "source"]].rename(columns={"source": "METACYC"})
+            metacyc_df = df_xref[df_xref["source"].str.startswith("metacyc")][
+                ["MNX_ID", "source"]
+            ].rename(columns={"source": "METACYC"})
 
             # --- Specific cleaning functions ---
             # CHEBI → one row per ID
@@ -896,7 +915,15 @@ def load_args(args=None):
 
             # --- Merge all dataframes together ---
             df_final = df_prop.merge(metacyc_df, on="MNX_ID", how="left")
-            for d in [chebi_df, pubchem_df, bigg_df, hmdb_df, refmet_df, seed_df, vmh_df]:
+            for d in [
+                chebi_df,
+                pubchem_df,
+                bigg_df,
+                hmdb_df,
+                refmet_df,
+                seed_df,
+                vmh_df,
+            ]:
                 df_final = df_final.merge(d, on="MNX_ID", how="left")
 
             # Rename MNX_ID → UNIQUE-ID
@@ -907,15 +934,36 @@ def load_args(args=None):
                 df_final = df_final.drop(columns=["CHARGE"])
 
             # Add missing columns if necessary
-            for col in ["ABBREV_NAME", "SYNONYMS", "ADD-COMPLEMENT", "NON-STANDARD-INCHI"]:
+            for col in [
+                "ABBREV_NAME",
+                "SYNONYMS",
+                "ADD-COMPLEMENT",
+                "NON-STANDARD-INCHI",
+            ]:
                 if col not in df_final.columns:
                     df_final[col] = ""
 
             # Reorder columns for final export (added VMH)
             cols_order = [
-                "UNIQUE-ID", "CHEBI", "COMMON_NAME", "ABBREV_NAME", "SYNONYMS", "ADD-COMPLEMENT",
-                "MOLECULAR_WEIGHT", "SEED", "BIGG", "HMDB", "METACYC",
-                "REFMET", "PUBCHEM", "VMH", "CAS", "INCHI", "NON-STANDARD-INCHI", "INCHI_KEY", "SMILES"
+                "UNIQUE-ID",
+                "CHEBI",
+                "COMMON_NAME",
+                "ABBREV_NAME",
+                "SYNONYMS",
+                "ADD-COMPLEMENT",
+                "MOLECULAR_WEIGHT",
+                "SEED",
+                "BIGG",
+                "HMDB",
+                "METACYC",
+                "REFMET",
+                "PUBCHEM",
+                "VMH",
+                "CAS",
+                "INCHI",
+                "NON-STANDARD-INCHI",
+                "INCHI_KEY",
+                "SMILES",
             ]
             for c in cols_order:
                 if c not in df_final.columns:
@@ -932,18 +980,19 @@ def load_args(args=None):
             # --- Save final merged table ---
             df_final.to_csv(output, sep="\t", index=False)
             logger.info(f"Final merged table generated: {output}")
-    
+
             logger.info("---> Complementary file added :")
             column_dicts = load_complementary_datatable(args.complement_file)
-            dictionary_db_metanetx=load_database_metanetx(output)
-            dictionary_db = add_complement_from_complementary(dictionary_db_metanetx, column_dicts)
+            dictionary_db_metanetx = load_database_metanetx(output)
+            dictionary_db = add_complement_from_complementary(
+                dictionary_db_metanetx, column_dicts
+            )
             utils.write_csv(dictionary_db, output, cols_order)
-
 
         else:
             logger.info("\n---> Run construction of the datatable for MetaNetX")
             logger.info("/!\\  No complementary file added")
-            
+
             # --- Load data ---
             df_prop = read_chem_prop(chem_prop_file)
             df_xref = read_chem_xref(chem_ref_file)
@@ -954,10 +1003,12 @@ def load_args(args=None):
             hmdb_df = extract_ids(df_xref, "hmdb")
             refmet_df = extract_ids(df_xref, "refmet")
             seed_df = extract_ids(df_xref, "seed")
-            vmh_df = extract_ids(df_xref, "vmh")  
+            vmh_df = extract_ids(df_xref, "vmh")
 
             # --- Extract MetaCyc references ---
-            metacyc_df = df_xref[df_xref["source"].str.startswith("metacyc")][["MNX_ID", "source"]].rename(columns={"source": "METACYC"})
+            metacyc_df = df_xref[df_xref["source"].str.startswith("metacyc")][
+                ["MNX_ID", "source"]
+            ].rename(columns={"source": "METACYC"})
 
             # --- Specific cleaning functions ---
             # CHEBI → one row per ID
@@ -976,7 +1027,15 @@ def load_args(args=None):
 
             # --- Merge all dataframes together ---
             df_final = df_prop.merge(metacyc_df, on="MNX_ID", how="left")
-            for d in [chebi_df, pubchem_df, bigg_df, hmdb_df, refmet_df, seed_df, vmh_df]:
+            for d in [
+                chebi_df,
+                pubchem_df,
+                bigg_df,
+                hmdb_df,
+                refmet_df,
+                seed_df,
+                vmh_df,
+            ]:
                 df_final = df_final.merge(d, on="MNX_ID", how="left")
 
             # Rename MNX_ID → UNIQUE-ID
@@ -987,15 +1046,36 @@ def load_args(args=None):
                 df_final = df_final.drop(columns=["CHARGE"])
 
             # Add missing columns if necessary
-            for col in ["ABBREV_NAME", "SYNONYMS", "ADD-COMPLEMENT", "NON-STANDARD-INCHI"]:
+            for col in [
+                "ABBREV_NAME",
+                "SYNONYMS",
+                "ADD-COMPLEMENT",
+                "NON-STANDARD-INCHI",
+            ]:
                 if col not in df_final.columns:
                     df_final[col] = ""
 
             # Reorder columns for final export (added VMH)
             cols_order = [
-                "UNIQUE-ID", "CHEBI", "COMMON_NAME", "ABBREV_NAME", "SYNONYMS", "ADD-COMPLEMENT",
-                "MOLECULAR_WEIGHT", "SEED", "BIGG", "HMDB", "METACYC",
-                "REFMET", "PUBCHEM", "VMH", "CAS", "INCHI", "NON-STANDARD-INCHI", "INCHI_KEY", "SMILES"
+                "UNIQUE-ID",
+                "CHEBI",
+                "COMMON_NAME",
+                "ABBREV_NAME",
+                "SYNONYMS",
+                "ADD-COMPLEMENT",
+                "MOLECULAR_WEIGHT",
+                "SEED",
+                "BIGG",
+                "HMDB",
+                "METACYC",
+                "REFMET",
+                "PUBCHEM",
+                "VMH",
+                "CAS",
+                "INCHI",
+                "NON-STANDARD-INCHI",
+                "INCHI_KEY",
+                "SMILES",
             ]
             for c in cols_order:
                 if c not in df_final.columns:
