@@ -74,7 +74,7 @@ def main():
     parent_parser_sbml.add_argument(
         "-s",
         "--sbml_input",
-        help="Path to the directory with SBML files (multiple option)",
+        help="Path to the directory containing SBML files, or to a single SBML file (depending on the selected mode).",
         required=True,
     )
 
@@ -83,7 +83,7 @@ def main():
     parent_parser_maf.add_argument(
         "-a",
         "--maf_input",
-        help="Path to the directory with MAF files (.tsv) (multiple option)",
+        help="Path to a directory of MAF (.tsv) files or to a single MAF file (depending on the mode).",
         required=True,
     )
 
@@ -121,7 +121,7 @@ def main():
     parent_parser_out_db = argparse.ArgumentParser(add_help=False)
     parent_parser_out_db.add_argument(
         "--out_db",
-        help="Path for the creation of the  to complement files for database conversion (build_db mode)\n"
+        help="Path for the creation of the complement files for database conversion (build_db mode)\n"
         "\nExample: -f <pathoutput>/",
         required=False,
     )
@@ -154,7 +154,7 @@ def main():
     # Partial mode (remove enantiomers temporarily)
     parent_parser_partial = argparse.ArgumentParser(add_help=False)
     parent_parser_partial.add_argument(
-        "-p", "--partial_match", help="Run the partial match mode ", action="store_true"
+        "-p", "--partial_match", help="Enable the partial matching option", action="store_true"
     )
 
     # Quiet mode (less verbose output)
@@ -200,8 +200,8 @@ def main():
             parent_parser_quiet,
             parent_parser_output,
         ],
-        description="Run in classic mode, with one metabolomic file "
-        "and many metabolomic networks",
+        description="Run in classic mode, with many metabolomic files "
+        "and one metabolomic network",
     )
 
     # Community mode
@@ -223,7 +223,7 @@ def main():
     # Test mode
     subparsers.add_parser(
         "test",
-        help="Run in community mode ",
+        help="Run in test mode ",
         parents=[
             parent_parser_quiet,
             parent_parser_partial,
