@@ -1416,14 +1416,10 @@ def match_db_sbml(
                     else:
                         sub_results_dic["Match in metabolic networks"] = flat_list
                     if sub_results_dic.get("Match IDS in metabolic networks"):
-                        sub_results_dic["Match IDS in metabolic networks"] = (
-                        f'{"Match IDS in metabolic networks"} _AND_ {id_unique}'
-                    )
-                        
-                        
-                        # sub_results_dic["Match IDS in metabolic networks"].append(
-                        #     id_unique
-                        # )
+                        if isinstance(sub_results_dic["Match IDS in metabolic networks"], list):
+                            sub_results_dic["Match IDS in metabolic networks"].append(id_unique)
+                        else:
+                            sub_results_dic["Match IDS in metabolic networks"] = [sub_results_dic["Match IDS in metabolic networks"], id_unique]
                     else:
                         sub_results_dic["Match IDS in metabolic networks"] = [id_unique]
             else:
