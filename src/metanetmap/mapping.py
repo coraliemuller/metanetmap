@@ -297,7 +297,7 @@ def extract_metadata_sbml(model, meta_data_sbml):
             if m.formula:
                 tmp_data["formula"] = [m.formula]
             else:
-                tmp_data["formula"] = ""
+                tmp_data["formula"] = [""]
             tmp_data = manage_id_in_metadata_sbml(annotations, tmp_data)
             meta_data_sbml[m.name] = tmp_data
     return meta_data_sbml
