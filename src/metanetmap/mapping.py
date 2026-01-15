@@ -268,8 +268,11 @@ def extract_metadata_sbml(model, meta_data_sbml):
         if m.name in meta_data_sbml.keys():
             if m.id.endswith("]"):
                 clean_id = m.id.rsplit("[", 1)[0]
+            elif len(m.id) >= 2 and m.id[-2] == "_" and "a" <= m.id[-1] <= "z":
+                clean_id = m.id[:-2]
             else:
-                clean_id = m.id.rsplit("_", 1)[0]
+                clean_id = m.id
+
             meta_data_sbml[m.name]["ID"].append(clean_id)
             if m.formula:
                 meta_data_sbml[m.name]["formula"].append(m.formula)
@@ -292,12 +295,14 @@ def extract_metadata_sbml(model, meta_data_sbml):
             tmp_data["NAME"] = [m.name]
             if m.id.endswith("]"):
                 tmp_data["ID"].append(m.id.rsplit("[", 1)[0])
+            elif len(m.id) >= 2 and m.id[-2] == "_" and "a" <= m.id[-1] <= "z":
+                tmp_data["ID"].append(m.id[:-2])
             else:
-                tmp_data["ID"].append(m.id.rsplit("_", 1)[0])
+                tmp_data["ID"].append(m.id)
             if m.formula:
                 tmp_data["formula"] = [m.formula]
             else:
-                tmp_data["formula"] = ""
+                tmp_data["formula"] = [""]
             tmp_data = manage_id_in_metadata_sbml(annotations, tmp_data)
             meta_data_sbml[m.name] = tmp_data
     return meta_data_sbml
@@ -347,10 +352,11 @@ def setup_merge_list_sbml_metabolites(List_SBML_paths):
         for m in model.metabolites:
             if m.id.endswith("]"):
                 clean_id = m.id.rsplit("[", 1)[0]
+            elif len(m.id) >= 2 and m.id[-2] == "_" and "a" <= m.id[-1] <= "z":
+                clean_id = m.id[:-2]
             else:
-                clean_id = m.id.rsplit("_", 1)[0]
+                clean_id = m.id
             list_metabolites_id.append(clean_id)
-
         # Add to global merged list
         list_metabolites_id_merge.append(list_metabolites_id)
 
@@ -1416,9 +1422,10 @@ def match_db_sbml(
                     else:
                         sub_results_dic["Match in metabolic networks"] = flat_list
                     if sub_results_dic.get("Match IDS in metabolic networks"):
-                        sub_results_dic["Match IDS in metabolic networks"].append(
-                            id_unique
-                        )
+                        if isinstance(sub_results_dic["Match IDS in metabolic networks"], list):
+                            sub_results_dic["Match IDS in metabolic networks"].append(id_unique)
+                        else:
+                            sub_results_dic["Match IDS in metabolic networks"] = [sub_results_dic["Match IDS in metabolic networks"], id_unique]
                     else:
                         sub_results_dic["Match IDS in metabolic networks"] = [id_unique]
             else:
